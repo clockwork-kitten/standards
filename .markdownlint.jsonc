@@ -1,0 +1,10 @@
+{
+  // Studio markdown standard — GitHub Flavored Markdown, intentionally relaxed.
+  // Rationale + full conventions: clockwork-kitten/ops docs/CONVENTIONS.md (CK-003).
+  "default": true,
+  "MD013": false,
+  "MD033": false,
+  "MD024": { "siblings_only": true },
+  "MD046": { "style": "fenced" },
+  "MD029": { "style": "one_or_ordered" }
+}
