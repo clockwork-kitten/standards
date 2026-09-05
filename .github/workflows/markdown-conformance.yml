@@ -5,20 +5,23 @@ name: markdown-conformance
 #
 #   jobs:
 #     markdown:
-#       uses: clockwork-kitten/standards/.github/workflows/markdown-conformance.yml@v0.1.0
+#       uses: clockwork-kitten/standards/.github/workflows/markdown-conformance.yml@v0.2.0
 #
-# It runs markdownlint (via markdownlint-cli2) against the studio baseline config
-# and the internal cross-reference checker. Sensible defaults; override via inputs.
+# It runs the conform engine (packages/conform, @clockwork-kitten/conform) against
+# the studio baseline and the internal cross-reference checker. The engine isn't
+# published to a registry, so this workflow checks out clockwork-kitten/standards
+# at `standards-ref`, installs the engine's runtime deps with Bun, and runs its
+# `conform check` CLI against the calling repo. Sensible defaults; override via inputs.
 
 on:
   workflow_call:
     inputs:
       paths:
-        description: 'Globs passed to markdownlint-cli2 (space-separated, quoted).'
+        description: 'Globs the engine lints (space-separated). node_modules/.git/.standards are always ignored.'
         type: string
-        default: '"**/*.md" "#node_modules"'
+        default: '**/*.md'
       config:
-        description: 'markdownlint config path in the calling repo. Empty uses the studio baseline.'
+        description: 'Path to a conform.config.* in the calling repo. Empty auto-discovers one, else the bundled studio baseline.'
         type: string
         default: ''
       reference-check:
@@ -34,9 +37,9 @@ on:
         type: string
         default: ''
       standards-ref:
-        description: 'Ref of clockwork-kitten/standards for shared config/scripts. Empty uses the caller checkout (self/dogfood).'
+        description: 'Ref of clockwork-kitten/standards providing the engine + scripts. Empty uses the caller checkout (self/dogfood).'
         type: string
-        default: 'v0.1.0'
+        default: 'v0.2.0'
 
 permissions:
   contents: read
@@ -47,30 +50,43 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Checkout standards baseline
+      - name: Checkout standards engine
         if: inputs.standards-ref != ''
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           repository: clockwork-kitten/standards
           ref: ${{ inputs.standards-ref }}
           path: .standards
-      - name: Resolve config path
-        id: cfg
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: latest
+      - name: Resolve engine root
+        id: engine
         env:
-          CONFIG: ${{ inputs.config }}
           STANDARDS_REF: ${{ inputs.standards-ref }}
         run: |
           set -euo pipefail
-          if [ -n "$CONFIG" ]; then
-            path="$CONFIG"
-          elif [ -n "$STANDARDS_REF" ]; then
-            path=".standards/.markdownlint.jsonc"
+          if [ -n "$STANDARDS_REF" ]; then
+            echo "root=.standards" >> "$GITHUB_OUTPUT"
           else
-            path=".markdownlint.jsonc"
+            echo "root=." >> "$GITHUB_OUTPUT"
           fi
-          echo "path=$path" >> "$GITHUB_OUTPUT"
-      - name: Lint Markdown
-        run: npx --yes markdownlint-cli2 --config "${{ steps.cfg.outputs.path }}" ${{ inputs.paths }} "#.standards"
+      - name: Install engine (runtime deps only)
+        working-directory: ${{ steps.engine.outputs.root }}
+        run: bun install --frozen-lockfile --production
+      - name: Lint Markdown via the conform engine
+        env:
+          ENGINE_ROOT: ${{ steps.engine.outputs.root }}
+          CONFIG: ${{ inputs.config }}
+          PATHS: ${{ inputs.paths }}
+        run: |
+          set -euo pipefail
+          args=(check $PATHS)
+          if [ -n "$CONFIG" ]; then
+            args+=(--config "$CONFIG")
+          fi
+          bun "$ENGINE_ROOT/packages/conform/src/cli/main.ts" "${args[@]}"
 
   references:
     if: inputs.reference-check

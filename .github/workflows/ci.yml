@@ -54,3 +54,12 @@ jobs:
     uses: ./.github/workflows/repo-hygiene.yml
     with:
       required-files: 'README.md ROADMAP.md IDEAS.md LICENSE .markdownlint.jsonc'
+
+  # Exercise the published reusable workflow end-to-end against this repo (self
+  # mode: standards-ref empty uses the caller checkout). References are checked in
+  # the dedicated job above, so keep that off here to avoid a duplicate run.
+  reusable-markdown:
+    uses: ./.github/workflows/markdown-conformance.yml
+    with:
+      standards-ref: ''
+      reference-check: false
