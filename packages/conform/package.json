@@ -1,0 +1,29 @@
+{
+  "name": "@clockwork-kitten/conform",
+  "version": "0.0.0",
+  "description": "The clockwork-kitten conformance engine — one CLI that lints and (later) structurally edits conformant files.",
+  "type": "module",
+  "bin": {
+    "conform": "./src/cli/main.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "markdownlint": "^0.38.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@vitest/coverage-v8": "^3.0.2",
+    "jsonc-parser": "^3.3.1",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.2"
+  }
+}

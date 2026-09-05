@@ -1,8 +1,9 @@
 name: ci
 
-# The standards repo dogfoods its own reusable workflows on every PR: if the
-# tools can't keep this repo conformant, they aren't ready to ship. standards-ref
-# is empty so the checks use this checkout rather than a published tag.
+# The standards repo dogfoods its own conformance tooling on every PR: if the
+# tools can't keep this repo conformant, they aren't ready to ship. The markdown
+# lint now runs through the conform engine (packages/conform); the reference
+# checker and repo-hygiene reusable workflow round out the checks.
 
 on:
   pull_request:
@@ -13,12 +14,41 @@ permissions:
   contents: read
 
 jobs:
-  markdown:
-    uses: ./.github/workflows/markdown-conformance.yml
-    with:
-      standards-ref: ''
-      # These docs cross-reference the ops repo (CK-004 etc.), not local files.
-      reference-ignore: 'docs/DECISIONS.md docs/oss-policy.md ops/docs/'
+  conform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Typecheck the engine
+        run: bun run typecheck
+      - name: Test the engine
+        run: bun run test
+      - name: Lint markdown via the engine (dogfood)
+        run: bun run check:md
+
+  references:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: '3.x'
+      - name: Check internal cross-references
+        # These docs cross-reference the ops repo (CK-004 etc.), not local files.
+        run: |
+          python3 scripts/check_references.py --repo-root . \
+            --ignore-substr docs/DECISIONS.md \
+            --ignore-substr docs/oss-policy.md \
+            --ignore-substr ops/docs/ \
+            .
 
   hygiene:
     uses: ./.github/workflows/repo-hygiene.yml
