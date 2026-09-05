@@ -12,6 +12,7 @@
     "typecheck": "bun run --cwd packages/conform typecheck"
   },
   "devDependencies": {
-    "@clockwork-kitten/conform": "workspace:*"
+    "@clockwork-kitten/conform": "workspace:*",
+    "lefthook": "^2.1.12"
   }
 }

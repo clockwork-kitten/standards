@@ -4,6 +4,7 @@
 
 ## Standards home
 
+- [Agent guide — standards](AGENTS.md): How agents work in this repo. The studio invariant: AI proposes freely, a machine-checkable standard constrains how, a human still merges. conform is that machine-checkable standard for docs; you are the AI that proposes.
 - [Ideas — standards](IDEAS.md): A parking lot for not-yet-scheduled ideas specific to the standards home. Candidates, not commitments. When one is ready, promote it to ROADMAP.md and/or a decision in the ops repo's docs/DECISIONS.md, then remove it here.
 - [Clockwork Kitten — standards](README.md): The studio's machine-checkable engineering standards and reusable CI. This repo is the single source of truth for how every clockwork-kitten repo is kept consistent — the enforcement backbone of the studio invariant: AI proposes freely, a machine-checkable standard constrains how, a human still merges.
 - [Roadmap — standards](ROADMAP.md): The sequenced plan for the studio standards home. Status: ☐ todo · ◐ in progress · ☑ done · ⏸ deferred. Order is about dependencies, not urgency.

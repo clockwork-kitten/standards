@@ -1,0 +1,37 @@
+# Shared conform pre-commit base for clockwork-kitten repos.
+#
+# `conform` is the brain; lefthook is only the trigger — the commit-time backstop
+# behind the agent that runs `conform` in its own loop. Pre-commit autofixes
+# staged markdown, re-stages the results, then runs the same `conform check` CI
+# runs and fails on any residual drift.
+#
+# Boundary: this is AUTHORING-TIME tooling. The `fix` step only ever runs here
+# (local / agent loop / pre-commit) — CI never runs `fix`, because auto-fixing or
+# auto-committing would fight the human-merge gate.
+#
+# Consume by pinning this file from your own lefthook.yml, the same way you pin
+# the reusable workflows:
+#
+#   remotes:
+#     - git_url: https://github.com/clockwork-kitten/standards
+#       ref: v0.4.0
+#       configs:
+#         - lefthook/base.yml
+#
+# `conform` must be resolvable locally — add `@clockwork-kitten/conform`, pinned
+# to the same tag, so `bunx conform` finds it. `fix` runs with `--no-llms`: on a
+# partial staged set it must not regenerate `llms.txt` from a subset (that would
+# truncate the index). The `llms.txt` drift check stays in CI (`conform llms
+# --check`) and the agent's in-loop `conform fix`.
+pre-commit:
+  parallel: false
+  commands:
+    conform-fix:
+      priority: 1
+      glob: "*.md"
+      run: bunx conform fix --no-llms {staged_files}
+      stage_fixed: true
+    conform-check:
+      priority: 2
+      glob: "*.md"
+      run: bunx conform check {staged_files}
