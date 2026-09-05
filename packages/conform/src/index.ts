@@ -30,7 +30,7 @@ export {
 	type MarkdownlintConfig,
 	type ReferencesConfig,
 } from "./config/types.ts";
-export { formatIssues, lintContent, lintFiles, type LintIssue } from "./lint/markdown.ts";
+export { fixContents, formatIssues, lintContent, lintFiles, type FixResult, type LintIssue } from "./lint/markdown.ts";
 export {
 	checkReferences,
 	extractReferences,

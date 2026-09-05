@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { STUDIO_MARKDOWNLINT_BASELINE } from "../config/baseline.ts";
-import { formatIssues, lintContent } from "./markdown.ts";
+import { fixContents, formatIssues, lintContent } from "./markdown.ts";
 
 describe("lintContent", () => {
 	it("reports no issues for conformant markdown", async () => {
@@ -50,5 +50,50 @@ describe("formatIssues", () => {
 			{ file: "a.md", line: 3, rule: "MD012/no-multiple-blanks", description: "Multiple blanks", detail: "Expected: 1" },
 		]);
 		expect(line).toBe("a.md:3 MD012/no-multiple-blanks Multiple blanks [Expected: 1]");
+	});
+});
+
+describe("fixContents", () => {
+	it("returns an empty array for no documents", async () => {
+		expect(await fixContents({}, STUDIO_MARKDOWNLINT_BASELINE)).toEqual([]);
+	});
+
+	it("leaves conformant content unchanged with no residue", async () => {
+		const [result] = await fixContents(
+			{ "ok.md": "# Title\n\nA conformant paragraph.\n" },
+			STUDIO_MARKDOWNLINT_BASELINE,
+		);
+		expect(result?.changed).toBe(false);
+		expect(result?.residue).toEqual([]);
+		expect(result?.content).toBe("# Title\n\nA conformant paragraph.\n");
+	});
+
+	it("autofixes fixable rules (trailing spaces, multiple blanks)", async () => {
+		const dirty = "# Title\n\ntrailing spaces here   \n\n\n\nafter extra blanks\n";
+		const [result] = await fixContents({ "a.md": dirty }, STUDIO_MARKDOWNLINT_BASELINE);
+		expect(result?.changed).toBe(true);
+		expect(result?.content).not.toContain("here   ");
+		expect(result?.content).not.toContain("\n\n\n");
+		expect(result?.residue).toEqual([]);
+	});
+
+	it("reports residue for a rule with no autofix (missing top-level heading)", async () => {
+		const [result] = await fixContents(
+			{ "bad.md": "no heading here\n" },
+			STUDIO_MARKDOWNLINT_BASELINE,
+		);
+		expect(result?.changed).toBe(false);
+		expect(result?.residue.map((issue) => issue.rule)).toContain("MD041/first-line-heading");
+	});
+
+	it("fixes what it can and still reports the unfixable remainder", async () => {
+		// Trailing spaces are fixable; the missing H1 is not.
+		const [result] = await fixContents(
+			{ "mix.md": "no heading   \n" },
+			STUDIO_MARKDOWNLINT_BASELINE,
+		);
+		expect(result?.changed).toBe(true);
+		expect(result?.content).toBe("no heading\n");
+		expect(result?.residue.map((issue) => issue.rule)).toContain("MD041/first-line-heading");
 	});
 });

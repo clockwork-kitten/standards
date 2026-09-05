@@ -1,8 +1,8 @@
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { expandGlobs, parseCheckArgs, parseLlmsArgs, runCheck, runLlms } from "./main.ts";
+import { expandGlobs, parseCheckArgs, parseFixArgs, parseLlmsArgs, runCheck, runFix, runLlms } from "./main.ts";
 
 describe("parseCheckArgs", () => {
 	it("defaults to **/*.md with no config", () => {
@@ -197,5 +197,83 @@ describe("runLlms", () => {
 
 	it("returns 2 on bad arguments", async () => {
 		expect(await runLlms(["--config"], dir)).toBe(2);
+	});
+});
+
+describe("parseFixArgs", () => {
+	it("defaults to **/*.md, no config, llms on", () => {
+		expect(parseFixArgs([])).toEqual({ globs: ["**/*.md"], configPath: undefined, llms: true });
+	});
+
+	it("parses globs, --config, and --no-llms", () => {
+		expect(parseFixArgs(["docs/**/*.md", "--config", "c.ts", "--no-llms"])).toEqual({
+			globs: ["docs/**/*.md"],
+			configPath: "c.ts",
+			llms: false,
+		});
+	});
+
+	it("throws on a missing --config value or unknown flag", () => {
+		expect(() => parseFixArgs(["--config"])).toThrow(/requires a path/);
+		expect(() => parseFixArgs(["--nope"])).toThrow(/unknown option/);
+	});
+});
+
+describe("runFix", () => {
+	let dir: string;
+	beforeEach(() => {
+		dir = mkdtempSync(join(tmpdir(), "conform-fix-"));
+		vi.spyOn(console, "error").mockImplementation(() => {});
+	});
+	afterEach(() => {
+		rmSync(dir, { recursive: true, force: true });
+		vi.restoreAllMocks();
+	});
+
+	it("rewrites fixable violations in place and returns 0", async () => {
+		writeFileSync(join(dir, "a.md"), "# Title\n\ntrailing here   \n\n\n\ntail\n");
+		expect(await runFix(["**/*.md", "--no-llms"], dir)).toBe(0);
+		const fixed = readFileSync(join(dir, "a.md"), "utf8");
+		expect(fixed).not.toContain("here   ");
+		expect(fixed).not.toContain("\n\n\n");
+	});
+
+	it("leaves conformant files untouched", async () => {
+		const good = "# Title\n\nGood.\n";
+		writeFileSync(join(dir, "ok.md"), good);
+		expect(await runFix(["**/*.md", "--no-llms"], dir)).toBe(0);
+		expect(readFileSync(join(dir, "ok.md"), "utf8")).toBe(good);
+	});
+
+	it("reports unfixable residue but still returns 0 (check is the gate)", async () => {
+		writeFileSync(join(dir, "bad.md"), "no heading here\n");
+		expect(await runFix(["**/*.md", "--no-llms"], dir)).toBe(0);
+		// The file is unchanged because MD041 has no autofix.
+		expect(readFileSync(join(dir, "bad.md"), "utf8")).toBe("no heading here\n");
+	});
+
+	it("regenerates llms.txt when an llms config is present", async () => {
+		writeFileSync(join(dir, "conform.config.jsonc"), LLMS_CONFIG);
+		writeFileSync(join(dir, "README.md"), "# Home\n\nRoot doc.\n");
+		expect(await runFix([], dir)).toBe(0);
+		const index = readFileSync(join(dir, "llms.txt"), "utf8");
+		expect(index).toContain("# Test");
+		expect(index).toContain("- [Home](README.md): Root doc.");
+	});
+
+	it("skips llms regeneration with --no-llms", async () => {
+		writeFileSync(join(dir, "conform.config.jsonc"), LLMS_CONFIG);
+		writeFileSync(join(dir, "README.md"), "# Home\n\nRoot doc.\n");
+		expect(await runFix(["--no-llms"], dir)).toBe(0);
+		expect(existsSync(join(dir, "llms.txt"))).toBe(false);
+	});
+
+	it("returns 2 on a malformed config", async () => {
+		writeFileSync(join(dir, "conform.config.jsonc"), "{ broken");
+		expect(await runFix([], dir)).toBe(2);
+	});
+
+	it("returns 2 on bad arguments", async () => {
+		expect(await runFix(["--config"], dir)).toBe(2);
 	});
 });

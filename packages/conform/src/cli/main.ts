@@ -3,7 +3,7 @@ import { existsSync, globSync, readFileSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import process from "node:process";
 import { ConfigError, resolveConfig } from "../config/resolve.ts";
-import { formatIssues, lintFiles } from "../lint/markdown.ts";
+import { fixContents, formatIssues, lintFiles } from "../lint/markdown.ts";
 import { checkReferences, formatReferenceIssues } from "../lint/references.ts";
 import { generateLlms } from "../ops/llms.ts";
 
@@ -149,6 +149,124 @@ export async function runCheck(argv: string[], cwd: string): Promise<number> {
 	return exitCode;
 }
 
+const FIX_USAGE = "usage: conform fix [globs...] [--config <path>] [--no-llms]";
+
+/** Parsed arguments for `conform fix`. */
+export type FixArgs = {
+	globs: string[];
+	configPath: string | undefined;
+	/** Whether to also regenerate the `llms.txt` index (default true). */
+	llms: boolean;
+};
+
+/**
+ * Parse the arguments to `conform fix`. Positional args are globs (defaulting to
+ * `**\/*.md`); `--config`/`-c` selects a config file; `--no-llms` skips the
+ * `llms.txt` regeneration that otherwise runs after the markdown autofix. Throws
+ * on unknown flags or a missing option value.
+ */
+export function parseFixArgs(argv: string[]): FixArgs {
+	const globs: string[] = [];
+	let configPath: string | undefined;
+	let llms = true;
+	for (let index = 0; index < argv.length; index += 1) {
+		const arg = argv[index] as string;
+		if (arg === "--config" || arg === "-c") {
+			const next = argv[index + 1];
+			if (next === undefined) {
+				throw new Error(`${arg} requires a path`);
+			}
+			configPath = next;
+			index += 1;
+		} else if (arg.startsWith("--config=")) {
+			configPath = arg.slice("--config=".length);
+		} else if (arg === "--no-llms") {
+			llms = false;
+		} else if (arg.startsWith("-")) {
+			throw new Error(`unknown option: ${arg}`);
+		} else {
+			globs.push(arg);
+		}
+	}
+	return {
+		globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
+		configPath,
+		llms,
+	};
+}
+
+/**
+ * Run `conform fix`; returns a process exit code. Autofixes fixable markdown
+ * rules in place, then (unless `--no-llms`) regenerates `llms.txt` so the tree
+ * self-heals in one command. Reports any unfixable residue but does not fail on
+ * it — `fix` is authoring-time and `check` stays the failing gate, so CI never
+ * runs `fix`. Returns 2 only on an argument or config error.
+ */
+export async function runFix(argv: string[], cwd: string): Promise<number> {
+	let args: FixArgs;
+	try {
+		args = parseFixArgs(argv);
+	} catch (error) {
+		console.error(error instanceof Error ? error.message : String(error));
+		console.error(FIX_USAGE);
+		return 2;
+	}
+
+	let resolved;
+	try {
+		resolved = await resolveConfig({ cwd, configPath: args.configPath });
+	} catch (error) {
+		if (error instanceof ConfigError) {
+			console.error(error.message);
+			return 2;
+		}
+		throw error;
+	}
+
+	const files = expandGlobs(args.globs, cwd);
+	const contents: Record<string, string> = {};
+	for (const file of files) {
+		contents[file] = readFileSync(join(cwd, file), "utf8");
+	}
+
+	const fixes = await fixContents(contents, resolved.markdownlint);
+	console.error(`conform fix · markdown · ${resolved.source}`);
+
+	const changed = fixes.filter((fix) => fix.changed);
+	for (const fix of changed) {
+		writeFileSync(join(cwd, fix.file), fix.content);
+	}
+	if (changed.length > 0) {
+		console.error(`fixed ${changed.length} file(s):`);
+		for (const fix of changed) {
+			console.error(`  ${fix.file}`);
+		}
+	} else {
+		console.error(`${files.length} file(s) already conformant`);
+	}
+
+	const residue = fixes.flatMap((fix) => fix.residue);
+	if (residue.length > 0) {
+		console.error(`\n${residue.length} issue(s) fix cannot resolve — run \`conform check\` and fix by hand:`);
+		console.error(formatIssues(residue));
+	}
+
+	if (args.llms && resolved.llms) {
+		const content = generateLlms(files, resolved.llms, (file) => readFileSync(join(cwd, file), "utf8"));
+		const outPath = join(cwd, resolved.llms.output);
+		const outLabel = relative(cwd, outPath);
+		const current = existsSync(outPath) ? readFileSync(outPath, "utf8") : "";
+		if (current === content) {
+			console.error(`conform fix · llms · ${outLabel} already up to date`);
+		} else {
+			writeFileSync(outPath, content);
+			console.error(`conform fix · llms · wrote ${outLabel} (${content.length} bytes)`);
+		}
+	}
+
+	return 0;
+}
+
 const LLMS_USAGE = "usage: conform llms [globs...] [--config <path>] [--check]";
 
 /** Parsed arguments for `conform llms`. */
@@ -252,10 +370,14 @@ async function main(): Promise<number> {
 	if (subcommand === "check") {
 		return runCheck(rest, process.cwd());
 	}
+	if (subcommand === "fix") {
+		return runFix(rest, process.cwd());
+	}
 	if (subcommand === "llms") {
 		return runLlms(rest, process.cwd());
 	}
 	console.error(USAGE);
+	console.error(FIX_USAGE);
 	console.error(LLMS_USAGE);
 	return 2;
 }
