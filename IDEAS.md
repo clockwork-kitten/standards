@@ -27,6 +27,14 @@ aggressive lint guarantees the invariants (fixed entry shape, one separator, mon
 tools rely on. Tightness → determinism → agent-safe editing. Sequence after v0.1 (the lint that
 enforces the shape) so the operations have guarantees to stand on.
 
+**Prior art (2026-09-04).** A read-only research scan found generic AST/section Markdown
+editing is a solved commodity (mdast/remark, tree-sitter, ADR CLIs like `adr-tools`, MCP
+section-editor servers) — but **nothing couples a repo-specific conformance schema to typed
+entry operations with a re-lint postcondition.** That coupling is the novel part. Realistic
+finalists: (1) extend the v0.1 markdownlint rules (max reuse, schema can't drift) or (2) build
+on `mdast` (richer AST for `move`/`renumber`). Full write-up:
+`docs/research/markdown-structural-tooling-prior-art.md`.
+
 **Open questions.**
 
 - Per-file schemas: encode the shape as config the linter and the tools share, so they can't drift?
