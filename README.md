@@ -34,10 +34,10 @@ permissions:
 
 jobs:
   markdown:
-    uses: clockwork-kitten/standards/.github/workflows/markdown-conformance.yml@v0.2.0
+    uses: clockwork-kitten/standards/.github/workflows/markdown-conformance.yml@v0.3.0
 
   hygiene:
-    uses: clockwork-kitten/standards/.github/workflows/repo-hygiene.yml@v0.2.0
+    uses: clockwork-kitten/standards/.github/workflows/repo-hygiene.yml@v0.3.0
 ```
 
 Both are `workflow_call` reusable workflows with safe defaults you can override via
@@ -47,9 +47,11 @@ Both are `workflow_call` reusable workflows with safe defaults you can override 
 (`@clockwork-kitten/conform`) against the studio markdownlint baseline shipped in this
 repo — markdown lint plus the internal cross-reference check in one pass — so there is no
 per-repo config drift; point `config` at a `conform.config.*` to adjust individual rules.
+The engine is automatically locked to the exact `standards` commit you pin the workflow at,
+so the workflow and the engine it runs can never drift — you never set an engine ref.
 
 Consumers **pin to a tag** and upgrade deliberately (propagation vs stability). Pin to an exact
-version (`@v0.2.0`) for maximum stability, or to a moving line alias (`@v0.2`) to pick up patches
+version (`@v0.3.0`) for maximum stability, or to a moving line alias (`@v0.3`) to pick up patches
 automatically. See `docs/RELEASING.md` for the versioning and release policy, and `ROADMAP.md` for
 the roadmap.
 
