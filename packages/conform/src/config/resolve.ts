@@ -24,10 +24,27 @@ export const CONFIG_FILENAMES = [
 /** The reference-checker settings for a run, with defaults applied. */
 export type ResolvedReferencesConfig = Required<ReferencesConfig>;
 
+/** A section of the `llms.txt` index with defaults applied. */
+export type ResolvedLlmsSection = {
+	title: string;
+	prefix: string;
+	shallow: boolean;
+};
+
+/** The `llms.txt` generator settings for a run, with defaults applied. */
+export type ResolvedLlmsConfig = {
+	project: string;
+	summary: string;
+	sections: ResolvedLlmsSection[];
+	output: string;
+};
+
 /** The effective configuration for a run, plus where it came from. */
 export type ResolvedConfig = {
 	markdownlint: MarkdownlintConfig;
 	references: ResolvedReferencesConfig;
+	/** The `llms.txt` generator config, or `undefined` when the repo declares none. */
+	llms: ResolvedLlmsConfig | undefined;
 	/** Human-readable description of the config source, for logging. */
 	source: string;
 };
@@ -55,6 +72,31 @@ export function resolveMarkdownlintConfig(config: ConformConfig): MarkdownlintCo
  */
 export function resolveReferencesConfig(config: ConformConfig): ResolvedReferencesConfig {
 	return { ignore: [...(config.references?.ignore ?? [])] };
+}
+
+/** Default output path for the generated doc index. */
+export const DEFAULT_LLMS_OUTPUT = "llms.txt";
+
+/**
+ * Compute the effective `llms.txt` generator settings, or `undefined` when the
+ * config declares no `llms` block. Applies section defaults (`prefix` → `""`,
+ * `shallow` → `false`) and the default output path.
+ */
+export function resolveLlmsConfig(config: ConformConfig): ResolvedLlmsConfig | undefined {
+	const llms = config.llms;
+	if (!llms) {
+		return undefined;
+	}
+	return {
+		project: llms.project,
+		summary: llms.summary,
+		sections: llms.sections.map((section) => ({
+			title: section.title,
+			prefix: section.prefix ?? "",
+			shallow: section.shallow ?? false,
+		})),
+		output: llms.output ?? DEFAULT_LLMS_OUTPUT,
+	};
 }
 
 function isConfigModule(value: unknown): value is ConformConfig {
@@ -131,6 +173,7 @@ export async function resolveConfig(options: {
 		return {
 			markdownlint: { ...STUDIO_MARKDOWNLINT_BASELINE },
 			references: { ignore: [] },
+			llms: undefined,
 			source: "studio baseline (no config file found)",
 		};
 	}
@@ -139,6 +182,7 @@ export async function resolveConfig(options: {
 	return {
 		markdownlint: resolveMarkdownlintConfig(config),
 		references: resolveReferencesConfig(config),
+		llms: resolveLlmsConfig(config),
 		source: path,
 	};
 }

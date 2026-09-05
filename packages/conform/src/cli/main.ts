@@ -1,10 +1,11 @@
 #!/usr/bin/env bun
-import { globSync } from "node:fs";
+import { existsSync, globSync, readFileSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import process from "node:process";
 import { ConfigError, resolveConfig } from "../config/resolve.ts";
 import { formatIssues, lintFiles } from "../lint/markdown.ts";
 import { checkReferences, formatReferenceIssues } from "../lint/references.ts";
+import { generateLlms } from "../ops/llms.ts";
 
 /** Directory names never descended into when expanding globs. */
 export const IGNORE_DIRS = new Set(["node_modules", ".git", ".standards"]);
@@ -148,13 +149,115 @@ export async function runCheck(argv: string[], cwd: string): Promise<number> {
 	return exitCode;
 }
 
-async function main(): Promise<number> {
-	const [subcommand, ...rest] = process.argv.slice(2);
-	if (subcommand !== "check") {
-		console.error(USAGE);
+const LLMS_USAGE = "usage: conform llms [globs...] [--config <path>] [--check]";
+
+/** Parsed arguments for `conform llms`. */
+export type LlmsArgs = {
+	globs: string[];
+	configPath: string | undefined;
+	/** Verify the on-disk index matches, rather than writing it. */
+	check: boolean;
+};
+
+/**
+ * Parse the arguments to `conform llms`. Positional args are globs (defaulting
+ * to `**\/*.md`); `--config`/`-c` selects a config file; `--check` verifies the
+ * committed index instead of writing it. Throws on unknown flags or a missing
+ * `--config` value.
+ */
+export function parseLlmsArgs(argv: string[]): LlmsArgs {
+	const globs: string[] = [];
+	let configPath: string | undefined;
+	let check = false;
+	for (let index = 0; index < argv.length; index += 1) {
+		const arg = argv[index] as string;
+		if (arg === "--config" || arg === "-c") {
+			const next = argv[index + 1];
+			if (next === undefined) {
+				throw new Error(`${arg} requires a path`);
+			}
+			configPath = next;
+			index += 1;
+		} else if (arg.startsWith("--config=")) {
+			configPath = arg.slice("--config=".length);
+		} else if (arg === "--check") {
+			check = true;
+		} else if (arg.startsWith("-")) {
+			throw new Error(`unknown option: ${arg}`);
+		} else {
+			globs.push(arg);
+		}
+	}
+	return {
+		globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
+		configPath,
+		check,
+	};
+}
+
+/** Run `conform llms`; returns a process exit code. */
+export async function runLlms(argv: string[], cwd: string): Promise<number> {
+	let args: LlmsArgs;
+	try {
+		args = parseLlmsArgs(argv);
+	} catch (error) {
+		console.error(error instanceof Error ? error.message : String(error));
+		console.error(LLMS_USAGE);
 		return 2;
 	}
-	return runCheck(rest, process.cwd());
+
+	let resolved;
+	try {
+		resolved = await resolveConfig({ cwd, configPath: args.configPath });
+	} catch (error) {
+		if (error instanceof ConfigError) {
+			console.error(error.message);
+			return 2;
+		}
+		throw error;
+	}
+
+	if (!resolved.llms) {
+		console.error(`conform llms · no \`llms\` config found · ${resolved.source}`);
+		console.error("Add an `llms` block to your conform config to generate a doc index.");
+		return 2;
+	}
+
+	const files = expandGlobs(args.globs, cwd);
+	const content = generateLlms(
+		files,
+		resolved.llms,
+		(file) => readFileSync(join(cwd, file), "utf8"),
+	);
+	const outPath = join(cwd, resolved.llms.output);
+	const outLabel = relative(cwd, outPath);
+
+	if (args.check) {
+		const current = existsSync(outPath) ? readFileSync(outPath, "utf8") : "";
+		if (current !== content) {
+			console.error(`conform llms · ${outLabel} is out of date · run \`conform llms\` to regenerate`);
+			return 1;
+		}
+		console.error(`conform llms · ${outLabel} is up to date`);
+		return 0;
+	}
+
+	writeFileSync(outPath, content);
+	console.error(`conform llms · wrote ${outLabel} (${content.length} bytes)`);
+	return 0;
+}
+
+async function main(): Promise<number> {
+	const [subcommand, ...rest] = process.argv.slice(2);
+	if (subcommand === "check") {
+		return runCheck(rest, process.cwd());
+	}
+	if (subcommand === "llms") {
+		return runLlms(rest, process.cwd());
+	}
+	console.error(USAGE);
+	console.error(LLMS_USAGE);
+	return 2;
 }
 
 // Only run when executed directly (e.g. `bun src/cli/main.ts`), not when

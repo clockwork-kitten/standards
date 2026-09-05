@@ -10,17 +10,23 @@ export { deepMerge, isPlainObject, type PlainObject } from "./config/merge.ts";
 export {
 	CONFIG_FILENAMES,
 	ConfigError,
+	DEFAULT_LLMS_OUTPUT,
 	discoverConfigPath,
 	loadConfigFile,
 	resolveConfig,
+	resolveLlmsConfig,
 	resolveMarkdownlintConfig,
 	resolveReferencesConfig,
 	type ResolvedConfig,
+	type ResolvedLlmsConfig,
+	type ResolvedLlmsSection,
 	type ResolvedReferencesConfig,
 } from "./config/resolve.ts";
 export {
 	defineConfig,
 	type ConformConfig,
+	type LlmsConfig,
+	type LlmsSection,
 	type MarkdownlintConfig,
 	type ReferencesConfig,
 } from "./config/types.ts";
@@ -33,3 +39,9 @@ export {
 	type Reference,
 	type ReferenceIssue,
 } from "./lint/references.ts";
+export {
+	extractDocMeta,
+	generateLlms,
+	renderLlms,
+	type DocMeta,
+} from "./ops/llms.ts";

@@ -5,6 +5,8 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "check:md": "conform check",
+    "llms": "conform llms",
+    "check:llms": "conform llms --check",
     "test": "bun run --cwd packages/conform test",
     "typecheck": "bun run --cwd packages/conform typecheck"
   },

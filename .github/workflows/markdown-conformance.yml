@@ -9,7 +9,8 @@ name: markdown-conformance
 #
 # It runs the conform engine (packages/conform, @clockwork-kitten/conform) against
 # the studio baseline: markdown lint plus the internal cross-reference checker, in
-# one `conform check` invocation. The engine isn't published to a registry, so this
+# one `conform check` invocation, and can optionally verify a generated `llms.txt`
+# doc index (`llms-check`). The engine isn't published to a registry, so this
 # workflow checks out clockwork-kitten/standards at `standards-ref`, installs the
 # engine's runtime deps with Bun, and runs its CLI against the calling repo.
 # Sensible defaults; override via inputs.
@@ -33,6 +34,10 @@ on:
         description: 'Substrings marking a backtick path as external/cross-repo, not resolved (space-separated). Layered on top of the config''s references.ignore.'
         type: string
         default: ''
+      llms-check:
+        description: 'Verify the committed llms.txt is up to date. Requires an `llms` block in the calling repo''s conform config.'
+        type: boolean
+        default: false
       standards-ref:
         description: 'Ref of clockwork-kitten/standards providing the engine. Empty uses the caller checkout (self/dogfood).'
         type: string
@@ -101,4 +106,16 @@ jobs:
           for sub in $REFERENCE_IGNORE; do
             args+=(--reference-ignore "$sub")
           done
+          bun "$ENGINE_ROOT/packages/conform/src/cli/main.ts" "${args[@]}"
+      - name: Verify llms.txt is up to date
+        if: inputs.llms-check
+        env:
+          ENGINE_ROOT: ${{ steps.engine.outputs.root }}
+          CONFIG: ${{ inputs.config }}
+        run: |
+          set -euo pipefail
+          args=(llms --check)
+          if [ -n "$CONFIG" ]; then
+            args+=(--config "$CONFIG")
+          fi
           bun "$ENGINE_ROOT/packages/conform/src/cli/main.ts" "${args[@]}"
