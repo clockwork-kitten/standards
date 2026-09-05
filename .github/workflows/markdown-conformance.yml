@@ -75,6 +75,16 @@ jobs:
       - name: Install engine (runtime deps only)
         working-directory: ${{ steps.engine.outputs.root }}
         run: bun install --frozen-lockfile --production
+      - name: Link engine for config self-imports
+        env:
+          ENGINE_ROOT: ${{ steps.engine.outputs.root }}
+        run: |
+          set -euo pipefail
+          # A repo `conform.config.ts` imports `@clockwork-kitten/conform`; make that
+          # specifier resolvable from the caller root, whether the engine lives here
+          # (self mode) or under `.standards`. jsonc/plain configs don't need this.
+          mkdir -p node_modules/@clockwork-kitten
+          ln -sfn "$PWD/$ENGINE_ROOT/packages/conform" node_modules/@clockwork-kitten/conform
       - name: Lint Markdown via the conform engine
         env:
           ENGINE_ROOT: ${{ steps.engine.outputs.root }}
