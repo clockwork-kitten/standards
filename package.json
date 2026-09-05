@@ -1,0 +1,14 @@
+{
+  "name": "@clockwork-kitten/standards-workspace",
+  "private": true,
+  "type": "module",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "check:md": "conform check",
+    "test": "bun run --cwd packages/conform test",
+    "typecheck": "bun run --cwd packages/conform typecheck"
+  },
+  "devDependencies": {
+    "@clockwork-kitten/conform": "workspace:*"
+  }
+}
