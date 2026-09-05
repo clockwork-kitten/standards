@@ -14,12 +14,12 @@ pilot adopter.
 
 | # | Task | Status | Notes |
 | --- | --- | --- | --- |
-| 1 | Repo skeleton: `README`, `ROADMAP`, `IDEAS`, `LICENSE`, markdownlint config | ◐ | Dogfoods the hygiene rules it will enforce |
-| 2 | `markdown-conformance.yml` reusable workflow (`workflow_call`) | ☐ | markdownlint + internal-reference check; inputs for config/paths |
-| 3 | Generalize the reference checker so any repo can call it | ☐ | From `ops/scripts/check_links.py`; make roots/globs configurable |
-| 4 | `repo-hygiene.yml` reusable workflow | ☐ | Assert required files exist and are non-trivial; configurable required-file list |
-| 5 | Shared, versioned markdownlint config consumers can reference | ☐ | Pinnable; mirrors the studio standard (CK-003) |
-| 6 | Tag `v0.1.0`; document the `uses: …@v0.1.0` consume path | ☐ | Release/versioning story below |
+| 1 | Repo skeleton: `README`, `ROADMAP`, `IDEAS`, `LICENSE`, markdownlint config | ☑ | Dogfoods the hygiene rules it will enforce |
+| 2 | `markdown-conformance.yml` reusable workflow (`workflow_call`) | ☑ | markdownlint + internal-reference check; inputs for config/paths |
+| 3 | Generalize the reference checker so any repo can call it | ☑ | `scripts/check_references.py`; roots/globs configurable |
+| 4 | `repo-hygiene.yml` reusable workflow | ☑ | Assert required files exist and are non-trivial; configurable required-file list |
+| 5 | Shared, versioned markdownlint config consumers can reference | ☑ | Pinnable; mirrors the studio standard (CK-003) |
+| 6 | Tag `v0.1.0`; document the `uses: …@v0.1.0` consume path | ◐ | Consume path documented in `README.md`; tag after CI is green |
 | 7 | Pilot adoption in `ops`: replace local `docs.yml` with `uses:` this repo | ☐ | Proves the end-to-end consume path |
 
 ## v0.2 — Code conformance track

@@ -1,0 +1,26 @@
+name: ci
+
+# The standards repo dogfoods its own reusable workflows on every PR: if the
+# tools can't keep this repo conformant, they aren't ready to ship. standards-ref
+# is empty so the checks use this checkout rather than a published tag.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  markdown:
+    uses: ./.github/workflows/markdown-conformance.yml
+    with:
+      standards-ref: ''
+      # These docs cross-reference the ops repo (CK-004 etc.), not local files.
+      reference-ignore: 'docs/DECISIONS.md docs/oss-policy.md ops/docs/'
+
+  hygiene:
+    uses: ./.github/workflows/repo-hygiene.yml
+    with:
+      required-files: 'README.md ROADMAP.md IDEAS.md LICENSE .markdownlint.jsonc'
