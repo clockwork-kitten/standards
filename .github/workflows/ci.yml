@@ -41,10 +41,10 @@ jobs:
       required-files: 'README.md ROADMAP.md IDEAS.md LICENSE .markdownlint.jsonc llms.txt'
 
   # Exercise the published reusable workflow end-to-end against this repo (self
-  # mode: standards-ref empty uses the caller checkout). It auto-discovers the
-  # root conform.config.ts, so references resolve with the same cross-repo ignores
-  # as the local dogfood above.
+  # mode: the engine is this checkout, so the workflow tests the PR's own engine).
+  # It auto-discovers the root conform.config.ts, so references resolve with the
+  # same cross-repo ignores as the local dogfood above.
   reusable-markdown:
     uses: ./.github/workflows/markdown-conformance.yml
     with:
-      standards-ref: ''
+      self: true

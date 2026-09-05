@@ -5,15 +5,19 @@ name: markdown-conformance
 #
 #   jobs:
 #     markdown:
-#       uses: clockwork-kitten/standards/.github/workflows/markdown-conformance.yml@v0.2.0
+#       uses: clockwork-kitten/standards/.github/workflows/markdown-conformance.yml@v0.3.0
 #
 # It runs the conform engine (packages/conform, @clockwork-kitten/conform) against
 # the studio baseline: markdown lint plus the internal cross-reference checker, in
 # one `conform check` invocation, and can optionally verify a generated `llms.txt`
 # doc index (`llms-check`). The engine isn't published to a registry, so this
-# workflow checks out clockwork-kitten/standards at `standards-ref`, installs the
-# engine's runtime deps with Bun, and runs its CLI against the calling repo.
-# Sensible defaults; override via inputs.
+# workflow checks out the engine and runs its CLI against the calling repo.
+#
+# Engine/workflow lockstep: by default the engine is pinned to the EXACT
+# clockwork-kitten/standards commit this workflow was called at
+# (github.job_workflow_sha). So `uses: ...@v0.3.0` runs the v0.3.0 engine, and
+# `@v0.3` (the moving alias) always runs the matching engine — the two can never
+# diverge, and consumers never set a ref. Sensible defaults; override via inputs.
 
 on:
   workflow_call:
@@ -38,10 +42,14 @@ on:
         description: 'Verify the committed llms.txt is up to date. Requires an `llms` block in the calling repo''s conform config.'
         type: boolean
         default: false
+      self:
+        description: 'Dogfood mode: the engine is the calling checkout itself (skip the engine checkout). Only clockwork-kitten/standards sets this.'
+        type: boolean
+        default: false
       standards-ref:
-        description: 'Ref of clockwork-kitten/standards providing the engine. Empty uses the caller checkout (self/dogfood).'
+        description: 'Advanced override: pin the engine to a specific clockwork-kitten/standards ref instead of the commit this workflow was called at. Empty (default) auto-locks the engine to github.job_workflow_sha.'
         type: string
-        default: 'v0.2.0'
+        default: ''
 
 permissions:
   contents: read
@@ -53,11 +61,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Checkout standards engine
-        if: inputs.standards-ref != ''
+        if: ${{ !inputs.self }}
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           repository: clockwork-kitten/standards
-          ref: ${{ inputs.standards-ref }}
+          # Empty standards-ref → lock to the exact commit this reusable workflow
+          # was resolved to, so the engine always matches the pinned workflow.
+          ref: ${{ inputs.standards-ref != '' && inputs.standards-ref || github.job_workflow_sha }}
           path: .standards
       - name: Set up Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
@@ -66,13 +76,13 @@ jobs:
       - name: Resolve engine root
         id: engine
         env:
-          STANDARDS_REF: ${{ inputs.standards-ref }}
+          SELF: ${{ inputs.self }}
         run: |
           set -euo pipefail
-          if [ -n "$STANDARDS_REF" ]; then
-            echo "root=.standards" >> "$GITHUB_OUTPUT"
-          else
+          if [ "$SELF" = "true" ]; then
             echo "root=." >> "$GITHUB_OUTPUT"
+          else
+            echo "root=.standards" >> "$GITHUB_OUTPUT"
           fi
       - name: Install engine (runtime deps only)
         working-directory: ${{ steps.engine.outputs.root }}
