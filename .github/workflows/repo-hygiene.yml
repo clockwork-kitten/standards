@@ -1,0 +1,56 @@
+name: repo-hygiene
+
+# Reusable repo-hygiene track for clockwork-kitten repos.
+# Consume it from a repo's own CI:
+#
+#   jobs:
+#     hygiene:
+#       uses: clockwork-kitten/standards/.github/workflows/repo-hygiene.yml@v0.1.0
+#
+# Asserts that required files exist and are non-trivial (above a small byte
+# threshold). The required-file list and threshold are inputs with safe defaults.
+
+on:
+  workflow_call:
+    inputs:
+      required-files:
+        description: 'Files that must exist and be non-trivial (space-separated).'
+        type: string
+        default: 'README.md LICENSE'
+      min-bytes:
+        description: 'Minimum size in bytes for a required file to count as non-trivial.'
+        type: number
+        default: 64
+
+permissions:
+  contents: read
+
+jobs:
+  required-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Assert required files exist and are non-trivial
+        env:
+          REQUIRED: ${{ inputs.required-files }}
+          MIN_BYTES: ${{ inputs.min-bytes }}
+        run: |
+          set -euo pipefail
+          fail=0
+          for f in $REQUIRED; do
+            if [ ! -f "$f" ]; then
+              echo "::error::missing required file: $f"
+              fail=1
+              continue
+            fi
+            size=$(wc -c < "$f")
+            if [ "$size" -lt "$MIN_BYTES" ]; then
+              echo "::error::required file too small (${size}b < ${MIN_BYTES}b): $f"
+              fail=1
+            fi
+          done
+          if [ "$fail" -eq 0 ]; then
+            echo "All required files present and non-trivial."
+          fi
+          exit "$fail"

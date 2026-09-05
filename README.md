@@ -22,13 +22,32 @@ Reference a reusable workflow from a consuming repo, pinned to a tag:
 
 ```yaml
 # .github/workflows/conformance.yml in a consuming repo
+name: conformance
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
 jobs:
   markdown:
     uses: clockwork-kitten/standards/.github/workflows/markdown-conformance.yml@v0.1.0
+
+  hygiene:
+    uses: clockwork-kitten/standards/.github/workflows/repo-hygiene.yml@v0.1.0
 ```
 
-Consumers **pin to a tag** and upgrade deliberately (propagation vs stability). See `ROADMAP.md`
-for the release/versioning story.
+Both are `workflow_call` reusable workflows with safe defaults you can override via
+`with:` — e.g. `markdown-conformance` takes `paths`, `config`, and `reference-roots`;
+`repo-hygiene` takes a `required-files` list (default `README.md LICENSE`). By default
+`markdown-conformance` lints against the studio markdownlint baseline shipped in this
+repo, so there is no per-repo config drift.
+
+Consumers **pin to a tag** and upgrade deliberately (propagation vs stability). See
+`ROADMAP.md` for the release/versioning story.
 
 ## Status
 
