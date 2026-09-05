@@ -52,15 +52,20 @@ repo now, structured for later extraction into its own branded repo (see `IDEAS.
 
 ## v0.3 — Structural document operations
 
-Promoted from `IDEAS.md`; prior-art scan in `docs/research/markdown-structural-tooling-prior-art.md`.
-Typed, schema-aware entry operations agents call instead of splicing prose — the engine's original
-contribution, gated behind the v0.2 lint that guarantees the invariants.
+The engine folds the studio's remaining bespoke doc scripts into one TS/Bun/`mdast`
+implementation, retiring per-repo Python. Two capabilities, both structural document
+operations over a shared parse: **reference integrity** (unifying `standards`'
+`check_references.py` and `ops`' `check_links.py`) and **generated doc indexes**
+(`llms.txt`) with typed per-repo config and drift checking. Prior-art scan in
+`docs/research/markdown-structural-tooling-prior-art.md`.
 
 | # | Task | Status | Notes |
 | --- | --- | --- | --- |
-| 1 | Per-document schemas in `conform.config` (`ideas`, `decisions`, `roadmap`) | ☐ | The same config the linter consumes; shape = `## I-NNN`, monotonic IDs, one separator |
-| 2 | `entry delete` / `add` / `move` / `renumber` positional splices | ☐ | Re-lint against the same schema as postcondition |
-| 3 | Surface decision: a CLI and/or an MCP tool for agents | ☐ | Answers the idea's open question |
+| 1 | `conform check` validates cross-references on `mdast` | ☐ | Clickable `](x.md)` links + backtick root-relative `.md` paths; `ignore` substrings in config; walks real `link`/`inlineCode` nodes instead of regex |
+| 2 | Retire both Python reference checkers | ☐ | Supersedes `standards/scripts/check_references.py` and `ops/scripts/check_links.py`; wire into `markdown-conformance.yml` and adopt in `ops` |
+| 3 | `conform llms` generates the `llms.txt` index; `--check` fails on drift | ☐ | First engine op that *writes*; idempotent (apply-twice = empty diff) |
+| 4 | Typed `llms` config in `conform.config.ts` (project, summary, sections) | ☐ | Proves the config carries non-markdownlint, per-repo settings — one config, shared by lint and ops |
+| 5 | Adopt `llms` generation in `ops`; retire `gen_llms_txt.py` | ☐ | `ops` becomes Python-free; `standards` dogfoods its own index |
 
 ## v0.4 — Code conformance track
 
@@ -74,23 +79,37 @@ linters and `clockwork-kitten/bedrock` the way it runs the markdown checks.
 | 3 | Invoke `clockwork-kitten/bedrock` as a check | ☐ | Bedrock is a tool the engine runs, not the home |
 | 4 | Opinionated Astro ruleset for site/client repos | ☐ | Coordinate with the galleycat template/provisioner |
 
+## v0.5 — Schema-aware entry operations
+
+Promoted from `IDEAS.md`. Typed, schema-aware entry operations agents call instead of splicing prose —
+the engine's original structural contribution, gated behind the checks that guarantee the invariants.
+Deferred below the code track so the studio's whole doc pipeline is engine-owned first.
+
+| # | Task | Status | Notes |
+| --- | --- | --- | --- |
+| 1 | Per-document schemas in `conform.config` (`ideas`, `decisions`, `roadmap`) | ☐ | The same config the linter consumes; shape = `## I-NNN`, monotonic IDs, one separator |
+| 2 | `entry delete` / `add` / `move` / `renumber` positional splices | ☐ | Re-lint against the same schema as postcondition |
+| 3 | Surface decision: a CLI and/or an MCP tool for agents | ☐ | Answers the idea's open question |
+
 ## Release & versioning
 
 - Consuming repos reference reusable workflows and configs **pinned to a tag** (`@v0.1.0`) and
   upgrade deliberately.
 - Semantic-ish tags; breaking changes to a workflow's inputs, a config's rules, or the engine's CLI
   bump the major.
-- **`v0.1.0` is cut** (tag + GitHub Release). Releases are automated by the `release` workflow
-  (`workflow_dispatch`): it validates the version, verifies `ci` is green, tags, publishes the
-  Release, and force-moves a major-line alias (`v0.1` → `v0.1.0`) so consumers can pin to a line and
-  still get patches. Full policy and consume paths in `docs/RELEASING.md`.
+- **`v0.1.0` and `v0.2.0` are cut** (tag + GitHub Release). Releases are automated by the `release`
+  workflow (`workflow_dispatch`): it validates the version, verifies `ci` is green, tags, publishes
+  the Release, and force-moves a major-line alias (`v0.2` → `v0.2.0`) so consumers can pin to a line
+  and still get patches. Full policy and consume paths in `docs/RELEASING.md`.
 
 ## Open items
 
-- **License choice at extraction.** Currently `LICENSE` is MIT for simplicity while private.
-  Reconsider **Apache-2.0** (patent grant) if the conformance engine is extracted/commercialized —
-  see `IDEAS.md` and the `ops` `docs/oss-policy.md`.
-- **Public vs private.** Private now; revisit at product extraction.
+- **License choice at extraction.** Currently `LICENSE` is MIT. Reconsider **Apache-2.0** (patent
+  grant) if the conformance engine is extracted/commercialized — see `IDEAS.md` and the `ops`
+  `docs/oss-policy.md`.
+- **Public vs private.** **Now public** — private consumers (e.g. `ops`) must be able to fetch the
+  reusable workflows and the engine, which a private home blocked. Revisit only if a future home
+  needs to hold non-public material.
 - **Record the engine architecture as a decision.** The consolidation to one TS/Bun/`mdast` engine
   with `standards` as thin orchestration is a notable direction worth a `CK-NNN` entry in the `ops`
   repo's `docs/DECISIONS.md`, alongside CK-004.
