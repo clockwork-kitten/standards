@@ -1,0 +1,18 @@
+# Clockwork Kitten — standards
+
+> The studio's machine-checkable engineering standards and reusable CI: the conform engine, shared markdownlint baseline, and reusable workflows every clockwork-kitten repo consumes.
+
+## Standards home
+
+- [Ideas — standards](IDEAS.md): A parking lot for not-yet-scheduled ideas specific to the standards home. Candidates, not commitments. When one is ready, promote it to ROADMAP.md and/or a decision in the ops repo's docs/DECISIONS.md, then remove it here.
+- [Clockwork Kitten — standards](README.md): The studio's machine-checkable engineering standards and reusable CI. This repo is the single source of truth for how every clockwork-kitten repo is kept consistent — the enforcement backbone of the studio invariant: AI proposes freely, a machine-checkable standard constrains how, a human still merges.
+- [Roadmap — standards](ROADMAP.md): The sequenced plan for the studio standards home. Status: ☐ todo · ◐ in progress · ☑ done · ⏸ deferred. Order is about dependencies, not urgency.
+
+## Reference docs
+
+- [Releasing — standards](docs/RELEASING.md): How the studio standards home cuts releases. Consuming repos pin to tags published here, so releases are deliberate and versioned. The release workflow (.github/workflows/release.yml) automates the mechanics; a human still decides when and what to release.
+- [Prior art — Deterministic structural tools for conformant Markdown](docs/research/markdown-structural-tooling-prior-art.md): Prior-art scan for the IDEAS.md entry "Deterministic structural tools for conformant Markdown". Compiled 2026-09-04 by a read-only research session (josephcarey-scaling-carnival); preserved here verbatim.
+
+## Conform engine
+
+- [@clockwork-kitten/conform](packages/conform/README.md): The studio conformance engine — one CLI that comes in and checks a repo against the clockwork-kitten standards. It lints Markdown, validates internal cross-references, and generates an llms.txt doc index; code checks land in later slices (see the repo ROADMAP.md).

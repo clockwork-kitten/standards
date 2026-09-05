@@ -1,8 +1,8 @@
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { expandGlobs, parseCheckArgs, runCheck } from "./main.ts";
+import { expandGlobs, parseCheckArgs, parseLlmsArgs, runCheck, runLlms } from "./main.ts";
 
 describe("parseCheckArgs", () => {
 	it("defaults to **/*.md with no config", () => {
@@ -123,5 +123,79 @@ describe("runCheck", () => {
 		writeFileSync(join(dir, "index.md"), "# Index\n\nSee `other/repo.md` elsewhere.\n");
 		expect(await runCheck(["**/*.md"], dir)).toBe(1);
 		expect(await runCheck(["**/*.md", "--reference-ignore", "other/"], dir)).toBe(0);
+	});
+});
+
+describe("parseLlmsArgs", () => {
+	it("defaults to **/*.md, no config, write mode", () => {
+		expect(parseLlmsArgs([])).toEqual({ globs: ["**/*.md"], configPath: undefined, check: false });
+	});
+
+	it("parses globs, --config, and --check", () => {
+		expect(parseLlmsArgs(["docs/**/*.md", "--config", "c.ts", "--check"])).toEqual({
+			globs: ["docs/**/*.md"],
+			configPath: "c.ts",
+			check: true,
+		});
+	});
+
+	it("throws on a missing --config value or unknown flag", () => {
+		expect(() => parseLlmsArgs(["--config"])).toThrow(/requires a path/);
+		expect(() => parseLlmsArgs(["--nope"])).toThrow(/unknown option/);
+	});
+});
+
+const LLMS_CONFIG = JSON.stringify({
+	llms: {
+		project: "Test",
+		summary: "A test index.",
+		sections: [
+			{ title: "Top", prefix: "", shallow: true },
+			{ title: "Docs", prefix: "docs/" },
+		],
+	},
+});
+
+describe("runLlms", () => {
+	let dir: string;
+	beforeEach(() => {
+		dir = mkdtempSync(join(tmpdir(), "conform-llms-"));
+		vi.spyOn(console, "error").mockImplementation(() => {});
+	});
+	afterEach(() => {
+		rmSync(dir, { recursive: true, force: true });
+		vi.restoreAllMocks();
+	});
+
+	it("returns 2 when no llms config is present", async () => {
+		writeFileSync(join(dir, "README.md"), "# R\n\nx.\n");
+		expect(await runLlms([], dir)).toBe(2);
+	});
+
+	it("writes llms.txt, then --check passes; editing a doc makes --check fail", async () => {
+		writeFileSync(join(dir, "conform.config.jsonc"), LLMS_CONFIG);
+		writeFileSync(join(dir, "README.md"), "# Home\n\nRoot doc.\n");
+		mkdirSync(join(dir, "docs"));
+		writeFileSync(join(dir, "docs", "a.md"), "# Alpha\n\nA doc.\n");
+
+		expect(await runLlms([], dir)).toBe(0);
+		const written = readFileSync(join(dir, "llms.txt"), "utf8");
+		expect(written).toContain("# Test");
+		expect(written).toContain("- [Home](README.md): Root doc.");
+		expect(written).toContain("- [Alpha](docs/a.md): A doc.");
+
+		expect(await runLlms(["--check"], dir)).toBe(0);
+
+		writeFileSync(join(dir, "docs", "a.md"), "# Alpha\n\nChanged summary.\n");
+		expect(await runLlms(["--check"], dir)).toBe(1);
+	});
+
+	it("returns 2 on a malformed config", async () => {
+		writeFileSync(join(dir, "conform.config.jsonc"), "{ broken");
+		expect(await runLlms([], dir)).toBe(2);
+	});
+
+	it("returns 2 on bad arguments", async () => {
+		expect(await runLlms(["--config"], dir)).toBe(2);
 	});
 });

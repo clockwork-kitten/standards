@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, normalize } from "node:path";
-import { fromMarkdown } from "mdast-util-from-markdown";
 import { visit } from "unist-util-visit";
+import { parseMarkdown } from "./parse.ts";
 
 /** Link URL prefixes that name something outside the repo — never resolved on disk. */
 const EXTERNAL_PREFIXES = ["http://", "https://", "mailto:", "tel:"] as const;
@@ -45,7 +45,7 @@ function isExternal(url: string): boolean {
  *   containing a `/` (a bare `` `file.md` `` is prose, not a path).
  */
 export function extractReferences(markdown: string): Reference[] {
-	const tree = fromMarkdown(markdown);
+	const tree = parseMarkdown(markdown);
 	const references: Reference[] = [];
 	visit(tree, (node) => {
 		if (node.type === "link" || node.type === "definition") {

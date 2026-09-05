@@ -41,9 +41,9 @@ jobs:
 ```
 
 Both are `workflow_call` reusable workflows with safe defaults you can override via
-`with:` — e.g. `markdown-conformance` takes `paths`, `config`, `reference-check`, and
-`reference-ignore`; `repo-hygiene` takes a `required-files` list (default `README.md
-LICENSE`). By default `markdown-conformance` runs the conform engine
+`with:` — e.g. `markdown-conformance` takes `paths`, `config`, `reference-check`,
+`reference-ignore`, and `llms-check`; `repo-hygiene` takes a `required-files` list
+(default `README.md LICENSE`). By default `markdown-conformance` runs the conform engine
 (`@clockwork-kitten/conform`) against the studio markdownlint baseline shipped in this
 repo — markdown lint plus the internal cross-reference check in one pass — so there is no
 per-repo config drift; point `config` at a `conform.config.*` to adjust individual rules.

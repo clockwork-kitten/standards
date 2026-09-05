@@ -63,9 +63,9 @@ operations over a shared parse: **reference integrity** (unifying `standards`'
 | --- | --- | --- | --- |
 | 1 | `conform check` validates cross-references on `mdast` | ☑ | Clickable `](x.md)` links + backtick root-relative `.md` paths; `ignore` substrings in config; walks real `link`/`inlineCode` nodes instead of regex |
 | 2 | Retire both Python reference checkers | ◐ | `standards/scripts/check_references.py` removed and `markdown-conformance.yml` now runs the engine check; `ops/scripts/check_links.py` adoption is the follow-up `ops` PR |
-| 3 | `conform llms` generates the `llms.txt` index; `--check` fails on drift | ☐ | First engine op that *writes*; idempotent (apply-twice = empty diff) |
-| 4 | Typed `llms` config in `conform.config.ts` (project, summary, sections) | ☐ | Proves the config carries non-markdownlint, per-repo settings — one config, shared by lint and ops |
-| 5 | Adopt `llms` generation in `ops`; retire `gen_llms_txt.py` | ☐ | `ops` becomes Python-free; `standards` dogfoods its own index |
+| 3 | `conform llms` generates the `llms.txt` index; `--check` fails on drift | ☑ | First engine op that *writes*; idempotent (apply-twice = empty diff); `standards` dogfoods its own index |
+| 4 | Typed `llms` config in `conform.config.ts` (project, summary, sections) | ☑ | Proves the config carries non-markdownlint, per-repo settings — one config, shared by lint and ops; sections match by path prefix |
+| 5 | Adopt `llms` generation in `ops`; retire `gen_llms_txt.py` | ☐ | `ops` becomes Python-free; enable the reusable workflow's `llms-check` input |
 
 ## v0.4 — Code conformance track
 

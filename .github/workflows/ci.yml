@@ -32,11 +32,13 @@ jobs:
         run: bun run test
       - name: Lint markdown + check references via the engine (dogfood)
         run: bun run check:md
+      - name: Verify llms.txt is up to date (dogfood)
+        run: bun run check:llms
 
   hygiene:
     uses: ./.github/workflows/repo-hygiene.yml
     with:
-      required-files: 'README.md ROADMAP.md IDEAS.md LICENSE .markdownlint.jsonc'
+      required-files: 'README.md ROADMAP.md IDEAS.md LICENSE .markdownlint.jsonc llms.txt'
 
   # Exercise the published reusable workflow end-to-end against this repo (self
   # mode: standards-ref empty uses the caller checkout). It auto-discovers the
