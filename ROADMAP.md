@@ -62,12 +62,26 @@ operations over a shared parse: **reference integrity** (unifying `standards`'
 | # | Task | Status | Notes |
 | --- | --- | --- | --- |
 | 1 | `conform check` validates cross-references on `mdast` | ☑ | Clickable `](x.md)` links + backtick root-relative `.md` paths; `ignore` substrings in config; walks real `link`/`inlineCode` nodes instead of regex |
-| 2 | Retire both Python reference checkers | ◐ | `standards/scripts/check_references.py` removed and `markdown-conformance.yml` now runs the engine check; `ops/scripts/check_links.py` adoption is the follow-up `ops` PR |
+| 2 | Retire both Python reference checkers | ☑ | `standards/scripts/check_references.py` removed and `markdown-conformance.yml` runs the engine check; `ops/scripts/check_links.py` retired in ops PR #5 |
 | 3 | `conform llms` generates the `llms.txt` index; `--check` fails on drift | ☑ | First engine op that *writes*; idempotent (apply-twice = empty diff); `standards` dogfoods its own index |
 | 4 | Typed `llms` config in `conform.config.ts` (project, summary, sections) | ☑ | Proves the config carries non-markdownlint, per-repo settings — one config, shared by lint and ops; sections match by path prefix |
-| 5 | Adopt `llms` generation in `ops`; retire `gen_llms_txt.py` | ☐ | `ops` becomes Python-free; enable the reusable workflow's `llms-check` input |
+| 5 | Adopt `llms` generation in `ops`; retire `gen_llms_txt.py` | ☑ | `ops` is now Python-free (ops PRs #5/#6); `llms-check` enabled, riding the `@v0.3` alias |
 
-## v0.4 — Code conformance track
+## v0.4 — Authoring ergonomics
+
+The AI-native analog of "lint/format on save": a deterministic autofix the author (usually an agent)
+runs *while proposing*, plus a commit-time backstop — not editor/LSP integration, which is
+deliberately out of scope while authoring is AI-primary. `fix` is authoring-time only; CI still only
+ever runs `check` and fails on drift (auto-committing fixes would fight the human-merge gate).
+
+| # | Task | Status | Notes |
+| --- | --- | --- | --- |
+| 1 | `conform fix` autofixes fixable markdown rules | ☐ | Write-side sibling of `check`; uses markdownlint `applyFixes` via `fixInfo`, same resolved config + shared parser; reports the unfixable residue |
+| 2 | `conform fix` also regenerates `llms.txt` | ☐ | One command self-heals the tree; keep the generator injectable |
+| 3 | lefthook shared base consumers extend/pin | ☐ | Pre-commit runs `conform check` (+ `fix` on staged files); `conform` is the brain, lefthook the trigger; propagates like the reusable workflows; also serves the code track |
+| 4 | `AGENTS.md` guidance: run `conform` in-loop | ☐ | The hook is a backstop — an agent may commit via tooling that bypasses it |
+
+## v0.5 — Code conformance track
 
 Code checks join the same engine rather than a parallel toolchain: `conform check` invokes the studio
 linters and `clockwork-kitten/bedrock` the way it runs the markdown checks.
@@ -79,7 +93,7 @@ linters and `clockwork-kitten/bedrock` the way it runs the markdown checks.
 | 3 | Invoke `clockwork-kitten/bedrock` as a check | ☐ | Bedrock is a tool the engine runs, not the home |
 | 4 | Opinionated Astro ruleset for site/client repos | ☐ | Coordinate with the galleycat template/provisioner |
 
-## v0.5 — Schema-aware entry operations
+## v0.6 — Schema-aware entry operations
 
 Promoted from `IDEAS.md`. Typed, schema-aware entry operations agents call instead of splicing prose —
 the engine's original structural contribution, gated behind the checks that guarantee the invariants.
@@ -97,10 +111,11 @@ Deferred below the code track so the studio's whole doc pipeline is engine-owned
   upgrade deliberately.
 - Semantic-ish tags; breaking changes to a workflow's inputs, a config's rules, or the engine's CLI
   bump the major.
-- **`v0.1.0` and `v0.2.0` are cut** (tag + GitHub Release). Releases are automated by the `release`
+- **`v0.1.0` through `v0.3.1` are cut** (tag + GitHub Release). Releases are automated by the `release`
   workflow (`workflow_dispatch`): it validates the version, verifies `ci` is green, tags, publishes
-  the Release, and force-moves a major-line alias (`v0.2` → `v0.2.0`) so consumers can pin to a line
-  and still get patches. Full policy and consume paths in `docs/RELEASING.md`.
+  the Release, and force-moves a major-line alias (`v0.3` → `v0.3.1`) so consumers can pin to a line
+  and still get patches. The reusable workflow locks the engine to the exact commit it's pinned at
+  (`github.job_workflow_sha`), so the engine and workflow never drift. Full policy in `docs/RELEASING.md`.
 
 ## Open items
 
