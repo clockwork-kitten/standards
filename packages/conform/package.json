@@ -17,12 +17,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "jsonc-parser": "^3.3.1",
     "markdownlint": "^0.38.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",
     "@vitest/coverage-v8": "^3.0.2",
-    "jsonc-parser": "^3.3.1",
     "typescript": "^5.7.3",
     "vitest": "^3.0.2"
   }

@@ -46,9 +46,9 @@ repo now, structured for later extraction into its own branded repo (see `IDEAS.
 
 | # | Task | Status | Notes |
 | --- | --- | --- | --- |
-| 1 | Engine skeleton at `packages/conform/` (`@clockwork-kitten/conform`, `bin: conform`) | ☐ | TS/Bun; config discovery + deep-merge; one pinned `mdast`/GFM parser |
-| 2 | `conform check` runs markdown lint against the studio baseline | ☐ | Replaces the current shell `markdown` job; `standards` dogfoods it |
-| 3 | `markdown-conformance.yml` invokes the engine | ☐ | Consume path unchanged for callers |
+| 1 | Engine skeleton at `packages/conform/` (`@clockwork-kitten/conform`, `bin: conform`) | ☑ | TS/Bun; config discovery + deep-merge; markdownlint runner (mdast structural ops land in v0.3) |
+| 2 | `conform check` runs markdown lint against the studio baseline | ☑ | Replaced the shell `markdown` job in `ci.yml`; `standards` dogfoods it |
+| 3 | `markdown-conformance.yml` invokes the engine | ☑ | Reusable workflow checks out the engine at `standards-ref` and runs `conform check`; consume path unchanged for callers |
 
 ## v0.3 — Structural document operations
 

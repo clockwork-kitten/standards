@@ -34,27 +34,29 @@ permissions:
 
 jobs:
   markdown:
-    uses: clockwork-kitten/standards/.github/workflows/markdown-conformance.yml@v0.1.0
+    uses: clockwork-kitten/standards/.github/workflows/markdown-conformance.yml@v0.2.0
 
   hygiene:
-    uses: clockwork-kitten/standards/.github/workflows/repo-hygiene.yml@v0.1.0
+    uses: clockwork-kitten/standards/.github/workflows/repo-hygiene.yml@v0.2.0
 ```
 
 Both are `workflow_call` reusable workflows with safe defaults you can override via
 `with:` — e.g. `markdown-conformance` takes `paths`, `config`, and `reference-roots`;
 `repo-hygiene` takes a `required-files` list (default `README.md LICENSE`). By default
-`markdown-conformance` lints against the studio markdownlint baseline shipped in this
-repo, so there is no per-repo config drift.
+`markdown-conformance` runs the conform engine (`@clockwork-kitten/conform`) against the
+studio markdownlint baseline shipped in this repo, so there is no per-repo config drift;
+point `config` at a `conform.config.*` to adjust individual rules.
 
 Consumers **pin to a tag** and upgrade deliberately (propagation vs stability). Pin to an exact
-version (`@v0.1.0`) for maximum stability, or to a moving line alias (`@v0.1`) to pick up patches
+version (`@v0.2.0`) for maximum stability, or to a moving line alias (`@v0.2`) to pick up patches
 automatically. See `docs/RELEASING.md` for the versioning and release policy, and `ROADMAP.md` for
 the roadmap.
 
 ## Status
 
-**v0.1 in progress** — Markdown-conformance track + repo-hygiene core. `clockwork-kitten/ops`
-is the pilot adopter. See `ROADMAP.md`.
+**v0.2 in progress** — the markdown-conformance track now runs through the conform engine
+(`packages/conform`). v0.1 (reusable markdown-conformance + repo-hygiene) is released.
+`clockwork-kitten/ops` is the pilot adopter. See `ROADMAP.md`.
 
 ## Relationships
 
