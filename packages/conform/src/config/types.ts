@@ -6,12 +6,22 @@ import type { Configuration } from "markdownlint";
  */
 export type MarkdownlintConfig = Configuration;
 
+/** Configuration for the internal cross-reference checker. */
+export type ReferencesConfig = {
+	/**
+	 * Substrings marking a backtick root-relative path as external/cross-repo:
+	 * any `` `path.md` `` containing one is not resolved on disk. Use this for
+	 * paths that live in another repo (e.g. `ops/docs/`).
+	 */
+	ignore?: string[];
+};
+
 /**
  * A `conform` configuration, as authored in `conform.config.ts` or
  * `conform.config.jsonc` at a repo root.
  *
- * Slice 1 carries only markdown-lint settings; structural document schemas and
- * hygiene settings are added in later engine slices.
+ * Carries markdown-lint settings and reference-checker settings; structural
+ * document schemas and generators are added in later engine slices.
  */
 export type ConformConfig = {
 	/**
@@ -22,6 +32,8 @@ export type ConformConfig = {
 	extends?: boolean;
 	/** markdownlint rule overrides, deep-merged over the studio baseline. */
 	markdownlint?: MarkdownlintConfig;
+	/** Internal cross-reference checker settings. */
+	references?: ReferencesConfig;
 };
 
 /**

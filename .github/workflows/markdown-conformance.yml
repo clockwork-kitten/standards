@@ -8,16 +8,17 @@ name: markdown-conformance
 #       uses: clockwork-kitten/standards/.github/workflows/markdown-conformance.yml@v0.2.0
 #
 # It runs the conform engine (packages/conform, @clockwork-kitten/conform) against
-# the studio baseline and the internal cross-reference checker. The engine isn't
-# published to a registry, so this workflow checks out clockwork-kitten/standards
-# at `standards-ref`, installs the engine's runtime deps with Bun, and runs its
-# `conform check` CLI against the calling repo. Sensible defaults; override via inputs.
+# the studio baseline: markdown lint plus the internal cross-reference checker, in
+# one `conform check` invocation. The engine isn't published to a registry, so this
+# workflow checks out clockwork-kitten/standards at `standards-ref`, installs the
+# engine's runtime deps with Bun, and runs its CLI against the calling repo.
+# Sensible defaults; override via inputs.
 
 on:
   workflow_call:
     inputs:
       paths:
-        description: 'Globs the engine lints (space-separated). node_modules/.git/.standards are always ignored.'
+        description: 'Globs the engine checks (space-separated). node_modules/.git/.standards are always ignored.'
         type: string
         default: '**/*.md'
       config:
@@ -25,19 +26,15 @@ on:
         type: string
         default: ''
       reference-check:
-        description: 'Run the internal cross-reference checker.'
+        description: 'Run the internal cross-reference checker as part of the engine check.'
         type: boolean
         default: true
-      reference-roots:
-        description: 'Directories the reference checker scans (space-separated).'
-        type: string
-        default: '.'
       reference-ignore:
-        description: 'Substrings marking a backtick path as external/cross-repo, not resolved (space-separated).'
+        description: 'Substrings marking a backtick path as external/cross-repo, not resolved (space-separated). Layered on top of the config''s references.ignore.'
         type: string
         default: ''
       standards-ref:
-        description: 'Ref of clockwork-kitten/standards providing the engine + scripts. Empty uses the caller checkout (self/dogfood).'
+        description: 'Ref of clockwork-kitten/standards providing the engine. Empty uses the caller checkout (self/dogfood).'
         type: string
         default: 'v0.2.0'
 
@@ -85,56 +82,23 @@ jobs:
           # (self mode) or under `.standards`. jsonc/plain configs don't need this.
           mkdir -p node_modules/@clockwork-kitten
           ln -sfn "$PWD/$ENGINE_ROOT/packages/conform" node_modules/@clockwork-kitten/conform
-      - name: Lint Markdown via the conform engine
+      - name: Run the conform engine (markdown lint + references)
         env:
           ENGINE_ROOT: ${{ steps.engine.outputs.root }}
           CONFIG: ${{ inputs.config }}
           PATHS: ${{ inputs.paths }}
+          REFERENCE_CHECK: ${{ inputs.reference-check }}
+          REFERENCE_IGNORE: ${{ inputs.reference-ignore }}
         run: |
           set -euo pipefail
           args=(check $PATHS)
           if [ -n "$CONFIG" ]; then
             args+=(--config "$CONFIG")
           fi
-          bun "$ENGINE_ROOT/packages/conform/src/cli/main.ts" "${args[@]}"
-
-  references:
-    if: inputs.reference-check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Checkout standards baseline
-        if: inputs.standards-ref != ''
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          repository: clockwork-kitten/standards
-          ref: ${{ inputs.standards-ref }}
-          path: .standards
-      - name: Set up Python
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
-        with:
-          python-version: '3.x'
-      - name: Resolve checker path
-        id: script
-        env:
-          STANDARDS_REF: ${{ inputs.standards-ref }}
-        run: |
-          set -euo pipefail
-          if [ -n "$STANDARDS_REF" ]; then
-            echo "path=.standards/scripts/check_references.py" >> "$GITHUB_OUTPUT"
-          else
-            echo "path=scripts/check_references.py" >> "$GITHUB_OUTPUT"
+          if [ "$REFERENCE_CHECK" != "true" ]; then
+            args+=(--no-references)
           fi
-      - name: Check internal cross-references
-        env:
-          CHECKER: ${{ steps.script.outputs.path }}
-          ROOTS: ${{ inputs.reference-roots }}
-          IGNORE: ${{ inputs.reference-ignore }}
-        run: |
-          set -euo pipefail
-          args=(--repo-root . --skip-dir .standards)
-          for sub in $IGNORE; do
-            args+=(--ignore-substr "$sub")
+          for sub in $REFERENCE_IGNORE; do
+            args+=(--reference-ignore "$sub")
           done
-          python3 "$CHECKER" "${args[@]}" $ROOTS
+          bun "$ENGINE_ROOT/packages/conform/src/cli/main.ts" "${args[@]}"

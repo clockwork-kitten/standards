@@ -6,13 +6,20 @@ import { expandGlobs, parseCheckArgs, runCheck } from "./main.ts";
 
 describe("parseCheckArgs", () => {
 	it("defaults to **/*.md with no config", () => {
-		expect(parseCheckArgs([])).toEqual({ globs: ["**/*.md"], configPath: undefined });
+		expect(parseCheckArgs([])).toEqual({
+			globs: ["**/*.md"],
+			configPath: undefined,
+			references: true,
+			referenceIgnore: [],
+		});
 	});
 
 	it("collects positional globs", () => {
 		expect(parseCheckArgs(["docs/**/*.md", "README.md"])).toEqual({
 			globs: ["docs/**/*.md", "README.md"],
 			configPath: undefined,
+			references: true,
+			referenceIgnore: [],
 		});
 	});
 
@@ -22,9 +29,17 @@ describe("parseCheckArgs", () => {
 		expect(parseCheckArgs(["--config=c.ts"]).configPath).toBe("c.ts");
 	});
 
+	it("parses --no-references and repeatable --reference-ignore", () => {
+		expect(parseCheckArgs(["--no-references"]).references).toBe(false);
+		expect(parseCheckArgs(["--reference-ignore", "ops/", "--reference-ignore=docs/x.md"]).referenceIgnore).toEqual(
+			["ops/", "docs/x.md"],
+		);
+	});
+
 	it("throws on a missing --config value or unknown flag", () => {
 		expect(() => parseCheckArgs(["--config"])).toThrow(/requires a path/);
 		expect(() => parseCheckArgs(["--nope"])).toThrow(/unknown option/);
+		expect(() => parseCheckArgs(["--reference-ignore"])).toThrow(/requires a substring/);
 	});
 });
 
@@ -90,5 +105,23 @@ describe("runCheck", () => {
 			'{ "extends": false, "markdownlint": { "default": true, "MD041": false, "MD047": false } }',
 		);
 		expect(await runCheck(["**/*.md"], dir)).toBe(0);
+	});
+
+	it("returns 1 on a broken internal link, 0 once --no-references is set", async () => {
+		writeFileSync(join(dir, "index.md"), "# Index\n\nSee [gone](missing.md).\n");
+		expect(await runCheck(["**/*.md"], dir)).toBe(1);
+		expect(await runCheck(["**/*.md", "--no-references"], dir)).toBe(0);
+	});
+
+	it("resolves a valid internal link", async () => {
+		writeFileSync(join(dir, "index.md"), "# Index\n\nSee [target](target.md).\n");
+		writeFileSync(join(dir, "target.md"), "# Target\n\nHere.\n");
+		expect(await runCheck(["**/*.md"], dir)).toBe(0);
+	});
+
+	it("honors --reference-ignore for a cross-repo backtick path", async () => {
+		writeFileSync(join(dir, "index.md"), "# Index\n\nSee `other/repo.md` elsewhere.\n");
+		expect(await runCheck(["**/*.md"], dir)).toBe(1);
+		expect(await runCheck(["**/*.md", "--reference-ignore", "other/"], dir)).toBe(0);
 	});
 });

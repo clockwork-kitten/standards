@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { STUDIO_MARKDOWNLINT_BASELINE } from "./baseline.ts";
-import { resolveMarkdownlintConfig } from "./resolve.ts";
+import { resolveMarkdownlintConfig, resolveReferencesConfig } from "./resolve.ts";
 import { defineConfig } from "./types.ts";
 
 describe("resolveMarkdownlintConfig", () => {
@@ -41,5 +41,18 @@ describe("resolveMarkdownlintConfig", () => {
 	it("defineConfig returns its argument unchanged", () => {
 		const config = { markdownlint: { MD013: true } };
 		expect(defineConfig(config)).toBe(config);
+	});
+});
+
+describe("resolveReferencesConfig", () => {
+	it("defaults ignore to empty when unset", () => {
+		expect(resolveReferencesConfig({})).toEqual({ ignore: [] });
+	});
+
+	it("copies configured ignore substrings without aliasing the source", () => {
+		const source = { references: { ignore: ["ops/"] } };
+		const resolved = resolveReferencesConfig(source);
+		expect(resolved).toEqual({ ignore: ["ops/"] });
+		expect(resolved.ignore).not.toBe(source.references.ignore);
 	});
 });
