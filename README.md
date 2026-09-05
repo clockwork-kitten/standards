@@ -46,8 +46,10 @@ Both are `workflow_call` reusable workflows with safe defaults you can override 
 `markdown-conformance` lints against the studio markdownlint baseline shipped in this
 repo, so there is no per-repo config drift.
 
-Consumers **pin to a tag** and upgrade deliberately (propagation vs stability). See
-`ROADMAP.md` for the release/versioning story.
+Consumers **pin to a tag** and upgrade deliberately (propagation vs stability). Pin to an exact
+version (`@v0.1.0`) for maximum stability, or to a moving line alias (`@v0.1`) to pick up patches
+automatically. See `docs/RELEASING.md` for the versioning and release policy, and `ROADMAP.md` for
+the roadmap.
 
 ## Status
 

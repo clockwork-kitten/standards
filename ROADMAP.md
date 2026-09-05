@@ -80,9 +80,10 @@ linters and `clockwork-kitten/bedrock` the way it runs the markdown checks.
   upgrade deliberately.
 - Semantic-ish tags; breaking changes to a workflow's inputs, a config's rules, or the engine's CLI
   bump the major.
-- **`v0.1.0` is cut** (tag + GitHub Release). Next: **automate releases** — a tag/dispatch-triggered
-  workflow that cuts versioned tags and maintains a moving major alias (`v0.1` → `v0.1.0`) so
-  consumers can pin to a major line and still get patches.
+- **`v0.1.0` is cut** (tag + GitHub Release). Releases are automated by the `release` workflow
+  (`workflow_dispatch`): it validates the version, verifies `ci` is green, tags, publishes the
+  Release, and force-moves a major-line alias (`v0.1` → `v0.1.0`) so consumers can pin to a line and
+  still get patches. Full policy and consume paths in `docs/RELEASING.md`.
 
 ## Open items
 
