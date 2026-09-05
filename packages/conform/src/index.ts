@@ -14,7 +14,22 @@ export {
 	loadConfigFile,
 	resolveConfig,
 	resolveMarkdownlintConfig,
+	resolveReferencesConfig,
 	type ResolvedConfig,
+	type ResolvedReferencesConfig,
 } from "./config/resolve.ts";
-export { defineConfig, type ConformConfig, type MarkdownlintConfig } from "./config/types.ts";
+export {
+	defineConfig,
+	type ConformConfig,
+	type MarkdownlintConfig,
+	type ReferencesConfig,
+} from "./config/types.ts";
 export { formatIssues, lintContent, lintFiles, type LintIssue } from "./lint/markdown.ts";
+export {
+	checkReferences,
+	extractReferences,
+	formatReferenceIssues,
+	type CheckReferencesOptions,
+	type Reference,
+	type ReferenceIssue,
+} from "./lint/references.ts";

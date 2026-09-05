@@ -20,7 +20,7 @@ pilot adopter.
 | 4 | `repo-hygiene.yml` reusable workflow | ☑ | Assert required files exist and are non-trivial; configurable required-file list |
 | 5 | Shared, versioned markdownlint config consumers can reference | ☑ | Pinnable; mirrors the studio standard (CK-003) |
 | 6 | Tag `v0.1.0`; document the `uses: …@v0.1.0` consume path | ☑ | Tag + GitHub Release cut from green `main`; consume path in `README.md` |
-| 7 | Pilot adoption in `ops`: replace local `docs.yml` with `uses:` this repo | ☐ | Proves the end-to-end consume path |
+| 7 | Pilot adoption in `ops`: replace local `docs.yml` with `uses:` this repo | ☑ | Proves the end-to-end consume path (ops PR #4) |
 
 ## v0.2 — Conform engine (markdown-lint slice)
 
@@ -61,8 +61,8 @@ operations over a shared parse: **reference integrity** (unifying `standards`'
 
 | # | Task | Status | Notes |
 | --- | --- | --- | --- |
-| 1 | `conform check` validates cross-references on `mdast` | ☐ | Clickable `](x.md)` links + backtick root-relative `.md` paths; `ignore` substrings in config; walks real `link`/`inlineCode` nodes instead of regex |
-| 2 | Retire both Python reference checkers | ☐ | Supersedes `standards/scripts/check_references.py` and `ops/scripts/check_links.py`; wire into `markdown-conformance.yml` and adopt in `ops` |
+| 1 | `conform check` validates cross-references on `mdast` | ☑ | Clickable `](x.md)` links + backtick root-relative `.md` paths; `ignore` substrings in config; walks real `link`/`inlineCode` nodes instead of regex |
+| 2 | Retire both Python reference checkers | ◐ | `standards/scripts/check_references.py` removed and `markdown-conformance.yml` now runs the engine check; `ops/scripts/check_links.py` adoption is the follow-up `ops` PR |
 | 3 | `conform llms` generates the `llms.txt` index; `--check` fails on drift | ☐ | First engine op that *writes*; idempotent (apply-twice = empty diff) |
 | 4 | Typed `llms` config in `conform.config.ts` (project, summary, sections) | ☐ | Proves the config carries non-markdownlint, per-repo settings — one config, shared by lint and ops |
 | 5 | Adopt `llms` generation in `ops`; retire `gen_llms_txt.py` | ☐ | `ops` becomes Python-free; `standards` dogfoods its own index |

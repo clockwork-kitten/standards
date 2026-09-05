@@ -4,7 +4,7 @@ import { pathToFileURL } from "node:url";
 import { parse as parseJsonc, type ParseError } from "jsonc-parser";
 import { STUDIO_MARKDOWNLINT_BASELINE } from "./baseline.ts";
 import { deepMerge, isPlainObject, type PlainObject } from "./merge.ts";
-import type { ConformConfig, MarkdownlintConfig } from "./types.ts";
+import type { ConformConfig, MarkdownlintConfig, ReferencesConfig } from "./types.ts";
 
 /** Raised when a config file exists but cannot be loaded or parsed. */
 export class ConfigError extends Error {
@@ -21,9 +21,13 @@ export const CONFIG_FILENAMES = [
 	"conform.config.json",
 ] as const;
 
+/** The reference-checker settings for a run, with defaults applied. */
+export type ResolvedReferencesConfig = Required<ReferencesConfig>;
+
 /** The effective configuration for a run, plus where it came from. */
 export type ResolvedConfig = {
 	markdownlint: MarkdownlintConfig;
+	references: ResolvedReferencesConfig;
 	/** Human-readable description of the config source, for logging. */
 	source: string;
 };
@@ -42,6 +46,15 @@ export function resolveMarkdownlintConfig(config: ConformConfig): MarkdownlintCo
 		return { ...overrides } as MarkdownlintConfig;
 	}
 	return deepMerge(STUDIO_MARKDOWNLINT_BASELINE as PlainObject, overrides) as MarkdownlintConfig;
+}
+
+/**
+ * Compute the effective reference-checker settings from a loaded conform config.
+ * The checker has no studio baseline, so this only fills defaults; `ignore`
+ * defaults to empty (resolve every internal reference).
+ */
+export function resolveReferencesConfig(config: ConformConfig): ResolvedReferencesConfig {
+	return { ignore: [...(config.references?.ignore ?? [])] };
 }
 
 function isConfigModule(value: unknown): value is ConformConfig {
@@ -117,10 +130,15 @@ export async function resolveConfig(options: {
 	if (!path) {
 		return {
 			markdownlint: { ...STUDIO_MARKDOWNLINT_BASELINE },
+			references: { ignore: [] },
 			source: "studio baseline (no config file found)",
 		};
 	}
 
 	const config = await loadConfigFile(path);
-	return { markdownlint: resolveMarkdownlintConfig(config), source: path };
+	return {
+		markdownlint: resolveMarkdownlintConfig(config),
+		references: resolveReferencesConfig(config),
+		source: path,
+	};
 }
