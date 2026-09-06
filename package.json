@@ -2,17 +2,28 @@
   "name": "@clockwork-kitten/standards-workspace",
   "private": true,
   "type": "module",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "check:md": "conform check",
     "llms": "conform llms",
     "fix:md": "conform fix",
     "check:llms": "conform llms --check",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "deadcode": "knip",
     "test": "bun run --cwd packages/conform test",
     "typecheck": "bun run --cwd packages/conform typecheck"
   },
+  "prettier": "@clockwork-kitten/conform/configs/prettier.base.json",
   "devDependencies": {
     "@clockwork-kitten/conform": "workspace:*",
-    "lefthook": "^2.1.12"
+    "eslint": "^10.10.0",
+    "knip": "^6.34.0",
+    "lefthook": "^2.1.12",
+    "prettier": "^3.9.6"
   }
 }

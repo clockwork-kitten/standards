@@ -1,21 +1,26 @@
+import { toString } from "mdast-util-to-string";
 import { readFileSync } from "node:fs";
 import { basename } from "node:path";
-import { toString } from "mdast-util-to-string";
+
+import type {
+  ResolvedLlmsConfig,
+  ResolvedLlmsSection,
+} from "../config/resolve.ts";
+
 import { parseMarkdown } from "../lint/parse.ts";
-import type { ResolvedLlmsConfig, ResolvedLlmsSection } from "../config/resolve.ts";
 
 /** Title and one-line description distilled from a single document. */
 export type DocMeta = {
-	/** Repo-relative posix path, used as both sort key and link target. */
-	path: string;
-	/** The document's first level-1 heading, or its filename as a fallback. */
-	title: string;
-	/** The document's first paragraph, flattened to a single line (may be empty). */
-	description: string;
+  /** Repo-relative posix path, used as both sort key and link target. */
+  path: string;
+  /** The document's first level-1 heading, or its filename as a fallback. */
+  title: string;
+  /** The document's first paragraph, flattened to a single line (may be empty). */
+  description: string;
 };
 
 function collapseWhitespace(text: string): string {
-	return text.split(/\s+/).filter(Boolean).join(" ");
+  return text.split(/\s+/).filter(Boolean).join(" ");
 }
 
 /**
@@ -26,35 +31,38 @@ function collapseWhitespace(text: string): string {
  * between the heading and the first paragraph are skipped. Working on real nodes
  * avoids the line-prefix heuristics the shell generator needed.
  */
-export function extractDocMeta(markdown: string, fallbackTitle: string): { title: string; description: string } {
-	const tree = parseMarkdown(markdown);
-	let title = "";
-	let description = "";
-	let seenTitle = false;
-	for (const node of tree.children) {
-		if (!seenTitle) {
-			if (node.type === "heading" && node.depth === 1) {
-				title = toString(node).trim();
-				seenTitle = true;
-			}
-			continue;
-		}
-		if (node.type === "paragraph") {
-			description = collapseWhitespace(toString(node));
-			break;
-		}
-	}
-	return { title: title || fallbackTitle, description };
+export function extractDocMeta(
+  markdown: string,
+  fallbackTitle: string,
+): { title: string; description: string } {
+  const tree = parseMarkdown(markdown);
+  let title = "";
+  let description = "";
+  let seenTitle = false;
+  for (const node of tree.children) {
+    if (!seenTitle) {
+      if (node.type === "heading" && node.depth === 1) {
+        title = toString(node).trim();
+        seenTitle = true;
+      }
+      continue;
+    }
+    if (node.type === "paragraph") {
+      description = collapseWhitespace(toString(node));
+      break;
+    }
+  }
+  return { title: title || fallbackTitle, description };
 }
 
 function matchesSection(path: string, section: ResolvedLlmsSection): boolean {
-	if (!path.startsWith(section.prefix)) {
-		return false;
-	}
-	if (section.shallow && path.slice(section.prefix.length).includes("/")) {
-		return false;
-	}
-	return true;
+  if (!path.startsWith(section.prefix)) {
+    return false;
+  }
+  if (section.shallow && path.slice(section.prefix.length).includes("/")) {
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -64,23 +72,33 @@ function matchesSection(path: string, section: ResolvedLlmsSection): boolean {
  * first section it matches (so ordering is significant); documents matching no
  * section are omitted. Output is deterministic given sorted input.
  */
-export function renderLlms(docs: readonly DocMeta[], config: ResolvedLlmsConfig): string {
-	const lines: string[] = [`# ${config.project}`, "", `> ${config.summary}`, ""];
-	const used = new Set<string>();
-	for (const section of config.sections) {
-		const matched = docs.filter((doc) => !used.has(doc.path) && matchesSection(doc.path, section));
-		if (matched.length === 0) {
-			continue;
-		}
-		lines.push(`## ${section.title}`, "");
-		for (const doc of matched) {
-			used.add(doc.path);
-			const entry = `- [${doc.title}](${doc.path})`;
-			lines.push(doc.description ? `${entry}: ${doc.description}` : entry);
-		}
-		lines.push("");
-	}
-	return `${lines.join("\n").replace(/\s+$/, "")}\n`;
+export function renderLlms(
+  docs: readonly DocMeta[],
+  config: ResolvedLlmsConfig,
+): string {
+  const lines: string[] = [
+    `# ${config.project}`,
+    "",
+    `> ${config.summary}`,
+    "",
+  ];
+  const used = new Set<string>();
+  for (const section of config.sections) {
+    const matched = docs.filter(
+      (doc) => !used.has(doc.path) && matchesSection(doc.path, section),
+    );
+    if (matched.length === 0) {
+      continue;
+    }
+    lines.push(`## ${section.title}`, "");
+    for (const doc of matched) {
+      used.add(doc.path);
+      const entry = `- [${doc.title}](${doc.path})`;
+      lines.push(doc.description ? `${entry}: ${doc.description}` : entry);
+    }
+    lines.push("");
+  }
+  return `${lines.join("\n").replace(/\s+$/, "")}\n`;
 }
 
 /**
@@ -90,15 +108,18 @@ export function renderLlms(docs: readonly DocMeta[], config: ResolvedLlmsConfig)
  * injectable for testing.
  */
 export function generateLlms(
-	files: readonly string[],
-	config: ResolvedLlmsConfig,
-	readFile: (path: string) => string = (path) => readFileSync(path, "utf8"),
+  files: readonly string[],
+  config: ResolvedLlmsConfig,
+  readFile: (path: string) => string = (path) => readFileSync(path, "utf8"),
 ): string {
-	const docs: DocMeta[] = [...files]
-		.sort((a, b) => a.localeCompare(b))
-		.map((path) => {
-			const { title, description } = extractDocMeta(readFile(path), basename(path));
-			return { path, title, description };
-		});
-	return renderLlms(docs, config);
+  const docs: DocMeta[] = [...files]
+    .toSorted((a, b) => a.localeCompare(b))
+    .map((path) => {
+      const { title, description } = extractDocMeta(
+        readFile(path),
+        basename(path),
+      );
+      return { path, title, description };
+    });
+  return renderLlms(docs, config);
 }

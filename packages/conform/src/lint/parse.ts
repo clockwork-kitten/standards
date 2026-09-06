@@ -1,7 +1,8 @@
+import type { Root } from "mdast";
+
 import { fromMarkdown } from "mdast-util-from-markdown";
 import { gfmFromMarkdown } from "mdast-util-gfm";
 import { gfm } from "micromark-extension-gfm";
-import type { Root } from "mdast";
 
 /**
  * Parse Markdown to an mdast tree with GFM enabled, the studio's Markdown
@@ -11,8 +12,8 @@ import type { Root } from "mdast";
  * an accidental paragraph.
  */
 export function parseMarkdown(markdown: string): Root {
-	return fromMarkdown(markdown, {
-		extensions: [gfm()],
-		mdastExtensions: [gfmFromMarkdown()],
-	});
+  return fromMarkdown(markdown, {
+    extensions: [gfm()],
+    mdastExtensions: [gfmFromMarkdown()],
+  });
 }

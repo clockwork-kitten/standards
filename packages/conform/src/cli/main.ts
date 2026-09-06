@@ -2,6 +2,7 @@
 import { existsSync, globSync, readFileSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import process from "node:process";
+
 import { ConfigError, resolveConfig } from "../config/resolve.ts";
 import { fixContents, formatIssues, lintFiles } from "../lint/markdown.ts";
 import { checkReferences, formatReferenceIssues } from "../lint/references.ts";
@@ -14,16 +15,16 @@ export const IGNORE_DIRS = new Set(["node_modules", ".git", ".standards"]);
 export const DEFAULT_GLOBS = ["**/*.md"] as const;
 
 const USAGE =
-	"usage: conform check [globs...] [--config <path>] [--no-references] [--reference-ignore <substr>]";
+  "usage: conform check [globs...] [--config <path>] [--no-references] [--reference-ignore <substr>]";
 
 /** Parsed arguments for `conform check`. */
 export type CheckArgs = {
-	globs: string[];
-	configPath: string | undefined;
-	/** Whether to run the internal cross-reference checker (default true). */
-	references: boolean;
-	/** Extra ignore substrings for the reference checker, added to config. */
-	referenceIgnore: string[];
+  globs: string[];
+  configPath: string | undefined;
+  /** Whether to run the internal cross-reference checker (default true). */
+  references: boolean;
+  /** Extra ignore substrings for the reference checker, added to config. */
+  referenceIgnore: string[];
 };
 
 /**
@@ -33,130 +34,135 @@ export type CheckArgs = {
  * substrings. Throws on unknown flags or a missing option value.
  */
 export function parseCheckArgs(argv: string[]): CheckArgs {
-	const globs: string[] = [];
-	let configPath: string | undefined;
-	let references = true;
-	const referenceIgnore: string[] = [];
-	for (let index = 0; index < argv.length; index += 1) {
-		const arg = argv[index] as string;
-		if (arg === "--config" || arg === "-c") {
-			const next = argv[index + 1];
-			if (next === undefined) {
-				throw new Error(`${arg} requires a path`);
-			}
-			configPath = next;
-			index += 1;
-		} else if (arg.startsWith("--config=")) {
-			configPath = arg.slice("--config=".length);
-		} else if (arg === "--no-references") {
-			references = false;
-		} else if (arg === "--reference-ignore") {
-			const next = argv[index + 1];
-			if (next === undefined) {
-				throw new Error(`${arg} requires a substring`);
-			}
-			referenceIgnore.push(next);
-			index += 1;
-		} else if (arg.startsWith("--reference-ignore=")) {
-			referenceIgnore.push(arg.slice("--reference-ignore=".length));
-		} else if (arg.startsWith("-")) {
-			throw new Error(`unknown option: ${arg}`);
-		} else {
-			globs.push(arg);
-		}
-	}
-	return {
-		globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
-		configPath,
-		references,
-		referenceIgnore,
-	};
+  const globs: string[] = [];
+  let configPath: string | undefined;
+  let references = true;
+  const referenceIgnore: string[] = [];
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index] as string;
+    if (arg === "--config" || arg === "-c") {
+      const next = argv[index + 1];
+      if (next === undefined) {
+        throw new Error(`${arg} requires a path`);
+      }
+      configPath = next;
+      index += 1;
+    } else if (arg.startsWith("--config=")) {
+      configPath = arg.slice("--config=".length);
+    } else if (arg === "--no-references") {
+      references = false;
+    } else if (arg === "--reference-ignore") {
+      const next = argv[index + 1];
+      if (next === undefined) {
+        throw new Error(`${arg} requires a substring`);
+      }
+      referenceIgnore.push(next);
+      index += 1;
+    } else if (arg.startsWith("--reference-ignore=")) {
+      referenceIgnore.push(arg.slice("--reference-ignore=".length));
+    } else if (arg.startsWith("-")) {
+      throw new Error(`unknown option: ${arg}`);
+    } else {
+      globs.push(arg);
+    }
+  }
+  return {
+    globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
+    configPath,
+    references,
+    referenceIgnore,
+  };
 }
 
 /** Expand globs relative to `cwd`, dropping ignored directories. Sorted, unique. */
 export function expandGlobs(globs: string[], cwd: string): string[] {
-	const found = new Set<string>();
-	for (const pattern of globs) {
-		for (const relative of globSync(pattern, { cwd })) {
-			const normalized = relative.split("\\").join("/");
-			const segments = normalized.split("/");
-			if (segments.some((segment) => IGNORE_DIRS.has(segment))) {
-				continue;
-			}
-			found.add(normalized);
-		}
-	}
-	return [...found].sort();
+  const found = new Set<string>();
+  for (const pattern of globs) {
+    const matches = globSync(pattern, { cwd });
+    for (const relative of matches) {
+      const normalized = relative.replaceAll("\\", "/");
+      const segments = normalized.split("/");
+      if (segments.every((segment) => !IGNORE_DIRS.has(segment))) {
+        found.add(normalized);
+      }
+    }
+  }
+  return [...found].toSorted();
 }
 
 /** Run `conform check`; returns a process exit code. */
 export async function runCheck(argv: string[], cwd: string): Promise<number> {
-	let args: CheckArgs;
-	try {
-		args = parseCheckArgs(argv);
-	} catch (error) {
-		console.error(error instanceof Error ? error.message : String(error));
-		console.error(USAGE);
-		return 2;
-	}
+  let args: CheckArgs;
+  try {
+    args = parseCheckArgs(argv);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    console.error(USAGE);
+    return 2;
+  }
 
-	let resolved;
-	try {
-		resolved = await resolveConfig({ cwd, configPath: args.configPath });
-	} catch (error) {
-		if (error instanceof ConfigError) {
-			console.error(error.message);
-			return 2;
-		}
-		throw error;
-	}
+  let resolved;
+  try {
+    resolved = await resolveConfig({ cwd, configPath: args.configPath });
+  } catch (error) {
+    if (error instanceof ConfigError) {
+      console.error(error.message);
+      return 2;
+    }
+    throw error;
+  }
 
-	const files = expandGlobs(args.globs, cwd);
-	// markdownlint reads files relative to process.cwd(); pass absolute paths so
-	// a caller-supplied cwd is honored, then relativize findings for display.
-	const absolute = files.map((file) => join(cwd, file));
-	const issues = (await lintFiles(absolute, resolved.markdownlint)).map((issue) => ({
-		...issue,
-		file: relative(cwd, issue.file),
-	}));
+  const files = expandGlobs(args.globs, cwd);
+  // markdownlint reads files relative to process.cwd(); pass absolute paths so
+  // a caller-supplied cwd is honored, then relativize findings for display.
+  const absolute = files.map((file) => join(cwd, file));
+  const found = await lintFiles(absolute, resolved.markdownlint);
+  const issues = found.map((issue) => ({
+    ...issue,
+    file: relative(cwd, issue.file),
+  }));
 
-	console.error(`conform check · markdown lint · ${resolved.source}`);
-	let exitCode = 0;
-	if (issues.length > 0) {
-		console.error(formatIssues(issues));
-		console.error(`\n${issues.length} issue(s) across ${files.length} file(s)`);
-		exitCode = 1;
-	} else {
-		console.error(`${files.length} file(s) conformant`);
-	}
+  console.error(`conform check · markdown lint · ${resolved.source}`);
+  let exitCode = 0;
+  if (issues.length > 0) {
+    console.error(formatIssues(issues));
+    console.error(`\n${issues.length} issue(s) across ${files.length} file(s)`);
+    exitCode = 1;
+  } else {
+    console.error(`${files.length} file(s) conformant`);
+  }
 
-	if (args.references) {
-		const ignore = [...resolved.references.ignore, ...args.referenceIgnore];
-		const refIssues = checkReferences(absolute, { repoRoot: cwd, ignore }).map((issue) => ({
-			...issue,
-			file: relative(cwd, issue.file),
-		}));
-		console.error(`conform check · references · ${resolved.source}`);
-		if (refIssues.length > 0) {
-			console.error(formatReferenceIssues(refIssues));
-			console.error(`\n${refIssues.length} broken reference(s) across ${files.length} file(s)`);
-			exitCode = 1;
-		} else {
-			console.error(`${files.length} file(s) with resolvable references`);
-		}
-	}
+  if (args.references) {
+    const ignore = [...resolved.references.ignore, ...args.referenceIgnore];
+    const refIssues = checkReferences(absolute, { repoRoot: cwd, ignore }).map(
+      (issue) => ({
+        ...issue,
+        file: relative(cwd, issue.file),
+      }),
+    );
+    console.error(`conform check · references · ${resolved.source}`);
+    if (refIssues.length > 0) {
+      console.error(formatReferenceIssues(refIssues));
+      console.error(
+        `\n${refIssues.length} broken reference(s) across ${files.length} file(s)`,
+      );
+      exitCode = 1;
+    } else {
+      console.error(`${files.length} file(s) with resolvable references`);
+    }
+  }
 
-	return exitCode;
+  return exitCode;
 }
 
 const FIX_USAGE = "usage: conform fix [globs...] [--config <path>] [--no-llms]";
 
 /** Parsed arguments for `conform fix`. */
 export type FixArgs = {
-	globs: string[];
-	configPath: string | undefined;
-	/** Whether to also regenerate the `llms.txt` index (default true). */
-	llms: boolean;
+  globs: string[];
+  configPath: string | undefined;
+  /** Whether to also regenerate the `llms.txt` index (default true). */
+  llms: boolean;
 };
 
 /**
@@ -166,33 +172,33 @@ export type FixArgs = {
  * on unknown flags or a missing option value.
  */
 export function parseFixArgs(argv: string[]): FixArgs {
-	const globs: string[] = [];
-	let configPath: string | undefined;
-	let llms = true;
-	for (let index = 0; index < argv.length; index += 1) {
-		const arg = argv[index] as string;
-		if (arg === "--config" || arg === "-c") {
-			const next = argv[index + 1];
-			if (next === undefined) {
-				throw new Error(`${arg} requires a path`);
-			}
-			configPath = next;
-			index += 1;
-		} else if (arg.startsWith("--config=")) {
-			configPath = arg.slice("--config=".length);
-		} else if (arg === "--no-llms") {
-			llms = false;
-		} else if (arg.startsWith("-")) {
-			throw new Error(`unknown option: ${arg}`);
-		} else {
-			globs.push(arg);
-		}
-	}
-	return {
-		globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
-		configPath,
-		llms,
-	};
+  const globs: string[] = [];
+  let configPath: string | undefined;
+  let llms = true;
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index] as string;
+    if (arg === "--config" || arg === "-c") {
+      const next = argv[index + 1];
+      if (next === undefined) {
+        throw new Error(`${arg} requires a path`);
+      }
+      configPath = next;
+      index += 1;
+    } else if (arg.startsWith("--config=")) {
+      configPath = arg.slice("--config=".length);
+    } else if (arg === "--no-llms") {
+      llms = false;
+    } else if (arg.startsWith("-")) {
+      throw new Error(`unknown option: ${arg}`);
+    } else {
+      globs.push(arg);
+    }
+  }
+  return {
+    globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
+    configPath,
+    llms,
+  };
 }
 
 /**
@@ -203,78 +209,84 @@ export function parseFixArgs(argv: string[]): FixArgs {
  * runs `fix`. Returns 2 only on an argument or config error.
  */
 export async function runFix(argv: string[], cwd: string): Promise<number> {
-	let args: FixArgs;
-	try {
-		args = parseFixArgs(argv);
-	} catch (error) {
-		console.error(error instanceof Error ? error.message : String(error));
-		console.error(FIX_USAGE);
-		return 2;
-	}
+  let args: FixArgs;
+  try {
+    args = parseFixArgs(argv);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    console.error(FIX_USAGE);
+    return 2;
+  }
 
-	let resolved;
-	try {
-		resolved = await resolveConfig({ cwd, configPath: args.configPath });
-	} catch (error) {
-		if (error instanceof ConfigError) {
-			console.error(error.message);
-			return 2;
-		}
-		throw error;
-	}
+  let resolved;
+  try {
+    resolved = await resolveConfig({ cwd, configPath: args.configPath });
+  } catch (error) {
+    if (error instanceof ConfigError) {
+      console.error(error.message);
+      return 2;
+    }
+    throw error;
+  }
 
-	const files = expandGlobs(args.globs, cwd);
-	const contents: Record<string, string> = {};
-	for (const file of files) {
-		contents[file] = readFileSync(join(cwd, file), "utf8");
-	}
+  const files = expandGlobs(args.globs, cwd);
+  const contents: Record<string, string> = {};
+  for (const file of files) {
+    contents[file] = readFileSync(join(cwd, file), "utf8");
+  }
 
-	const fixes = await fixContents(contents, resolved.markdownlint);
-	console.error(`conform fix · markdown · ${resolved.source}`);
+  const fixes = await fixContents(contents, resolved.markdownlint);
+  console.error(`conform fix · markdown · ${resolved.source}`);
 
-	const changed = fixes.filter((fix) => fix.changed);
-	for (const fix of changed) {
-		writeFileSync(join(cwd, fix.file), fix.content);
-	}
-	if (changed.length > 0) {
-		console.error(`fixed ${changed.length} file(s):`);
-		for (const fix of changed) {
-			console.error(`  ${fix.file}`);
-		}
-	} else {
-		console.error(`${files.length} file(s) already conformant`);
-	}
+  const changed = fixes.filter((fix) => fix.changed);
+  for (const fix of changed) {
+    writeFileSync(join(cwd, fix.file), fix.content);
+  }
+  if (changed.length > 0) {
+    console.error(`fixed ${changed.length} file(s):`);
+    for (const fix of changed) {
+      console.error(`  ${fix.file}`);
+    }
+  } else {
+    console.error(`${files.length} file(s) already conformant`);
+  }
 
-	const residue = fixes.flatMap((fix) => fix.residue);
-	if (residue.length > 0) {
-		console.error(`\n${residue.length} issue(s) fix cannot resolve — run \`conform check\` and fix by hand:`);
-		console.error(formatIssues(residue));
-	}
+  const residue = fixes.flatMap((fix) => fix.residue);
+  if (residue.length > 0) {
+    console.error(
+      `\n${residue.length} issue(s) fix cannot resolve — run \`conform check\` and fix by hand:`,
+    );
+    console.error(formatIssues(residue));
+  }
 
-	if (args.llms && resolved.llms) {
-		const content = generateLlms(files, resolved.llms, (file) => readFileSync(join(cwd, file), "utf8"));
-		const outPath = join(cwd, resolved.llms.output);
-		const outLabel = relative(cwd, outPath);
-		const current = existsSync(outPath) ? readFileSync(outPath, "utf8") : "";
-		if (current === content) {
-			console.error(`conform fix · llms · ${outLabel} already up to date`);
-		} else {
-			writeFileSync(outPath, content);
-			console.error(`conform fix · llms · wrote ${outLabel} (${content.length} bytes)`);
-		}
-	}
+  if (args.llms && resolved.llms) {
+    const content = generateLlms(files, resolved.llms, (file) =>
+      readFileSync(join(cwd, file), "utf8"),
+    );
+    const outPath = join(cwd, resolved.llms.output);
+    const outLabel = relative(cwd, outPath);
+    const current = existsSync(outPath) ? readFileSync(outPath, "utf8") : "";
+    if (current === content) {
+      console.error(`conform fix · llms · ${outLabel} already up to date`);
+    } else {
+      writeFileSync(outPath, content);
+      console.error(
+        `conform fix · llms · wrote ${outLabel} (${content.length} bytes)`,
+      );
+    }
+  }
 
-	return 0;
+  return 0;
 }
 
 const LLMS_USAGE = "usage: conform llms [globs...] [--config <path>] [--check]";
 
 /** Parsed arguments for `conform llms`. */
 export type LlmsArgs = {
-	globs: string[];
-	configPath: string | undefined;
-	/** Verify the on-disk index matches, rather than writing it. */
-	check: boolean;
+  globs: string[];
+  configPath: string | undefined;
+  /** Verify the on-disk index matches, rather than writing it. */
+  check: boolean;
 };
 
 /**
@@ -284,113 +296,115 @@ export type LlmsArgs = {
  * `--config` value.
  */
 export function parseLlmsArgs(argv: string[]): LlmsArgs {
-	const globs: string[] = [];
-	let configPath: string | undefined;
-	let check = false;
-	for (let index = 0; index < argv.length; index += 1) {
-		const arg = argv[index] as string;
-		if (arg === "--config" || arg === "-c") {
-			const next = argv[index + 1];
-			if (next === undefined) {
-				throw new Error(`${arg} requires a path`);
-			}
-			configPath = next;
-			index += 1;
-		} else if (arg.startsWith("--config=")) {
-			configPath = arg.slice("--config=".length);
-		} else if (arg === "--check") {
-			check = true;
-		} else if (arg.startsWith("-")) {
-			throw new Error(`unknown option: ${arg}`);
-		} else {
-			globs.push(arg);
-		}
-	}
-	return {
-		globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
-		configPath,
-		check,
-	};
+  const globs: string[] = [];
+  let configPath: string | undefined;
+  let check = false;
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index] as string;
+    if (arg === "--config" || arg === "-c") {
+      const next = argv[index + 1];
+      if (next === undefined) {
+        throw new Error(`${arg} requires a path`);
+      }
+      configPath = next;
+      index += 1;
+    } else if (arg.startsWith("--config=")) {
+      configPath = arg.slice("--config=".length);
+    } else if (arg === "--check") {
+      check = true;
+    } else if (arg.startsWith("-")) {
+      throw new Error(`unknown option: ${arg}`);
+    } else {
+      globs.push(arg);
+    }
+  }
+  return {
+    globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
+    configPath,
+    check,
+  };
 }
 
 /** Run `conform llms`; returns a process exit code. */
 export async function runLlms(argv: string[], cwd: string): Promise<number> {
-	let args: LlmsArgs;
-	try {
-		args = parseLlmsArgs(argv);
-	} catch (error) {
-		console.error(error instanceof Error ? error.message : String(error));
-		console.error(LLMS_USAGE);
-		return 2;
-	}
+  let args: LlmsArgs;
+  try {
+    args = parseLlmsArgs(argv);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    console.error(LLMS_USAGE);
+    return 2;
+  }
 
-	let resolved;
-	try {
-		resolved = await resolveConfig({ cwd, configPath: args.configPath });
-	} catch (error) {
-		if (error instanceof ConfigError) {
-			console.error(error.message);
-			return 2;
-		}
-		throw error;
-	}
+  let resolved;
+  try {
+    resolved = await resolveConfig({ cwd, configPath: args.configPath });
+  } catch (error) {
+    if (error instanceof ConfigError) {
+      console.error(error.message);
+      return 2;
+    }
+    throw error;
+  }
 
-	if (!resolved.llms) {
-		console.error(`conform llms · no \`llms\` config found · ${resolved.source}`);
-		console.error("Add an `llms` block to your conform config to generate a doc index.");
-		return 2;
-	}
+  if (!resolved.llms) {
+    console.error(
+      `conform llms · no \`llms\` config found · ${resolved.source}`,
+    );
+    console.error(
+      "Add an `llms` block to your conform config to generate a doc index.",
+    );
+    return 2;
+  }
 
-	const files = expandGlobs(args.globs, cwd);
-	const content = generateLlms(
-		files,
-		resolved.llms,
-		(file) => readFileSync(join(cwd, file), "utf8"),
-	);
-	const outPath = join(cwd, resolved.llms.output);
-	const outLabel = relative(cwd, outPath);
+  const files = expandGlobs(args.globs, cwd);
+  const content = generateLlms(files, resolved.llms, (file) =>
+    readFileSync(join(cwd, file), "utf8"),
+  );
+  const outPath = join(cwd, resolved.llms.output);
+  const outLabel = relative(cwd, outPath);
 
-	if (args.check) {
-		const current = existsSync(outPath) ? readFileSync(outPath, "utf8") : "";
-		if (current !== content) {
-			console.error(`conform llms · ${outLabel} is out of date · run \`conform llms\` to regenerate`);
-			return 1;
-		}
-		console.error(`conform llms · ${outLabel} is up to date`);
-		return 0;
-	}
+  if (args.check) {
+    const current = existsSync(outPath) ? readFileSync(outPath, "utf8") : "";
+    if (current !== content) {
+      console.error(
+        `conform llms · ${outLabel} is out of date · run \`conform llms\` to regenerate`,
+      );
+      return 1;
+    }
+    console.error(`conform llms · ${outLabel} is up to date`);
+    return 0;
+  }
 
-	writeFileSync(outPath, content);
-	console.error(`conform llms · wrote ${outLabel} (${content.length} bytes)`);
-	return 0;
+  writeFileSync(outPath, content);
+  console.error(`conform llms · wrote ${outLabel} (${content.length} bytes)`);
+  return 0;
 }
 
 async function main(): Promise<number> {
-	const [subcommand, ...rest] = process.argv.slice(2);
-	if (subcommand === "check") {
-		return runCheck(rest, process.cwd());
-	}
-	if (subcommand === "fix") {
-		return runFix(rest, process.cwd());
-	}
-	if (subcommand === "llms") {
-		return runLlms(rest, process.cwd());
-	}
-	console.error(USAGE);
-	console.error(FIX_USAGE);
-	console.error(LLMS_USAGE);
-	return 2;
+  const [subcommand, ...rest] = process.argv.slice(2);
+  if (subcommand === "check") {
+    return runCheck(rest, process.cwd());
+  }
+  if (subcommand === "fix") {
+    return runFix(rest, process.cwd());
+  }
+  if (subcommand === "llms") {
+    return runLlms(rest, process.cwd());
+  }
+  console.error(USAGE);
+  console.error(FIX_USAGE);
+  console.error(LLMS_USAGE);
+  return 2;
 }
 
 // Only run when executed directly (e.g. `bun src/cli/main.ts`), not when
 // imported by tests. `import.meta.main` is a Bun/Node entrypoint signal.
 if ((import.meta as { main?: boolean }).main) {
-	main()
-		.then((code) => {
-			process.exitCode = code;
-		})
-		.catch((error: unknown) => {
-			console.error(error);
-			process.exitCode = 1;
-		});
+  try {
+    process.exitCode = await main();
+  } catch (error) {
+    console.error(error);
+    process.exitCode = 1;
+  }
 }
