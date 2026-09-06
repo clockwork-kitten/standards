@@ -13,8 +13,8 @@ describe("extractReferences", () => {
   it("collects internal .md links and strips fragments", () => {
     const refs = extractReferences("[a](docs/a.md#section) and [b](../b.md)");
     expect(refs).toEqual([
-      { kind: "link", target: "docs/a.md", line: 1 },
-      { kind: "link", target: "../b.md", line: 1 },
+      { kind: "link", line: 1, target: "docs/a.md" },
+      { kind: "link", line: 1, target: "../b.md" },
     ]);
   });
 
@@ -27,7 +27,7 @@ describe("extractReferences", () => {
 
   it("collects reference-definition targets", () => {
     const refs = extractReferences("See [a][def].\n\n[def]: docs/a.md\n");
-    expect(refs).toContainEqual({ kind: "link", target: "docs/a.md", line: 3 });
+    expect(refs).toContainEqual({ kind: "link", line: 3, target: "docs/a.md" });
   });
 
   it("treats a backtick root-relative path as a ref but bare filenames as prose", () => {
@@ -35,13 +35,13 @@ describe("extractReferences", () => {
       "Use `docs/conventions.md` but not `README.md` here.",
     );
     expect(refs).toEqual([
-      { kind: "ref", target: "docs/conventions.md", line: 1 },
+      { kind: "ref", line: 1, target: "docs/conventions.md" },
     ]);
   });
 
   it("reports the correct line for a reference deeper in the document", () => {
     const refs = extractReferences("# Title\n\nintro\n\nSee [x](gone.md).\n");
-    expect(refs).toEqual([{ kind: "link", target: "gone.md", line: 5 }]);
+    expect(refs).toEqual([{ kind: "link", line: 5, target: "gone.md" }]);
   });
 });
 
@@ -51,7 +51,7 @@ describe("checkReferences", () => {
     dir = mkdtempSync(join(tmpdir(), "conform-ref-"));
   });
   afterEach(() => {
-    rmSync(dir, { recursive: true, force: true });
+    rmSync(dir, { force: true, recursive: true });
   });
 
   it("passes when links and root-relative refs resolve", () => {
@@ -68,7 +68,7 @@ describe("checkReferences", () => {
     writeFileSync(file, "See [gone](docs/missing.md).\n");
     const issues = checkReferences([file], { repoRoot: dir });
     expect(issues).toEqual([
-      { kind: "link", target: "docs/missing.md", line: 1, file },
+      { file, kind: "link", line: 1, target: "docs/missing.md" },
     ]);
   });
 
@@ -77,7 +77,7 @@ describe("checkReferences", () => {
     writeFileSync(file, "Use `docs/nope.md` please.\n");
     const issues = checkReferences([file], { repoRoot: dir });
     expect(issues).toEqual([
-      { kind: "ref", target: "docs/nope.md", line: 1, file },
+      { file, kind: "ref", line: 1, target: "docs/nope.md" },
     ]);
   });
 
@@ -85,7 +85,7 @@ describe("checkReferences", () => {
     const file = join(dir, "index.md");
     writeFileSync(file, "Cross-repo `ops/docs/x.md` link.\n");
     expect(
-      checkReferences([file], { repoRoot: dir, ignore: ["ops/"] }),
+      checkReferences([file], { ignore: ["ops/"], repoRoot: dir }),
     ).toEqual([]);
     expect(checkReferences([file], { repoRoot: dir })).toHaveLength(1);
   });
@@ -110,8 +110,8 @@ describe("formatReferenceIssues", () => {
   it("labels each kind and returns empty for no issues", () => {
     expect(formatReferenceIssues([])).toBe("");
     const text = formatReferenceIssues([
-      { kind: "link", target: "a.md", line: 2, file: "x.md" },
-      { kind: "ref", target: "docs/b.md", line: 5, file: "x.md" },
+      { file: "x.md", kind: "link", line: 2, target: "a.md" },
+      { file: "x.md", kind: "ref", line: 5, target: "docs/b.md" },
     ]);
     expect(text).toBe(
       "x.md:2 broken link -> a.md\nx.md:5 broken root-relative ref -> docs/b.md",

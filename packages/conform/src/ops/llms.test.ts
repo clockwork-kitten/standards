@@ -15,7 +15,7 @@ describe("extractDocMeta", () => {
       "# Title\n\nThe summary line.\n\nMore body.\n",
       "fallback.md",
     );
-    expect(meta).toEqual({ title: "Title", description: "The summary line." });
+    expect(meta).toEqual({ description: "The summary line.", title: "Title" });
   });
 
   it("flattens links and inline formatting in the description", () => {
@@ -44,28 +44,28 @@ describe("extractDocMeta", () => {
 
   it("falls back to the filename and empty description without an h1", () => {
     expect(extractDocMeta("no heading here\n", "readme.md")).toEqual({
-      title: "readme.md",
       description: "",
+      title: "readme.md",
     });
   });
 });
 
 const config: ResolvedLlmsConfig = {
-  project: "Proj",
-  summary: "A summary.",
   output: "llms.txt",
+  project: "Proj",
   sections: [
-    { title: "Top level", prefix: "", shallow: true },
-    { title: "Docs", prefix: "docs/", shallow: false },
+    { prefix: "", shallow: true, title: "Top level" },
+    { prefix: "docs/", shallow: false, title: "Docs" },
   ],
+  summary: "A summary.",
 };
 
 describe("renderLlms", () => {
   it("renders title, summary, and one section per group with first-match placement", () => {
     const docs: DocMeta[] = [
-      { path: "README.md", title: "Readme", description: "root doc" },
-      { path: "docs/a.md", title: "A", description: "" },
-      { path: "docs/deep/b.md", title: "B", description: "nested" },
+      { description: "root doc", path: "README.md", title: "Readme" },
+      { description: "", path: "docs/a.md", title: "A" },
+      { description: "nested", path: "docs/deep/b.md", title: "B" },
     ];
     expect(renderLlms(docs, config)).toBe(
       [
@@ -88,10 +88,10 @@ describe("renderLlms", () => {
   it("omits empty sections and documents matching no section", () => {
     const narrow: ResolvedLlmsConfig = {
       ...config,
-      sections: [{ title: "Docs", prefix: "docs/", shallow: false }],
+      sections: [{ prefix: "docs/", shallow: false, title: "Docs" }],
     };
     const out = renderLlms(
-      [{ path: "README.md", title: "R", description: "" }],
+      [{ description: "", path: "README.md", title: "R" }],
       narrow,
     );
     expect(out).toBe("# Proj\n\n> A summary.\n");
@@ -102,9 +102,9 @@ describe("generateLlms", () => {
   it("sorts files and reads each via the injected reader", () => {
     const files = ["docs/b.md", "README.md", "docs/a.md"];
     const contents: Record<string, string> = {
-      "README.md": "# Home\n\nThe root.\n",
       "docs/a.md": "# Alpha\n\nFirst doc.\n",
       "docs/b.md": "# Beta\n\nSecond doc.\n",
+      "README.md": "# Home\n\nThe root.\n",
     };
     const out = generateLlms(files, config, (path) => contents[path] ?? "");
     expect(out).toContain("- [Home](README.md): The root.");

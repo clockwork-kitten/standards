@@ -23,19 +23,19 @@ import {
 describe("parseCheckArgs", () => {
   it("defaults to **/*.md with no config", () => {
     expect(parseCheckArgs([])).toEqual({
-      globs: ["**/*.md"],
       configPath: undefined,
-      references: true,
+      globs: ["**/*.md"],
       referenceIgnore: [],
+      references: true,
     });
   });
 
   it("collects positional globs", () => {
     expect(parseCheckArgs(["docs/**/*.md", "README.md"])).toEqual({
-      globs: ["docs/**/*.md", "README.md"],
       configPath: undefined,
-      references: true,
+      globs: ["docs/**/*.md", "README.md"],
       referenceIgnore: [],
+      references: true,
     });
   });
 
@@ -76,7 +76,7 @@ describe("expandGlobs", () => {
     writeFileSync(join(dir, "node_modules", "c.md"), "# C\n");
   });
   afterEach(() => {
-    rmSync(dir, { recursive: true, force: true });
+    rmSync(dir, { force: true, recursive: true });
   });
 
   it("finds markdown recursively and skips ignored dirs", () => {
@@ -95,7 +95,7 @@ describe("runCheck", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
   });
   afterEach(() => {
-    rmSync(dir, { recursive: true, force: true });
+    rmSync(dir, { force: true, recursive: true });
     vi.restoreAllMocks();
   });
 
@@ -162,9 +162,9 @@ describe("runCheck", () => {
 describe("parseLlmsArgs", () => {
   it("defaults to **/*.md, no config, write mode", () => {
     expect(parseLlmsArgs([])).toEqual({
-      globs: ["**/*.md"],
-      configPath: undefined,
       check: false,
+      configPath: undefined,
+      globs: ["**/*.md"],
     });
   });
 
@@ -172,9 +172,9 @@ describe("parseLlmsArgs", () => {
     expect(
       parseLlmsArgs(["docs/**/*.md", "--config", "c.ts", "--check"]),
     ).toEqual({
-      globs: ["docs/**/*.md"],
-      configPath: "c.ts",
       check: true,
+      configPath: "c.ts",
+      globs: ["docs/**/*.md"],
     });
   });
 
@@ -187,11 +187,11 @@ describe("parseLlmsArgs", () => {
 const LLMS_CONFIG = JSON.stringify({
   llms: {
     project: "Test",
-    summary: "A test index.",
     sections: [
-      { title: "Top", prefix: "", shallow: true },
-      { title: "Docs", prefix: "docs/" },
+      { prefix: "", shallow: true, title: "Top" },
+      { prefix: "docs/", title: "Docs" },
     ],
+    summary: "A test index.",
   },
 });
 
@@ -202,7 +202,7 @@ describe("runLlms", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
   });
   afterEach(() => {
-    rmSync(dir, { recursive: true, force: true });
+    rmSync(dir, { force: true, recursive: true });
     vi.restoreAllMocks();
   });
 
@@ -242,8 +242,8 @@ describe("runLlms", () => {
 describe("parseFixArgs", () => {
   it("defaults to **/*.md, no config, llms on", () => {
     expect(parseFixArgs([])).toEqual({
-      globs: ["**/*.md"],
       configPath: undefined,
+      globs: ["**/*.md"],
       llms: true,
     });
   });
@@ -252,8 +252,8 @@ describe("parseFixArgs", () => {
     expect(
       parseFixArgs(["docs/**/*.md", "--config", "c.ts", "--no-llms"]),
     ).toEqual({
-      globs: ["docs/**/*.md"],
       configPath: "c.ts",
+      globs: ["docs/**/*.md"],
       llms: false,
     });
   });
@@ -271,7 +271,7 @@ describe("runFix", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
   });
   afterEach(() => {
-    rmSync(dir, { recursive: true, force: true });
+    rmSync(dir, { force: true, recursive: true });
     vi.restoreAllMocks();
   });
 

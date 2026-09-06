@@ -27,33 +27,33 @@ export const CONFIG_FILENAMES = [
   "conform.config.json",
 ] as const;
 
-/** The reference-checker settings for a run, with defaults applied. */
-export type ResolvedReferencesConfig = Required<ReferencesConfig>;
-
-/** A section of the `llms.txt` index with defaults applied. */
-export type ResolvedLlmsSection = {
-  title: string;
-  prefix: string;
-  shallow: boolean;
+/** The effective configuration for a run, plus where it came from. */
+export type ResolvedConfig = {
+  /** The `llms.txt` generator config, or `undefined` when the repo declares none. */
+  llms: ResolvedLlmsConfig | undefined;
+  markdownlint: MarkdownlintConfig;
+  references: ResolvedReferencesConfig;
+  /** Human-readable description of the config source, for logging. */
+  source: string;
 };
 
 /** The `llms.txt` generator settings for a run, with defaults applied. */
 export type ResolvedLlmsConfig = {
-  project: string;
-  summary: string;
-  sections: ResolvedLlmsSection[];
   output: string;
+  project: string;
+  sections: ResolvedLlmsSection[];
+  summary: string;
 };
 
-/** The effective configuration for a run, plus where it came from. */
-export type ResolvedConfig = {
-  markdownlint: MarkdownlintConfig;
-  references: ResolvedReferencesConfig;
-  /** The `llms.txt` generator config, or `undefined` when the repo declares none. */
-  llms: ResolvedLlmsConfig | undefined;
-  /** Human-readable description of the config source, for logging. */
-  source: string;
+/** A section of the `llms.txt` index with defaults applied. */
+export type ResolvedLlmsSection = {
+  prefix: string;
+  shallow: boolean;
+  title: string;
 };
+
+/** The reference-checker settings for a run, with defaults applied. */
+export type ResolvedReferencesConfig = Required<ReferencesConfig>;
 
 /**
  * Compute the effective markdownlint config from a loaded conform config.
@@ -91,31 +91,16 @@ export function resolveReferencesConfig(
 export const DEFAULT_LLMS_OUTPUT = "llms.txt";
 
 /**
- * Compute the effective `llms.txt` generator settings, or `undefined` when the
- * config declares no `llms` block. Applies section defaults (`prefix` → `""`,
- * `shallow` → `false`) and the default output path.
+ * Find the first existing config file at `cwd`, or `undefined` if none.
  */
-export function resolveLlmsConfig(
-  config: ConformConfig,
-): ResolvedLlmsConfig | undefined {
-  const llms = config.llms;
-  if (!llms) {
-    return undefined;
+export function discoverConfigPath(cwd: string): string | undefined {
+  for (const name of CONFIG_FILENAMES) {
+    const candidate = resolve(cwd, name);
+    if (existsSync(candidate)) {
+      return candidate;
+    }
   }
-  return {
-    project: llms.project,
-    summary: llms.summary,
-    sections: llms.sections.map((section) => ({
-      title: section.title,
-      prefix: section.prefix ?? "",
-      shallow: section.shallow ?? false,
-    })),
-    output: llms.output ?? DEFAULT_LLMS_OUTPUT,
-  };
-}
-
-function isConfigModule(value: unknown): value is ConformConfig {
-  return isPlainObject(value);
+  return undefined;
 }
 
 /**
@@ -161,29 +146,16 @@ export async function loadConfigFile(path: string): Promise<ConformConfig> {
 }
 
 /**
- * Find the first existing config file at `cwd`, or `undefined` if none.
- */
-export function discoverConfigPath(cwd: string): string | undefined {
-  for (const name of CONFIG_FILENAMES) {
-    const candidate = resolve(cwd, name);
-    if (existsSync(candidate)) {
-      return candidate;
-    }
-  }
-  return undefined;
-}
-
-/**
  * Resolve the effective config for a run: an explicit `configPath` wins,
  * otherwise the first `conform.config.*` found at `cwd`, otherwise the bundled
  * studio baseline. Throws {@link ConfigError} only when a config file is present
  * but broken.
  */
 export async function resolveConfig(options: {
-  cwd: string;
   configPath?: string | undefined;
+  cwd: string;
 }): Promise<ResolvedConfig> {
-  const { cwd, configPath } = options;
+  const { configPath, cwd } = options;
   const path = configPath
     ? isAbsolute(configPath)
       ? configPath
@@ -192,18 +164,46 @@ export async function resolveConfig(options: {
 
   if (!path) {
     return {
+      llms: undefined,
       markdownlint: { ...STUDIO_MARKDOWNLINT_BASELINE },
       references: { ignore: [] },
-      llms: undefined,
       source: "studio baseline (no config file found)",
     };
   }
 
   const config = await loadConfigFile(path);
   return {
+    llms: resolveLlmsConfig(config),
     markdownlint: resolveMarkdownlintConfig(config),
     references: resolveReferencesConfig(config),
-    llms: resolveLlmsConfig(config),
     source: path,
   };
+}
+
+/**
+ * Compute the effective `llms.txt` generator settings, or `undefined` when the
+ * config declares no `llms` block. Applies section defaults (`prefix` → `""`,
+ * `shallow` → `false`) and the default output path.
+ */
+export function resolveLlmsConfig(
+  config: ConformConfig,
+): ResolvedLlmsConfig | undefined {
+  const llms = config.llms;
+  if (!llms) {
+    return undefined;
+  }
+  return {
+    output: llms.output ?? DEFAULT_LLMS_OUTPUT,
+    project: llms.project,
+    sections: llms.sections.map((section) => ({
+      prefix: section.prefix ?? "",
+      shallow: section.shallow ?? false,
+      title: section.title,
+    })),
+    summary: llms.summary,
+  };
+}
+
+function isConfigModule(value: unknown): value is ConformConfig {
+  return isPlainObject(value);
 }

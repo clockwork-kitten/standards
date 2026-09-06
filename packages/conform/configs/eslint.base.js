@@ -28,53 +28,14 @@ export default tseslint.config(
   unicorn.configs.recommended,
   security.configs.recommended,
   depend.configs["flat/recommended"],
+  perfectionist.configs["recommended-natural"],
   {
     languageOptions: { globals: { ...globals.node } },
-    plugins: { perfectionist },
     rules: {
-      // Import/export ordering only — the studio's stated use for perfectionist.
-      // Its broader object/type sorting is intentionally left off to stay thin.
-      "perfectionist/sort-imports": ["error", { type: "natural" }],
-      "perfectionist/sort-named-imports": ["error", { type: "natural" }],
-      "perfectionist/sort-exports": ["error", { type: "natural" }],
-      "perfectionist/sort-named-exports": ["error", { type: "natural" }],
-
+      eqeqeq: "off",
       // Owned by bedrock's semantic normalizer — don't double-own here.
       "no-var": "off",
-      eqeqeq: "off",
       "prefer-arrow-callback": "off",
-
-      // Naming taxonomy is a house-style opinion, not machine-checkable
-      // correctness — off so the config stays thin and doesn't dictate vocabulary.
-      "unicorn/prevent-abbreviations": "off",
-      "unicorn/name-replacements": "off",
-      "unicorn/consistent-boolean-name": "off",
-
-      // Comment/import shape is formatting the studio delegates to Prettier and
-      // author judgement, not a correctness gate. `no-nested-ternary` conflicts
-      // directly with Prettier's ternary formatting — Prettier owns it.
-      "unicorn/single-line-block-comment-style": "off",
-      "unicorn/import-style": "off",
-      "unicorn/no-nested-ternary": "off",
-
-      // A bin entry that also exports its parsers for unit tests is a deliberate,
-      // good pattern here — not a violation.
-      "unicorn/no-exports-in-scripts": "off",
-
-      // `null` is legitimate at external/JSON boundaries; a comparator on every
-      // string sort is boilerplate. Keep `no-array-sort` (immutability) but not
-      // these two opinions. `no-top-level-assignment-in-function` fights the
-      // standard Vitest `beforeEach` setup pattern.
-      "unicorn/no-null": "off",
-      "unicorn/require-array-sort-compare": "off",
-      "unicorn/no-top-level-assignment-in-function": "off",
-
-      // Allow kebab-case (`.ts` modules) and PascalCase (Svelte/Astro components);
-      // reject the camelCase outlier so filenames stay consistent studio-wide.
-      "unicorn/filename-case": [
-        "error",
-        { cases: { kebabCase: true, pascalCase: true } },
-      ],
 
       // Heuristic taint rules that false-positive on nearly every file-system and
       // dynamic-key access — pure noise for a tool that reads/writes files by
@@ -82,6 +43,36 @@ export default tseslint.config(
       // stay enabled.
       "security/detect-non-literal-fs-filename": "off",
       "security/detect-object-injection": "off",
+
+      // Allow kebab-case (`.ts` modules) and PascalCase (Svelte/Astro components);
+      // reject the camelCase outlier so filenames stay consistent studio-wide.
+      "unicorn/filename-case": [
+        "error",
+        { cases: { kebabCase: true, pascalCase: true } },
+      ],
+      "unicorn/import-style": "off",
+      "unicorn/name-replacements": "off",
+
+      // A bin entry that also exports its parsers for unit tests is a deliberate,
+      // good pattern here — not a violation.
+      "unicorn/no-exports-in-scripts": "off",
+
+      "unicorn/no-nested-ternary": "off",
+      "unicorn/no-top-level-assignment-in-function": "off",
+
+      // Vocabulary is intrusive house-style, not machine-checkable correctness —
+      // off so the config stays thin and doesn't dictate word choice.
+      "unicorn/prevent-abbreviations": "off",
+
+      // A comparator on every string sort is boilerplate, and
+      // `no-top-level-assignment-in-function` fights the standard Vitest
+      // `beforeEach` setup pattern. (`no-array-sort` stays on — always `.toSorted()`;
+      // `no-null` stays on — always `undefined`.)
+      "unicorn/require-array-sort-compare": "off",
+      // Comment/import shape is formatting the studio delegates to Prettier and
+      // author judgement, not a correctness gate. `no-nested-ternary` conflicts
+      // directly with Prettier's ternary formatting — Prettier owns it.
+      "unicorn/single-line-block-comment-style": "off",
     },
   },
 );

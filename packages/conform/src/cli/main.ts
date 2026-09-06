@@ -9,7 +9,7 @@ import { checkReferences, formatReferenceIssues } from "../lint/references.ts";
 import { generateLlms } from "../ops/llms.ts";
 
 /** Directory names never descended into when expanding globs. */
-export const IGNORE_DIRS = new Set(["node_modules", ".git", ".standards"]);
+export const IGNORE_DIRS = new Set([".git", ".standards", "node_modules"]);
 
 /** Default glob when the user passes no positional patterns. */
 export const DEFAULT_GLOBS = ["**/*.md"] as const;
@@ -19,60 +19,13 @@ const USAGE =
 
 /** Parsed arguments for `conform check`. */
 export type CheckArgs = {
-  globs: string[];
   configPath: string | undefined;
-  /** Whether to run the internal cross-reference checker (default true). */
-  references: boolean;
+  globs: string[];
   /** Extra ignore substrings for the reference checker, added to config. */
   referenceIgnore: string[];
+  /** Whether to run the internal cross-reference checker (default true). */
+  references: boolean;
 };
-
-/**
- * Parse the arguments to `conform check`. Positional args are globs (defaulting
- * to `**\/*.md`); `--config`/`-c` selects a config file; `--no-references`
- * disables the reference checker; `--reference-ignore` (repeatable) adds ignore
- * substrings. Throws on unknown flags or a missing option value.
- */
-export function parseCheckArgs(argv: string[]): CheckArgs {
-  const globs: string[] = [];
-  let configPath: string | undefined;
-  let references = true;
-  const referenceIgnore: string[] = [];
-  for (let index = 0; index < argv.length; index += 1) {
-    const arg = argv[index] as string;
-    if (arg === "--config" || arg === "-c") {
-      const next = argv[index + 1];
-      if (next === undefined) {
-        throw new Error(`${arg} requires a path`);
-      }
-      configPath = next;
-      index += 1;
-    } else if (arg.startsWith("--config=")) {
-      configPath = arg.slice("--config=".length);
-    } else if (arg === "--no-references") {
-      references = false;
-    } else if (arg === "--reference-ignore") {
-      const next = argv[index + 1];
-      if (next === undefined) {
-        throw new Error(`${arg} requires a substring`);
-      }
-      referenceIgnore.push(next);
-      index += 1;
-    } else if (arg.startsWith("--reference-ignore=")) {
-      referenceIgnore.push(arg.slice("--reference-ignore=".length));
-    } else if (arg.startsWith("-")) {
-      throw new Error(`unknown option: ${arg}`);
-    } else {
-      globs.push(arg);
-    }
-  }
-  return {
-    globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
-    configPath,
-    references,
-    referenceIgnore,
-  };
-}
 
 /** Expand globs relative to `cwd`, dropping ignored directories. Sorted, unique. */
 export function expandGlobs(globs: string[], cwd: string): string[] {
@@ -90,6 +43,53 @@ export function expandGlobs(globs: string[], cwd: string): string[] {
   return [...found].toSorted();
 }
 
+/**
+ * Parse the arguments to `conform check`. Positional args are globs (defaulting
+ * to `**\/*.md`); `--config`/`-c` selects a config file; `--no-references`
+ * disables the reference checker; `--reference-ignore` (repeatable) adds ignore
+ * substrings. Throws on unknown flags or a missing option value.
+ */
+export function parseCheckArgs(argv: string[]): CheckArgs {
+  const globs: string[] = [];
+  let configPath: string | undefined;
+  let isReferences = true;
+  const referenceIgnore: string[] = [];
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index] as string;
+    if (arg === "--config" || arg === "-c") {
+      const next = argv[index + 1];
+      if (next === undefined) {
+        throw new Error(`${arg} requires a path`);
+      }
+      configPath = next;
+      index += 1;
+    } else if (arg.startsWith("--config=")) {
+      configPath = arg.slice("--config=".length);
+    } else if (arg === "--no-references") {
+      isReferences = false;
+    } else if (arg === "--reference-ignore") {
+      const next = argv[index + 1];
+      if (next === undefined) {
+        throw new Error(`${arg} requires a substring`);
+      }
+      referenceIgnore.push(next);
+      index += 1;
+    } else if (arg.startsWith("--reference-ignore=")) {
+      referenceIgnore.push(arg.slice("--reference-ignore=".length));
+    } else if (arg.startsWith("-")) {
+      throw new Error(`unknown option: ${arg}`);
+    } else {
+      globs.push(arg);
+    }
+  }
+  return {
+    configPath,
+    globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
+    referenceIgnore,
+    references: isReferences,
+  };
+}
+
 /** Run `conform check`; returns a process exit code. */
 export async function runCheck(argv: string[], cwd: string): Promise<number> {
   let args: CheckArgs;
@@ -103,7 +103,7 @@ export async function runCheck(argv: string[], cwd: string): Promise<number> {
 
   let resolved;
   try {
-    resolved = await resolveConfig({ cwd, configPath: args.configPath });
+    resolved = await resolveConfig({ configPath: args.configPath, cwd });
   } catch (error) {
     if (error instanceof ConfigError) {
       console.error(error.message);
@@ -134,7 +134,7 @@ export async function runCheck(argv: string[], cwd: string): Promise<number> {
 
   if (args.references) {
     const ignore = [...resolved.references.ignore, ...args.referenceIgnore];
-    const refIssues = checkReferences(absolute, { repoRoot: cwd, ignore }).map(
+    const refIssues = checkReferences(absolute, { ignore, repoRoot: cwd }).map(
       (issue) => ({
         ...issue,
         file: relative(cwd, issue.file),
@@ -159,8 +159,8 @@ const FIX_USAGE = "usage: conform fix [globs...] [--config <path>] [--no-llms]";
 
 /** Parsed arguments for `conform fix`. */
 export type FixArgs = {
-  globs: string[];
   configPath: string | undefined;
+  globs: string[];
   /** Whether to also regenerate the `llms.txt` index (default true). */
   llms: boolean;
 };
@@ -174,7 +174,7 @@ export type FixArgs = {
 export function parseFixArgs(argv: string[]): FixArgs {
   const globs: string[] = [];
   let configPath: string | undefined;
-  let llms = true;
+  let isLlms = true;
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index] as string;
     if (arg === "--config" || arg === "-c") {
@@ -187,7 +187,7 @@ export function parseFixArgs(argv: string[]): FixArgs {
     } else if (arg.startsWith("--config=")) {
       configPath = arg.slice("--config=".length);
     } else if (arg === "--no-llms") {
-      llms = false;
+      isLlms = false;
     } else if (arg.startsWith("-")) {
       throw new Error(`unknown option: ${arg}`);
     } else {
@@ -195,9 +195,9 @@ export function parseFixArgs(argv: string[]): FixArgs {
     }
   }
   return {
-    globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
     configPath,
-    llms,
+    globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
+    llms: isLlms,
   };
 }
 
@@ -220,7 +220,7 @@ export async function runFix(argv: string[], cwd: string): Promise<number> {
 
   let resolved;
   try {
-    resolved = await resolveConfig({ cwd, configPath: args.configPath });
+    resolved = await resolveConfig({ configPath: args.configPath, cwd });
   } catch (error) {
     if (error instanceof ConfigError) {
       console.error(error.message);
@@ -283,10 +283,10 @@ const LLMS_USAGE = "usage: conform llms [globs...] [--config <path>] [--check]";
 
 /** Parsed arguments for `conform llms`. */
 export type LlmsArgs = {
-  globs: string[];
-  configPath: string | undefined;
   /** Verify the on-disk index matches, rather than writing it. */
   check: boolean;
+  configPath: string | undefined;
+  globs: string[];
 };
 
 /**
@@ -298,7 +298,7 @@ export type LlmsArgs = {
 export function parseLlmsArgs(argv: string[]): LlmsArgs {
   const globs: string[] = [];
   let configPath: string | undefined;
-  let check = false;
+  let isCheck = false;
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index] as string;
     if (arg === "--config" || arg === "-c") {
@@ -311,7 +311,7 @@ export function parseLlmsArgs(argv: string[]): LlmsArgs {
     } else if (arg.startsWith("--config=")) {
       configPath = arg.slice("--config=".length);
     } else if (arg === "--check") {
-      check = true;
+      isCheck = true;
     } else if (arg.startsWith("-")) {
       throw new Error(`unknown option: ${arg}`);
     } else {
@@ -319,9 +319,9 @@ export function parseLlmsArgs(argv: string[]): LlmsArgs {
     }
   }
   return {
-    globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
+    check: isCheck,
     configPath,
-    check,
+    globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
   };
 }
 
@@ -338,7 +338,7 @@ export async function runLlms(argv: string[], cwd: string): Promise<number> {
 
   let resolved;
   try {
-    resolved = await resolveConfig({ cwd, configPath: args.configPath });
+    resolved = await resolveConfig({ configPath: args.configPath, cwd });
   } catch (error) {
     if (error instanceof ConfigError) {
       console.error(error.message);

@@ -10,6 +10,7 @@ describe("isPlainObject", () => {
 
   it("rejects arrays, null, and class instances", () => {
     expect(isPlainObject([])).toBe(false);
+    // eslint-disable-next-line unicorn/no-null -- deliberately asserting null input is rejected
     expect(isPlainObject(null)).toBe(false);
     expect(isPlainObject(new Date())).toBe(false);
     expect(isPlainObject("x")).toBe(false);
@@ -22,10 +23,10 @@ describe("deepMerge", () => {
   });
 
   it("recurses into nested plain objects", () => {
-    const base = { rules: { MD024: { siblings_only: true }, MD013: false } };
+    const base = { rules: { MD013: false, MD024: { siblings_only: true } } };
     const override = { rules: { MD013: true } };
     expect(deepMerge(base, override)).toEqual({
-      rules: { MD024: { siblings_only: true }, MD013: true },
+      rules: { MD013: true, MD024: { siblings_only: true } },
     });
   });
 
@@ -50,6 +51,6 @@ describe("deepMerge", () => {
     const merged = deepMerge(base, override);
     expect(base).toEqual({ nested: { keep: 1 } });
     expect(override).toEqual({ nested: { add: 2 } });
-    expect(merged).toEqual({ nested: { keep: 1, add: 2 } });
+    expect(merged).toEqual({ nested: { add: 2, keep: 1 } });
   });
 });

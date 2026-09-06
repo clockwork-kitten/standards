@@ -83,8 +83,10 @@ The studio's ESLint, Prettier, knip, and TypeScript bases ship inside `@clockwor
 and are referenced by the same pinned package consumers already install — so the toolchain
 propagates like the workflows do, with no per-repo drift. They are deliberately **thin**: Prettier
 owns formatting and `clockwork-kitten/bedrock` owns semantic normalization, so this layer only adds
-framework-agnostic correctness, import ordering, security, dependency hygiene, and dead-code
-detection. Markdown stays owned by `conform` — keep Prettier off it (see `.prettierignore`).
+framework-agnostic correctness, deterministic ordering (imports, exports, object keys, types), the
+"one canonical way" rules (`undefined` over `null`, `is`/`has` boolean names, `.toSorted()` over
+`.sort()`), security, dependency hygiene, and dead-code detection. Markdown stays owned by `conform`
+— keep Prettier off it (see `.prettierignore`).
 
 ```js
 // eslint.config.js

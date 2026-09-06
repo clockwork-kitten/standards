@@ -17,7 +17,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  rmSync(dir, { recursive: true, force: true });
+  rmSync(dir, { force: true, recursive: true });
 });
 
 describe("discoverConfigPath", () => {
@@ -89,8 +89,8 @@ describe("resolveConfig", () => {
       '{ "extends": false, "markdownlint": { "default": true } }',
     );
     const resolved = await resolveConfig({
-      cwd: dir,
       configPath: "custom.jsonc",
+      cwd: dir,
     });
     expect(resolved.markdownlint).toEqual({ default: true });
   });

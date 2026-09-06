@@ -43,7 +43,7 @@ describe("lintContent", () => {
 
   it("sorts issues by file then line", async () => {
     const issues = await lintContent(
-      { "z.md": "#x\n", "a.md": "#y\n" },
+      { "a.md": "#y\n", "z.md": "#x\n" },
       STUDIO_MARKDOWNLINT_BASELINE,
     );
     const files = issues.map((issue) => issue.file);
@@ -59,11 +59,11 @@ describe("formatIssues", () => {
   it("renders file:line rule description with optional detail", () => {
     const line = formatIssues([
       {
+        description: "Multiple blanks",
+        detail: "Expected: 1",
         file: "a.md",
         line: 3,
         rule: "MD012/no-multiple-blanks",
-        description: "Multiple blanks",
-        detail: "Expected: 1",
       },
     ]);
     expect(line).toBe(

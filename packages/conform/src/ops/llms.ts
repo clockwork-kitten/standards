@@ -11,17 +11,13 @@ import { parseMarkdown } from "../lint/parse.ts";
 
 /** Title and one-line description distilled from a single document. */
 export type DocMeta = {
+  /** The document's first paragraph, flattened to a single line (may be empty). */
+  description: string;
   /** Repo-relative posix path, used as both sort key and link target. */
   path: string;
   /** The document's first level-1 heading, or its filename as a fallback. */
   title: string;
-  /** The document's first paragraph, flattened to a single line (may be empty). */
-  description: string;
 };
-
-function collapseWhitespace(text: string): string {
-  return text.split(/\s+/).filter(Boolean).join(" ");
-}
 
 /**
  * Distil a document's title and one-line description from its mdast tree: the
@@ -34,16 +30,16 @@ function collapseWhitespace(text: string): string {
 export function extractDocMeta(
   markdown: string,
   fallbackTitle: string,
-): { title: string; description: string } {
+): { description: string; title: string } {
   const tree = parseMarkdown(markdown);
   let title = "";
   let description = "";
-  let seenTitle = false;
+  let isSeenTitle = false;
   for (const node of tree.children) {
-    if (!seenTitle) {
+    if (!isSeenTitle) {
       if (node.type === "heading" && node.depth === 1) {
         title = toString(node).trim();
-        seenTitle = true;
+        isSeenTitle = true;
       }
       continue;
     }
@@ -52,17 +48,30 @@ export function extractDocMeta(
       break;
     }
   }
-  return { title: title || fallbackTitle, description };
+  return { description, title: title || fallbackTitle };
 }
 
-function matchesSection(path: string, section: ResolvedLlmsSection): boolean {
-  if (!path.startsWith(section.prefix)) {
-    return false;
-  }
-  if (section.shallow && path.slice(section.prefix.length).includes("/")) {
-    return false;
-  }
-  return true;
+/**
+ * Build the `llms.txt` content for a repo: read each file, distil its metadata,
+ * and render against the config. `files` are repo-relative posix paths; they are
+ * sorted here so output does not depend on discovery order. `readFile` is
+ * injectable for testing.
+ */
+export function generateLlms(
+  files: readonly string[],
+  config: ResolvedLlmsConfig,
+  readFile: (path: string) => string = (path) => readFileSync(path, "utf8"),
+): string {
+  const docs: DocMeta[] = [...files]
+    .toSorted((a, b) => a.localeCompare(b))
+    .map((path) => {
+      const { description, title } = extractDocMeta(
+        readFile(path),
+        basename(path),
+      );
+      return { description, path, title };
+    });
+  return renderLlms(docs, config);
 }
 
 /**
@@ -85,7 +94,7 @@ export function renderLlms(
   const used = new Set<string>();
   for (const section of config.sections) {
     const matched = docs.filter(
-      (doc) => !used.has(doc.path) && matchesSection(doc.path, section),
+      (doc) => !used.has(doc.path) && isInSection(doc.path, section),
     );
     if (matched.length === 0) {
       continue;
@@ -101,25 +110,16 @@ export function renderLlms(
   return `${lines.join("\n").replace(/\s+$/, "")}\n`;
 }
 
-/**
- * Build the `llms.txt` content for a repo: read each file, distil its metadata,
- * and render against the config. `files` are repo-relative posix paths; they are
- * sorted here so output does not depend on discovery order. `readFile` is
- * injectable for testing.
- */
-export function generateLlms(
-  files: readonly string[],
-  config: ResolvedLlmsConfig,
-  readFile: (path: string) => string = (path) => readFileSync(path, "utf8"),
-): string {
-  const docs: DocMeta[] = [...files]
-    .toSorted((a, b) => a.localeCompare(b))
-    .map((path) => {
-      const { title, description } = extractDocMeta(
-        readFile(path),
-        basename(path),
-      );
-      return { path, title, description };
-    });
-  return renderLlms(docs, config);
+function collapseWhitespace(text: string): string {
+  return text.split(/\s+/).filter(Boolean).join(" ");
+}
+
+function isInSection(path: string, section: ResolvedLlmsSection): boolean {
+  if (!path.startsWith(section.prefix)) {
+    return false;
+  }
+  if (section.shallow && path.slice(section.prefix.length).includes("/")) {
+    return false;
+  }
+  return true;
 }
