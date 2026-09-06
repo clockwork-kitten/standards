@@ -78,8 +78,8 @@ ever runs `check` and fails on drift (auto-committing fixes would fight the huma
 | --- | --- | --- | --- |
 | 1 | `conform fix` autofixes fixable markdown rules | ☑ | Write-side sibling of `check`; uses markdownlint `applyFixes` via `fixInfo`, same resolved config + shared parser; re-lints the fixed content to report the unfixable residue; exits 0 (`check` stays the failing gate) |
 | 2 | `conform fix` also regenerates `llms.txt` | ☑ | One command self-heals the tree; reuses the injectable `generateLlms`; `--no-llms` opts out |
-| 3 | lefthook shared base consumers extend/pin | ☐ | Pre-commit runs `conform check` (+ `fix` on staged files); `conform` is the brain, lefthook the trigger; propagates like the reusable workflows; also serves the code track |
-| 4 | `AGENTS.md` guidance: run `conform` in-loop | ☐ | The hook is a backstop — an agent may commit via tooling that bypasses it |
+| 3 | lefthook shared base consumers extend/pin | ☑ | `lefthook/base.yml` pinned via lefthook `remotes:` (propagates like the reusable workflows); pre-commit runs `conform fix --no-llms` on staged markdown (re-staged) then `conform check`; `conform` is the brain, lefthook the trigger; also serves the code track |
+| 4 | `AGENTS.md` guidance: run `conform` in-loop | ☑ | Agents run `conform fix`/`check` while proposing; the hook is a backstop an agent may bypass (`--no-verify`, the API); records the CI-never-fixes boundary |
 
 ## v0.5 — Code conformance track
 

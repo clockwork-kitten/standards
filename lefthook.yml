@@ -1,0 +1,6 @@
+# Dogfoods the studio's shared conform pre-commit base — the same
+# `lefthook/base.yml` consumer repos pin via `remotes:`. Here it is extended by
+# local path; `conform` resolves through this workspace, so `bunx conform` works
+# without a published package. Enable the hooks with `bunx lefthook install`.
+extends:
+  - lefthook/base.yml
