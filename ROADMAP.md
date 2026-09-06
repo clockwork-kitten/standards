@@ -83,15 +83,27 @@ ever runs `check` and fails on drift (auto-committing fixes would fight the huma
 
 ## v0.5 — Code conformance track
 
-Code checks join the same engine rather than a parallel toolchain: `conform check` invokes the studio
-linters and `clockwork-kitten/bedrock` the way it runs the markdown checks.
+Code checks join the same engine rather than a parallel toolchain: `conform check` invokes the
+studio linter/formatter and `clockwork-kitten/bedrock` the way it runs the markdown checks, and
+`conform fix` drives their autofixers (`eslint --fix`, `prettier --write`, `bedrock --fix`) the way
+it drives markdownlint's.
+
+The studio toolchain is **ESLint (thin, flat config) + Prettier + knip + `tsc`** — the stack the
+`code-standards` skill already mandates. It is deliberately **thin** because `bedrock` normalizes the
+semantic core (`var`→`const`, `==`→`===`, arrow→function, `.push`→spread, …); the residual lint
+surface is framework-aware rules (Svelte a11y/reactivity, Astro), import ordering (`perfectionist`),
+security, and dead code (`knip`). **Not Biome:** it cannot parse `.svelte`/`.astro` to the needed
+depth, and `conform` already provides the single-command UX Biome is bought for, so its one win is
+redundant here while its cost (dropping the UI/site repos) is fatal. Revisit only if the studio drops
+Svelte/Astro or Biome ships first-class Svelte support — a trigger to record as a `CK-0NN` decision in
+the `ops` repo's `docs/DECISIONS.md`.
 
 | # | Task | Status | Notes |
 | --- | --- | --- | --- |
-| 1 | Studio Biome + TypeScript base configs (pinned, referenceable) | ☐ | No per-repo drift |
-| 2 | Engine runs the lint + format + typecheck baseline | ☐ | Supersedes a standalone `code-conformance.yml` |
-| 3 | Invoke `clockwork-kitten/bedrock` as a check | ☐ | Bedrock is a tool the engine runs, not the home |
-| 4 | Opinionated Astro ruleset for site/client repos | ☐ | Coordinate with the galleycat template/provisioner |
+| 1 | Studio ESLint (flat) + Prettier + knip + `tsconfig` base configs (pinned, referenceable) | ☐ | One toolchain across backend, engine, UI, and site repos; thin because `bedrock` covers the semantic core |
+| 2 | Engine runs the lint + format + typecheck + dead-code baseline | ☐ | `conform check` runs `eslint` + `prettier --check` + `knip` + `tsc`; `conform fix` runs their `--fix`/`--write`; supersedes a standalone `code-conformance.yml` |
+| 3 | Invoke `clockwork-kitten/bedrock` as a check | ☐ | Bedrock is a tool the engine runs, not the home; `--report` maps to `check`, `--fix` to `fix` |
+| 4 | Opinionated Astro ruleset for site/client repos | ☐ | `eslint-plugin-astro` + `prettier-plugin-astro` + house structural rules; coordinate with the galleycat template/provisioner |
 
 ## v0.6 — Schema-aware entry operations
 
