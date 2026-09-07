@@ -1,7 +1,7 @@
 {
   "name": "@clockwork-kitten/conform",
   "version": "0.0.0",
-  "description": "The clockwork-kitten conformance engine \u2014 one CLI that lints and (later) structurally edits conformant files.",
+  "description": "The clockwork-kitten conformance engine — one CLI that lints and (later) structurally edits conformant files.",
   "type": "module",
   "bin": {
     "conform": "./src/cli/main.ts"

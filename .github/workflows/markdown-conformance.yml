@@ -23,7 +23,7 @@ on:
   workflow_call:
     inputs:
       paths:
-        description: 'Globs canon checks (space-separated). node_modules/.git/.standards are always ignored.'
+        description: 'Globs canon checks (space-separated). node_modules/.git/.canon are always ignored.'
         type: string
         default: '**/*.md'
       config:
