@@ -27,5 +27,12 @@ export default {
       // explicitly too.
       entry: ["conform.config.ts", "eslint.config.js"],
     },
+    "packages/conform": {
+      // `prettier-plugin-astro` is loaded by the shipped `configs/prettier.astro.json`
+      // (a Prettier config consumers reference), not imported in code, so knip can't
+      // see its use. `astro-eslint-parser` is auto-wired by `eslint-plugin-astro`'s
+      // flat configs and comes transitively — we never import it directly.
+      ignoreDependencies: ["prettier-plugin-astro"],
+    },
   },
 } satisfies KnipConfig;

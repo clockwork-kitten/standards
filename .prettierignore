@@ -15,3 +15,7 @@ node_modules
 coverage
 dist
 build
+
+# Astro fixtures are formatted by `prettier-plugin-astro` in consumer repos (see
+# `configs/prettier.astro.json`), not by this repo's base Prettier config.
+**/*.astro
