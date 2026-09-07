@@ -23,6 +23,7 @@ import {
 describe("parseCheckArgs", () => {
   it("defaults to **/*.md with no config", () => {
     expect(parseCheckArgs([])).toEqual({
+      code: true,
       configPath: undefined,
       globs: ["**/*.md"],
       referenceIgnore: [],
@@ -32,6 +33,7 @@ describe("parseCheckArgs", () => {
 
   it("collects positional globs", () => {
     expect(parseCheckArgs(["docs/**/*.md", "README.md"])).toEqual({
+      code: true,
       configPath: undefined,
       globs: ["docs/**/*.md", "README.md"],
       referenceIgnore: [],
@@ -242,6 +244,7 @@ describe("runLlms", () => {
 describe("parseFixArgs", () => {
   it("defaults to **/*.md, no config, llms on", () => {
     expect(parseFixArgs([])).toEqual({
+      code: true,
       configPath: undefined,
       globs: ["**/*.md"],
       llms: true,
@@ -252,6 +255,7 @@ describe("parseFixArgs", () => {
     expect(
       parseFixArgs(["docs/**/*.md", "--config", "c.ts", "--no-llms"]),
     ).toEqual({
+      code: true,
       configPath: "c.ts",
       globs: ["docs/**/*.md"],
       llms: false,

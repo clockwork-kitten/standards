@@ -3,6 +3,7 @@ import { existsSync, globSync, readFileSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import process from "node:process";
 
+import { runCodeTrack } from "../code/run.ts";
 import { ConfigError, resolveConfig } from "../config/resolve.ts";
 import { fixContents, formatIssues, lintFiles } from "../lint/markdown.ts";
 import { checkReferences, formatReferenceIssues } from "../lint/references.ts";
@@ -15,10 +16,12 @@ export const IGNORE_DIRS = new Set([".git", ".standards", "node_modules"]);
 export const DEFAULT_GLOBS = ["**/*.md"] as const;
 
 const USAGE =
-  "usage: conform check [globs...] [--config <path>] [--no-references] [--reference-ignore <substr>]";
+  "usage: conform check [globs...] [--config <path>] [--no-references] [--no-code] [--reference-ignore <substr>]";
 
 /** Parsed arguments for `conform check`. */
 export type CheckArgs = {
+  /** Whether to run the code track when the config declares one (default true). */
+  code: boolean;
   configPath: string | undefined;
   globs: string[];
   /** Extra ignore substrings for the reference checker, added to config. */
@@ -46,13 +49,15 @@ export function expandGlobs(globs: string[], cwd: string): string[] {
 /**
  * Parse the arguments to `conform check`. Positional args are globs (defaulting
  * to `**\/*.md`); `--config`/`-c` selects a config file; `--no-references`
- * disables the reference checker; `--reference-ignore` (repeatable) adds ignore
+ * disables the reference checker; `--no-code` disables the code track;
+ * `--reference-ignore` (repeatable) adds ignore
  * substrings. Throws on unknown flags or a missing option value.
  */
 export function parseCheckArgs(argv: string[]): CheckArgs {
   const globs: string[] = [];
   let configPath: string | undefined;
   let isReferences = true;
+  let isCode = true;
   const referenceIgnore: string[] = [];
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index] as string;
@@ -67,6 +72,8 @@ export function parseCheckArgs(argv: string[]): CheckArgs {
       configPath = arg.slice("--config=".length);
     } else if (arg === "--no-references") {
       isReferences = false;
+    } else if (arg === "--no-code") {
+      isCode = false;
     } else if (arg === "--reference-ignore") {
       const next = argv[index + 1];
       if (next === undefined) {
@@ -83,6 +90,7 @@ export function parseCheckArgs(argv: string[]): CheckArgs {
     }
   }
   return {
+    code: isCode,
     configPath,
     globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
     referenceIgnore,
@@ -152,13 +160,32 @@ export async function runCheck(argv: string[], cwd: string): Promise<number> {
     }
   }
 
+  if (args.code && resolved.code) {
+    const results = await runCodeTrack({
+      config: resolved.code,
+      cwd,
+      mode: "check",
+    });
+    for (const result of results) {
+      if (result.code === 0) {
+        continue;
+      }
+
+      console.error(`conform check · code · ${result.tool} failed`);
+      exitCode = 1;
+    }
+  }
+
   return exitCode;
 }
 
-const FIX_USAGE = "usage: conform fix [globs...] [--config <path>] [--no-llms]";
+const FIX_USAGE =
+  "usage: conform fix [globs...] [--config <path>] [--no-code] [--no-llms]";
 
 /** Parsed arguments for `conform fix`. */
 export type FixArgs = {
+  /** Whether to run the code fixers when the config declares a code track (default true). */
+  code: boolean;
   configPath: string | undefined;
   globs: string[];
   /** Whether to also regenerate the `llms.txt` index (default true). */
@@ -167,7 +194,8 @@ export type FixArgs = {
 
 /**
  * Parse the arguments to `conform fix`. Positional args are globs (defaulting to
- * `**\/*.md`); `--config`/`-c` selects a config file; `--no-llms` skips the
+ * `**\/*.md`); `--config`/`-c` selects a config file; `--no-code` skips the code
+ * fixers; `--no-llms` skips the
  * `llms.txt` regeneration that otherwise runs after the markdown autofix. Throws
  * on unknown flags or a missing option value.
  */
@@ -175,6 +203,7 @@ export function parseFixArgs(argv: string[]): FixArgs {
   const globs: string[] = [];
   let configPath: string | undefined;
   let isLlms = true;
+  let isCode = true;
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index] as string;
     if (arg === "--config" || arg === "-c") {
@@ -188,6 +217,8 @@ export function parseFixArgs(argv: string[]): FixArgs {
       configPath = arg.slice("--config=".length);
     } else if (arg === "--no-llms") {
       isLlms = false;
+    } else if (arg === "--no-code") {
+      isCode = false;
     } else if (arg.startsWith("-")) {
       throw new Error(`unknown option: ${arg}`);
     } else {
@@ -195,6 +226,7 @@ export function parseFixArgs(argv: string[]): FixArgs {
     }
   }
   return {
+    code: isCode,
     configPath,
     globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
     llms: isLlms,
@@ -257,6 +289,10 @@ export async function runFix(argv: string[], cwd: string): Promise<number> {
       `\n${residue.length} issue(s) fix cannot resolve — run \`conform check\` and fix by hand:`,
     );
     console.error(formatIssues(residue));
+  }
+
+  if (args.code && resolved.code) {
+    await runCodeTrack({ config: resolved.code, cwd, mode: "fix" });
   }
 
   if (args.llms && resolved.llms) {

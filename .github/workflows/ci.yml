@@ -1,10 +1,11 @@
 name: ci
 
 # The standards repo dogfoods its own conformance tooling on every PR: if the
-# tools can't keep this repo conformant, they aren't ready to ship. Markdown lint
-# and the internal cross-reference check both run through the conform engine
-# (packages/conform) in one `conform check`; the repo-hygiene reusable workflow
-# and the end-to-end reusable-markdown job round out the checks.
+# tools can't keep this repo conformant, they aren't ready to ship. One
+# `conform check` runs the whole baseline — markdown lint, the internal
+# cross-reference check, and the code track (ESLint + Prettier + knip + the
+# TypeScript typecheck) — and the repo-hygiene and reusable-markdown workflows
+# round out the checks.
 
 on:
   pull_request:
@@ -26,11 +27,9 @@ jobs:
           bun-version: latest
       - name: Install dependencies
         run: bun install --frozen-lockfile
-      - name: Typecheck the engine
-        run: bun run typecheck
       - name: Test the engine
         run: bun run test
-      - name: Lint markdown + check references via the engine (dogfood)
+      - name: Conform check — markdown, references, and the code track (dogfood)
         run: bun run check:md
       - name: Verify llms.txt is up to date (dogfood)
         run: bun run check:llms

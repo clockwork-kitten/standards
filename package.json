@@ -21,9 +21,6 @@
   "prettier": "@clockwork-kitten/conform/configs/prettier.base.json",
   "devDependencies": {
     "@clockwork-kitten/conform": "workspace:*",
-    "eslint": "^10.10.0",
-    "knip": "^6.34.0",
-    "lefthook": "^2.1.12",
-    "prettier": "^3.9.6"
+    "lefthook": "^2.1.12"
   }
 }

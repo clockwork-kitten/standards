@@ -4,6 +4,13 @@ import { defineConfig } from "@clockwork-kitten/conform";
 // are no markdownlint overrides here. This file dogfoods config discovery and
 // the defineConfig authoring API.
 export default defineConfig({
+  // The code-conformance track: `conform check` runs ESLint + Prettier + knip +
+  // the TypeScript typecheck, and `conform fix` runs the ESLint/Prettier
+  // autofixers. The engine's TypeScript lives in the workspace package, so point
+  // the typecheck at that tsconfig rather than a (nonexistent) root one.
+  code: {
+    tsconfig: "packages/conform/tsconfig.json",
+  },
   // `conform llms` generates llms.txt (https://llmstxt.org/) — the engine
   // dogfooding its own doc-index generator. Sections match by path prefix; a
   // doc joins the first it matches, so the shallow root section is listed first.
