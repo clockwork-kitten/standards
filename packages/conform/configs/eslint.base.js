@@ -15,9 +15,12 @@ import tseslint from "typescript-eslint";
  * (`perfectionist`), security anti-patterns (`security`), and dependency hygiene
  * (`depend`). Framework rulesets (Svelte, Astro) layer on top of this base.
  *
- * Interim: because bedrock is not yet wired into the engine, a few of its canonical
- * rules are duplicated here and must be removed when it is (see the rules block and
- * ROADMAP v0.5 row 3).
+ * Interim: bedrock is now wired into the engine as a code-track tool
+ * (`conform check` → `bedrock --report`, `conform fix` → `bedrock --fix`), but it
+ * is off by default until it ships as an installable, bundled dependency. Until a
+ * repo actually enables it, these few canonical rules are duplicated here so
+ * nothing regresses; remove them once bedrock is the active owner (see the rules
+ * block and ROADMAP v0.5 row 3).
  *
  * Consumers extend it from their own `eslint.config.js`:
  *
@@ -37,10 +40,11 @@ export default tseslint.config(
     languageOptions: { globals: { ...globals.node } },
     rules: {
       // --- Interim duplication of `clockwork-kitten/bedrock` ---------------------
-      // bedrock is the long-term owner of semantic normalization, but it is not yet
-      // wired into the engine (v0.5 row 3). Until it is, enforce its canonical forms
-      // here so nothing regresses. REMOVE these four when bedrock is invoked, to
-      // avoid double-ownership (tracked in ROADMAP v0.5 row 3).
+      // bedrock is the long-term owner of semantic normalization and is now wired
+      // into the code track (v0.5 row 3), but off by default until it ships as an
+      // installable dependency. Until a repo enables it, enforce its canonical
+      // forms here so nothing regresses. REMOVE these four once bedrock is the
+      // active owner, to avoid double-ownership (tracked in ROADMAP v0.5 row 3).
       eqeqeq: ["error", "always"],
       "no-var": "error",
       "prefer-arrow-callback": "error",

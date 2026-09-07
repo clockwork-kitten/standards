@@ -73,6 +73,7 @@ describe("resolveCodeConfig", () => {
 
   it("enables every tool and defaults the tsconfig for a bare block", () => {
     expect(resolveCodeConfig({ code: {} })).toEqual({
+      bedrock: false,
       eslint: true,
       knip: true,
       prettier: true,
@@ -87,11 +88,25 @@ describe("resolveCodeConfig", () => {
         code: { knip: false, tsconfig: "packages/x/tsconfig.json" },
       }),
     ).toEqual({
+      bedrock: false,
       eslint: true,
       knip: false,
       prettier: true,
       tsconfig: "packages/x/tsconfig.json",
       typecheck: true,
     });
+  });
+
+  it("defaults bedrock to `src` when enabled with `true`", () => {
+    expect(resolveCodeConfig({ code: { bedrock: true } })?.bedrock).toEqual([
+      "src",
+    ]);
+  });
+
+  it("uses explicit bedrock patterns as-is, and treats an empty array as off", () => {
+    expect(
+      resolveCodeConfig({ code: { bedrock: ["src", "scripts"] } })?.bedrock,
+    ).toEqual(["src", "scripts"]);
+    expect(resolveCodeConfig({ code: { bedrock: [] } })?.bedrock).toBe(false);
   });
 });

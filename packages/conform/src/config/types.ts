@@ -8,6 +8,13 @@ import type { Configuration } from "markdownlint";
  * block only decides *which* run, not how they are configured.
  */
 export type CodeConfig = {
+  /**
+   * Run `clockwork-kitten/bedrock` semantic normalization (`--report` in check,
+   * `--fix` in fix). Off by default — bedrock is maximalist and opt-in. `true`
+   * runs it over `src`; pass an array of paths/globs to scope it. Requires
+   * bedrock to be installed alongside the engine.
+   */
+  bedrock?: boolean | string[];
   /** Run ESLint (flat config auto-discovered). Defaults to `true`. */
   eslint?: boolean;
   /** Run knip dead-code / unused-dependency analysis. Defaults to `true`. */

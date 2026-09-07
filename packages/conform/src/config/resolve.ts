@@ -29,6 +29,8 @@ export const CONFIG_FILENAMES = [
 
 /** The code-track settings for a run, with defaults applied. */
 export type ResolvedCodeConfig = {
+  /** File patterns bedrock normalizes, or `false` when the tool is off. */
+  bedrock: false | string[];
   eslint: boolean;
   knip: boolean;
   prettier: boolean;
@@ -104,6 +106,9 @@ export const DEFAULT_LLMS_OUTPUT = "llms.txt";
 /** Default tsconfig used by the code-track typecheck. */
 export const DEFAULT_TSCONFIG = "tsconfig.json";
 
+/** Default path(s) bedrock normalizes when `code.bedrock` is `true`. */
+export const DEFAULT_BEDROCK_FILES = ["src"];
+
 /**
  * Find the first existing config file at `cwd`, or `undefined` if none.
  */
@@ -172,6 +177,7 @@ export function resolveCodeConfig(
     return undefined;
   }
   return {
+    bedrock: resolveBedrock(code.bedrock),
     eslint: code.eslint ?? true,
     knip: code.knip ?? true,
     prettier: code.prettier ?? true,
@@ -243,4 +249,18 @@ export function resolveLlmsConfig(
 
 function isConfigModule(value: unknown): value is ConformConfig {
   return isPlainObject(value);
+}
+
+/**
+ * Normalize the `code.bedrock` option to the resolved file patterns, or `false`
+ * when off. `true` uses {@link DEFAULT_BEDROCK_FILES}; an explicit array is used
+ * as-is; an empty array is treated as off (nothing to normalize).
+ */
+function resolveBedrock(
+  value: boolean | string[] | undefined,
+): false | string[] {
+  if (Array.isArray(value)) {
+    return value.length > 0 ? value : false;
+  }
+  return value ? [...DEFAULT_BEDROCK_FILES] : false;
 }

@@ -5,12 +5,15 @@ import type { ResolvedCodeConfig } from "../config/resolve.ts";
 import { enabledTools, resolveBin, runCodeTrack, toolArgs } from "./run.ts";
 
 const CONFIG: ResolvedCodeConfig = {
+  bedrock: false,
   eslint: true,
   knip: true,
   prettier: true,
   tsconfig: "tsconfig.json",
   typecheck: true,
 };
+
+const WITH_BEDROCK: ResolvedCodeConfig = { ...CONFIG, bedrock: ["src"] };
 
 describe("toolArgs", () => {
   it("uses --fix / --write for the fixers in fix mode", () => {
@@ -32,6 +35,14 @@ describe("toolArgs", () => {
   it("passes no positional args to knip", () => {
     expect(toolArgs("knip", CONFIG, "check")).toEqual([]);
   });
+
+  it("passes bedrock its file patterns then the mode flag", () => {
+    expect(toolArgs("bedrock", WITH_BEDROCK, "check")).toEqual([
+      "src",
+      "--report",
+    ]);
+    expect(toolArgs("bedrock", WITH_BEDROCK, "fix")).toEqual(["src", "--fix"]);
+  });
 });
 
 describe("enabledTools", () => {
@@ -46,6 +57,21 @@ describe("enabledTools", () => {
 
   it("runs only the fixers in fix mode", () => {
     expect(enabledTools(CONFIG, "fix")).toEqual(["eslint", "prettier"]);
+  });
+
+  it("runs bedrock first, in both modes, when enabled", () => {
+    expect(enabledTools(WITH_BEDROCK, "check")).toEqual([
+      "bedrock",
+      "eslint",
+      "prettier",
+      "knip",
+      "typecheck",
+    ]);
+    expect(enabledTools(WITH_BEDROCK, "fix")).toEqual([
+      "bedrock",
+      "eslint",
+      "prettier",
+    ]);
   });
 
   it("honors per-tool disables", () => {

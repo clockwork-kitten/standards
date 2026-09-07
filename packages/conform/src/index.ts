@@ -21,6 +21,7 @@ export { deepMerge, isPlainObject, type PlainObject } from "./config/merge.ts";
 export {
   CONFIG_FILENAMES,
   ConfigError,
+  DEFAULT_BEDROCK_FILES,
   DEFAULT_LLMS_OUTPUT,
   DEFAULT_TSCONFIG,
   discoverConfigPath,

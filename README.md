@@ -129,10 +129,12 @@ export default { ...base, workspaces: { /* ... */ } };
 `conform check` and `conform fix` drive these tools directly: add a `code` block to your
 `conform.config.*` to opt in, and one `conform check` runs ESLint, Prettier (`--check`), knip, and
 `tsc --noEmit` alongside the markdown track — while `conform fix` runs the ESLint/Prettier
-autofixers (knip and `tsc` are check-only gates). The pinned toolchain ships as engine
-dependencies, so pinning `@clockwork-kitten/conform` gets the whole code stack — no separate
-installs. `fix` is authoring-time only (local, agent loop, pre-commit); CI runs `check` and fails on
-drift, never auto-fixing.
+autofixers (knip and `tsc` are check-only gates). `clockwork-kitten/bedrock` semantic normalization
+is available as an opt-in code-track tool (`code.bedrock`; `--report` in check, `--fix` in fix),
+off by default. The pinned toolchain ships as engine dependencies, so pinning
+`@clockwork-kitten/conform` gets the whole code stack — no separate installs. `fix` is
+authoring-time only (local, agent loop, pre-commit); CI runs `check` and fails on drift, never
+auto-fixing.
 
 ```ts
 // conform.config.ts — every tool defaults on; set a flag false to skip it
@@ -141,6 +143,7 @@ export default defineConfig({
   code: {
     // tsconfig: "tsconfig.json",  // point at your typecheck project
     // knip: false,                // e.g. skip a tool
+    // bedrock: true,              // opt in to bedrock (scopes to `src`); or pass globs
   },
 });
 ```

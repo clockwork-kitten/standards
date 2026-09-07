@@ -9,7 +9,7 @@ import type { ResolvedCodeConfig } from "../config/resolve.ts";
 const require = createRequire(import.meta.url);
 
 /** The tools the code track can run. */
-export type CodeTool = "eslint" | "knip" | "prettier" | "typecheck";
+export type CodeTool = "bedrock" | "eslint" | "knip" | "prettier" | "typecheck";
 
 /** Outcome of a single tool invocation. */
 export type CodeToolResult = {
@@ -38,6 +38,7 @@ export const runProcess: RunProcess = (command, args, cwd) =>
 
 /** Package + bin-entry name each tool is invoked through. */
 const TOOL_BIN: Record<CodeTool, readonly [pkg: string, bin: string]> = {
+  bedrock: ["bedrock", "bedrock"],
   eslint: ["eslint", "eslint"],
   // knip ships a bun-native entry; prefer it since the engine runs under Bun.
   knip: ["knip", "knip-bun"],
@@ -62,6 +63,10 @@ export function enabledTools(
   mode: "check" | "fix",
 ): CodeTool[] {
   const tools: CodeTool[] = [];
+  // Semantic normalization runs first so lint/format tidy up after its rewrites.
+  if (config.bedrock) {
+    tools.push("bedrock");
+  }
   if (config.eslint) {
     tools.push("eslint");
   }
@@ -125,9 +130,9 @@ export async function runCodeTrack(
 }
 
 /**
- * Build the argv (after the runtime and bin path) for a tool. `eslint` and
- * `prettier` differ between check and fix; `knip` and `typecheck` are gates with
- * no safe autofix, so they only ever run in check mode.
+ * Build the argv (after the runtime and bin path) for a tool. `bedrock`,
+ * `eslint`, and `prettier` differ between check and fix; `knip` and `typecheck`
+ * are gates with no safe autofix, so they only ever run in check mode.
  */
 export function toolArgs(
   tool: CodeTool,
@@ -135,6 +140,12 @@ export function toolArgs(
   mode: "check" | "fix",
 ): string[] {
   switch (tool) {
+    case "bedrock": {
+      // Positional file patterns come first, then the mode flag: `--report` is a
+      // read-only gate; `--fix` rewrites in place (authoring-time only).
+      const files = config.bedrock || [];
+      return [...files, mode === "fix" ? "--fix" : "--report"];
+    }
     case "eslint": {
       return mode === "fix" ? ["--fix", "."] : ["."];
     }
