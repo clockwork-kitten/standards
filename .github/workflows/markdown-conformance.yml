@@ -106,7 +106,11 @@ jobs:
           REFERENCE_IGNORE: ${{ inputs.reference-ignore }}
         run: |
           set -euo pipefail
-          args=(check $PATHS)
+          # This is the markdown-conformance track: never run the code track,
+          # even when the calling repo's config declares a `code` block (that
+          # runs in the repo's own `conform check` / a code-conformance workflow,
+          # with full dev dependencies installed).
+          args=(check --no-code $PATHS)
           if [ -n "$CONFIG" ]; then
             args+=(--config "$CONFIG")
           fi
