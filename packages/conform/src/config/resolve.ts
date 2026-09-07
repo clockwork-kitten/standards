@@ -27,8 +27,19 @@ export const CONFIG_FILENAMES = [
   "conform.config.json",
 ] as const;
 
+/** The code-track settings for a run, with defaults applied. */
+export type ResolvedCodeConfig = {
+  eslint: boolean;
+  knip: boolean;
+  prettier: boolean;
+  tsconfig: string;
+  typecheck: boolean;
+};
+
 /** The effective configuration for a run, plus where it came from. */
 export type ResolvedConfig = {
+  /** The code-track settings, or `undefined` when the repo declares no `code` block. */
+  code: ResolvedCodeConfig | undefined;
   /** The `llms.txt` generator config, or `undefined` when the repo declares none. */
   llms: ResolvedLlmsConfig | undefined;
   markdownlint: MarkdownlintConfig;
@@ -90,6 +101,9 @@ export function resolveReferencesConfig(
 /** Default output path for the generated doc index. */
 export const DEFAULT_LLMS_OUTPUT = "llms.txt";
 
+/** Default tsconfig used by the code-track typecheck. */
+export const DEFAULT_TSCONFIG = "tsconfig.json";
+
 /**
  * Find the first existing config file at `cwd`, or `undefined` if none.
  */
@@ -146,6 +160,27 @@ export async function loadConfigFile(path: string): Promise<ConformConfig> {
 }
 
 /**
+ * Compute the effective code-track settings, or `undefined` when the config
+ * declares no `code` block (docs-only repos). Each tool defaults to enabled, so
+ * a bare `code: {}` runs the full baseline.
+ */
+export function resolveCodeConfig(
+  config: ConformConfig,
+): ResolvedCodeConfig | undefined {
+  const code = config.code;
+  if (!code) {
+    return undefined;
+  }
+  return {
+    eslint: code.eslint ?? true,
+    knip: code.knip ?? true,
+    prettier: code.prettier ?? true,
+    tsconfig: code.tsconfig ?? DEFAULT_TSCONFIG,
+    typecheck: code.typecheck ?? true,
+  };
+}
+
+/**
  * Resolve the effective config for a run: an explicit `configPath` wins,
  * otherwise the first `conform.config.*` found at `cwd`, otherwise the bundled
  * studio baseline. Throws {@link ConfigError} only when a config file is present
@@ -164,6 +199,7 @@ export async function resolveConfig(options: {
 
   if (!path) {
     return {
+      code: undefined,
       llms: undefined,
       markdownlint: { ...STUDIO_MARKDOWNLINT_BASELINE },
       references: { ignore: [] },
@@ -173,6 +209,7 @@ export async function resolveConfig(options: {
 
   const config = await loadConfigFile(path);
   return {
+    code: resolveCodeConfig(config),
     llms: resolveLlmsConfig(config),
     markdownlint: resolveMarkdownlintConfig(config),
     references: resolveReferencesConfig(config),

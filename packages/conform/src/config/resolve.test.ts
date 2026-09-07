@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { STUDIO_MARKDOWNLINT_BASELINE } from "./baseline.ts";
 import {
+  resolveCodeConfig,
   resolveMarkdownlintConfig,
   resolveReferencesConfig,
 } from "./resolve.ts";
@@ -62,5 +63,35 @@ describe("resolveReferencesConfig", () => {
     const resolved = resolveReferencesConfig(source);
     expect(resolved).toEqual({ ignore: ["ops/"] });
     expect(resolved.ignore).not.toBe(source.references.ignore);
+  });
+});
+
+describe("resolveCodeConfig", () => {
+  it("returns undefined when no code block is declared", () => {
+    expect(resolveCodeConfig({})).toBeUndefined();
+  });
+
+  it("enables every tool and defaults the tsconfig for a bare block", () => {
+    expect(resolveCodeConfig({ code: {} })).toEqual({
+      eslint: true,
+      knip: true,
+      prettier: true,
+      tsconfig: "tsconfig.json",
+      typecheck: true,
+    });
+  });
+
+  it("honors per-tool disables and a custom tsconfig", () => {
+    expect(
+      resolveCodeConfig({
+        code: { knip: false, tsconfig: "packages/x/tsconfig.json" },
+      }),
+    ).toEqual({
+      eslint: true,
+      knip: false,
+      prettier: true,
+      tsconfig: "packages/x/tsconfig.json",
+      typecheck: true,
+    });
   });
 });

@@ -101,7 +101,7 @@ the `ops` repo's `docs/DECISIONS.md`.
 | # | Task | Status | Notes |
 | --- | --- | --- | --- |
 | 1 | Studio ESLint (flat) + Prettier + knip + `tsconfig` base configs (pinned, referenceable) | ☑ | Shipped from `@clockwork-kitten/conform/configs/*` (imported/extended, pinned by the same tag consumers already use); thin because `bedrock` covers the semantic core; dogfooded on the engine itself |
-| 2 | Engine runs the lint + format + typecheck + dead-code baseline | ☐ | `conform check` runs `eslint` + `prettier --check` + `knip` + `tsc`; `conform fix` runs their `--fix`/`--write`; supersedes a standalone `code-conformance.yml` |
+| 2 | Engine runs the lint + format + typecheck + dead-code baseline | ☑ | `conform check` runs `eslint` + `prettier --check` + `knip` + `tsc --noEmit`; `conform fix` runs the `eslint`/`prettier` autofixers (knip/tsc are check-only gates). Opt in with a `code` block in `conform.config.*`; the pinned toolchain ships as `@clockwork-kitten/conform` deps. `fix` stays authoring-time — CI only runs `check` |
 | 3 | Invoke `clockwork-kitten/bedrock` as a check | ☐ | Bedrock is a tool the engine runs, not the home; `--report` maps to `check`, `--fix` to `fix`. **On wiring, remove the interim ESLint rules that duplicate it** (`no-var`, `prefer-const`, `eqeqeq`, `prefer-arrow-callback` in `eslint.base.js`) to avoid double-ownership |
 | 4 | Opinionated Astro ruleset for site/client repos | ☐ | `eslint-plugin-astro` + `prettier-plugin-astro` + house structural rules; coordinate with the galleycat template/provisioner |
 

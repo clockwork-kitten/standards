@@ -110,8 +110,24 @@ import base from "@clockwork-kitten/conform/configs/knip.base.json" with { type:
 export default { ...base, workspaces: { /* ... */ } };
 ```
 
-`conform check`/`conform fix` will drive these tools directly in a later slice; for now they are
-runnable configs a repo wires into its own scripts.
+`conform check` and `conform fix` drive these tools directly: add a `code` block to your
+`conform.config.*` to opt in, and one `conform check` runs ESLint, Prettier (`--check`), knip, and
+`tsc --noEmit` alongside the markdown track — while `conform fix` runs the ESLint/Prettier
+autofixers (knip and `tsc` are check-only gates). The pinned toolchain ships as engine
+dependencies, so pinning `@clockwork-kitten/conform` gets the whole code stack — no separate
+installs. `fix` is authoring-time only (local, agent loop, pre-commit); CI runs `check` and fails on
+drift, never auto-fixing.
+
+```ts
+// conform.config.ts — every tool defaults on; set a flag false to skip it
+import { defineConfig } from "@clockwork-kitten/conform";
+export default defineConfig({
+  code: {
+    // tsconfig: "tsconfig.json",  // point at your typecheck project
+    // knip: false,                // e.g. skip a tool
+  },
+});
+```
 
 ## Status
 

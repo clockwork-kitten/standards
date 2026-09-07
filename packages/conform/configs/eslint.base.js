@@ -74,6 +74,12 @@ export default tseslint.config(
       // Fights the standard Vitest `beforeEach` setup pattern.
       "unicorn/no-top-level-assignment-in-function": "off",
 
+      // Rewrites the CLI's `else if` argument dispatchers into a `switch` inside
+      // the parse loop, which then trips `no-break-in-nested-loop` — the two
+      // rules fight and mangle the code. `else if` chains are the house style
+      // for these small parsers.
+      "unicorn/prefer-switch": "off",
+
       // Vocabulary/abbreviation policy — see `name-replacements` above.
       "unicorn/prevent-abbreviations": "off",
 
