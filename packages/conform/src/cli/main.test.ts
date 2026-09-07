@@ -1,24 +1,22 @@
-import {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
-import { tmpdir } from "node:os";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import {
-  expandGlobs,
-  parseCheckArgs,
-  parseFixArgs,
-  parseLlmsArgs,
-  runCheck,
-  runFix,
-  runLlms,
-} from "./main.ts";
+import type { CodeToolResult } from "../code/run.ts";
+import type { RunDocsOptions } from "../docs/run.ts";
+
+import { parseCheckArgs, parseFixArgs, runCheck, runFix } from "./main.ts";
+
+const SCRATCH_ROOT = join(process.cwd(), ".test-runs", "cli-main");
+let sequence = 0;
+
+function makeScratchDir(): string {
+  sequence += 1;
+  const dir = join(SCRATCH_ROOT, String(sequence));
+  rmSync(dir, { force: true, recursive: true });
+  mkdirSync(dir, { recursive: true });
+  return dir;
+}
 
 describe("parseCheckArgs", () => {
   it("defaults to **/*.md with no config", () => {
@@ -47,18 +45,23 @@ describe("parseCheckArgs", () => {
     expect(parseCheckArgs(["--config=c.ts"]).configPath).toBe("c.ts");
   });
 
-  it("parses --no-references and repeatable --reference-ignore", () => {
-    expect(parseCheckArgs(["--no-references"]).references).toBe(false);
+  it("parses --no-code, --no-references, and repeatable --reference-ignore", () => {
     expect(
       parseCheckArgs([
+        "--no-code",
+        "--no-references",
         "--reference-ignore",
         "ops/",
         "--reference-ignore=docs/x.md",
-      ]).referenceIgnore,
-    ).toEqual(["ops/", "docs/x.md"]);
+      ]),
+    ).toMatchObject({
+      code: false,
+      referenceIgnore: ["ops/", "docs/x.md"],
+      references: false,
+    });
   });
 
-  it("throws on a missing --config value or unknown flag", () => {
+  it("throws on a missing option value or unknown flag", () => {
     expect(() => parseCheckArgs(["--config"])).toThrow(/requires a path/);
     expect(() => parseCheckArgs(["--nope"])).toThrow(/unknown option/);
     expect(() => parseCheckArgs(["--reference-ignore"])).toThrow(
@@ -67,177 +70,123 @@ describe("parseCheckArgs", () => {
   });
 });
 
-describe("expandGlobs", () => {
-  let dir: string;
-  beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "conform-glob-"));
-    writeFileSync(join(dir, "a.md"), "# A\n");
-    mkdirSync(join(dir, "sub"));
-    writeFileSync(join(dir, "sub", "b.md"), "# B\n");
-    mkdirSync(join(dir, "node_modules"));
-    writeFileSync(join(dir, "node_modules", "c.md"), "# C\n");
-  });
-  afterEach(() => {
-    rmSync(dir, { force: true, recursive: true });
-  });
-
-  it("finds markdown recursively and skips ignored dirs", () => {
-    expect(expandGlobs(["**/*.md"], dir)).toEqual(["a.md", "sub/b.md"]);
-  });
-
-  it("de-duplicates across overlapping patterns", () => {
-    expect(expandGlobs(["**/*.md", "a.md"], dir)).toEqual(["a.md", "sub/b.md"]);
-  });
-});
-
 describe("runCheck", () => {
   let dir: string;
+  let docsCalls: RunDocsOptions[];
+  let codeResults: CodeToolResult[];
+  let codeCalls: Array<{
+    cwd: string;
+    mode: "check" | "fix";
+    tsconfig: string;
+  }>;
+
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "conform-run-"));
+    dir = makeScratchDir();
+    docsCalls = [];
+    codeResults = [];
+    codeCalls = [];
     vi.spyOn(console, "error").mockImplementation(() => {});
   });
+
   afterEach(() => {
-    rmSync(dir, { force: true, recursive: true });
     vi.restoreAllMocks();
+    rmSync(SCRATCH_ROOT, { force: true, recursive: true });
   });
 
-  it("returns 0 when all files are conformant", async () => {
-    writeFileSync(join(dir, "ok.md"), "# Title\n\nGood.\n");
-    expect(await runCheck(["**/*.md"], dir)).toBe(0);
-  });
-
-  it("returns 1 when a file violates a rule", async () => {
-    writeFileSync(join(dir, "bad.md"), "no heading\n");
-    expect(await runCheck(["**/*.md"], dir)).toBe(1);
-  });
-
-  it("returns 2 on a malformed config file", async () => {
-    writeFileSync(join(dir, "ok.md"), "# Title\n\nGood.\n");
-    writeFileSync(join(dir, "conform.config.jsonc"), "{ broken");
-    expect(await runCheck(["**/*.md"], dir)).toBe(2);
-  });
-
-  it("returns 2 on bad arguments", async () => {
-    expect(await runCheck(["--config"], dir)).toBe(2);
-  });
-
-  it("applies a repo config override (extends:false loosens rules)", async () => {
-    // MD041 (first-line-heading) would fire, but the repo config disables it.
-    writeFileSync(join(dir, "no-h1.md"), "Just a paragraph, no heading.\n");
+  it("runs docs and code tracks and returns 0 when both pass", async () => {
     writeFileSync(
       join(dir, "conform.config.jsonc"),
-      '{ "extends": false, "markdownlint": { "default": true, "MD041": false, "MD047": false } }',
+      '{ "code": { "tsconfig": "packages/conform/tsconfig.json" } }',
     );
-    expect(await runCheck(["**/*.md"], dir)).toBe(0);
-  });
 
-  it("returns 1 on a broken internal link, 0 once --no-references is set", async () => {
-    writeFileSync(
-      join(dir, "index.md"),
-      "# Index\n\nSee [gone](missing.md).\n",
-    );
-    expect(await runCheck(["**/*.md"], dir)).toBe(1);
-    expect(await runCheck(["**/*.md", "--no-references"], dir)).toBe(0);
-  });
-
-  it("resolves a valid internal link", async () => {
-    writeFileSync(
-      join(dir, "index.md"),
-      "# Index\n\nSee [target](target.md).\n",
-    );
-    writeFileSync(join(dir, "target.md"), "# Target\n\nHere.\n");
-    expect(await runCheck(["**/*.md"], dir)).toBe(0);
-  });
-
-  it("honors --reference-ignore for a cross-repo backtick path", async () => {
-    writeFileSync(
-      join(dir, "index.md"),
-      "# Index\n\nSee `other/repo.md` elsewhere.\n",
-    );
-    expect(await runCheck(["**/*.md"], dir)).toBe(1);
-    expect(
-      await runCheck(["**/*.md", "--reference-ignore", "other/"], dir),
-    ).toBe(0);
-  });
-});
-
-describe("parseLlmsArgs", () => {
-  it("defaults to **/*.md, no config, write mode", () => {
-    expect(parseLlmsArgs([])).toEqual({
-      check: false,
-      configPath: undefined,
-      globs: ["**/*.md"],
+    const exitCode = await runCheck(["README.md"], dir, {
+      runCode: ({ config, cwd, mode }) => {
+        codeCalls.push({ cwd, mode, tsconfig: config.tsconfig });
+        return Promise.resolve(codeResults);
+      },
+      runDocs: (options) => {
+        docsCalls.push(options);
+        return Promise.resolve(0);
+      },
     });
+
+    expect(exitCode).toBe(0);
+    expect(docsCalls).toHaveLength(1);
+    expect(docsCalls[0]).toMatchObject({
+      cwd: dir,
+      globs: ["README.md"],
+      llms: true,
+      mode: "check",
+      referenceIgnore: [],
+      references: true,
+    });
+    expect(codeCalls).toEqual([
+      { cwd: dir, mode: "check", tsconfig: "packages/conform/tsconfig.json" },
+    ]);
   });
 
-  it("parses globs, --config, and --check", () => {
+  it("returns 1 when canon check fails", async () => {
     expect(
-      parseLlmsArgs(["docs/**/*.md", "--config", "c.ts", "--check"]),
-    ).toEqual({
-      check: true,
-      configPath: "c.ts",
+      await runCheck([], dir, {
+        runCode: () => Promise.resolve([]),
+        runDocs: () => Promise.resolve(1),
+      }),
+    ).toBe(1);
+  });
+
+  it("returns 1 when any code tool fails", async () => {
+    writeFileSync(join(dir, "conform.config.jsonc"), '{ "code": {} }');
+    expect(
+      await runCheck([], dir, {
+        runCode: () => Promise.resolve([{ code: 1, tool: "knip" }]),
+        runDocs: () => Promise.resolve(0),
+      }),
+    ).toBe(1);
+  });
+
+  it("passes reference flags through to canon", async () => {
+    await runCheck(
+      [
+        "docs/**/*.md",
+        "--no-references",
+        "--reference-ignore",
+        "ops/",
+        "--reference-ignore=vendor/",
+      ],
+      dir,
+      {
+        runDocs: (options) => {
+          docsCalls.push(options);
+          return Promise.resolve(0);
+        },
+      },
+    );
+
+    expect(docsCalls[0]).toMatchObject({
       globs: ["docs/**/*.md"],
+      referenceIgnore: ["ops/", "vendor/"],
+      references: false,
     });
   });
 
-  it("throws on a missing --config value or unknown flag", () => {
-    expect(() => parseLlmsArgs(["--config"])).toThrow(/requires a path/);
-    expect(() => parseLlmsArgs(["--nope"])).toThrow(/unknown option/);
-  });
-});
-
-const LLMS_CONFIG = JSON.stringify({
-  llms: {
-    project: "Test",
-    sections: [
-      { prefix: "", shallow: true, title: "Top" },
-      { prefix: "docs/", title: "Docs" },
-    ],
-    summary: "A test index.",
-  },
-});
-
-describe("runLlms", () => {
-  let dir: string;
-  beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "conform-llms-"));
-    vi.spyOn(console, "error").mockImplementation(() => {});
-  });
-  afterEach(() => {
-    rmSync(dir, { force: true, recursive: true });
-    vi.restoreAllMocks();
+  it("skips code when --no-code is set", async () => {
+    writeFileSync(join(dir, "conform.config.jsonc"), '{ "code": {} }');
+    await runCheck(["--no-code"], dir, {
+      runCode: ({ config, cwd, mode }) => {
+        codeCalls.push({ cwd, mode, tsconfig: config.tsconfig });
+        return Promise.resolve([]);
+      },
+      runDocs: () => Promise.resolve(0),
+    });
+    expect(codeCalls).toEqual([]);
   });
 
-  it("returns 2 when no llms config is present", async () => {
-    writeFileSync(join(dir, "README.md"), "# R\n\nx.\n");
-    expect(await runLlms([], dir)).toBe(2);
-  });
-
-  it("writes llms.txt, then --check passes; editing a doc makes --check fail", async () => {
-    writeFileSync(join(dir, "conform.config.jsonc"), LLMS_CONFIG);
-    writeFileSync(join(dir, "README.md"), "# Home\n\nRoot doc.\n");
-    mkdirSync(join(dir, "docs"));
-    writeFileSync(join(dir, "docs", "a.md"), "# Alpha\n\nA doc.\n");
-
-    expect(await runLlms([], dir)).toBe(0);
-    const written = readFileSync(join(dir, "llms.txt"), "utf8");
-    expect(written).toContain("# Test");
-    expect(written).toContain("- [Home](README.md): Root doc.");
-    expect(written).toContain("- [Alpha](docs/a.md): A doc.");
-
-    expect(await runLlms(["--check"], dir)).toBe(0);
-
-    writeFileSync(join(dir, "docs", "a.md"), "# Alpha\n\nChanged summary.\n");
-    expect(await runLlms(["--check"], dir)).toBe(1);
-  });
-
-  it("returns 2 on a malformed config", async () => {
+  it("returns 2 on malformed config files and bad arguments", async () => {
     writeFileSync(join(dir, "conform.config.jsonc"), "{ broken");
-    expect(await runLlms([], dir)).toBe(2);
-  });
-
-  it("returns 2 on bad arguments", async () => {
-    expect(await runLlms(["--config"], dir)).toBe(2);
+    expect(await runCheck([], dir, { runDocs: () => Promise.resolve(0) })).toBe(
+      2,
+    );
+    expect(await runCheck(["--config"], dir)).toBe(2);
   });
 });
 
@@ -251,11 +200,17 @@ describe("parseFixArgs", () => {
     });
   });
 
-  it("parses globs, --config, and --no-llms", () => {
+  it("parses globs, --config, --no-code, and --no-llms", () => {
     expect(
-      parseFixArgs(["docs/**/*.md", "--config", "c.ts", "--no-llms"]),
+      parseFixArgs([
+        "docs/**/*.md",
+        "--config",
+        "c.ts",
+        "--no-code",
+        "--no-llms",
+      ]),
     ).toEqual({
-      code: true,
+      code: false,
       configPath: "c.ts",
       globs: ["docs/**/*.md"],
       llms: false,
@@ -270,62 +225,80 @@ describe("parseFixArgs", () => {
 
 describe("runFix", () => {
   let dir: string;
+  let docsCalls: RunDocsOptions[];
+  let codeCalls: Array<{
+    cwd: string;
+    mode: "check" | "fix";
+    tsconfig: string;
+  }>;
+
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "conform-fix-"));
+    dir = makeScratchDir();
+    docsCalls = [];
+    codeCalls = [];
     vi.spyOn(console, "error").mockImplementation(() => {});
   });
+
   afterEach(() => {
-    rmSync(dir, { force: true, recursive: true });
     vi.restoreAllMocks();
+    rmSync(SCRATCH_ROOT, { force: true, recursive: true });
   });
 
-  it("rewrites fixable violations in place and returns 0", async () => {
+  it("runs canon fix, then code fixers when a code config exists", async () => {
     writeFileSync(
-      join(dir, "a.md"),
-      "# Title\n\ntrailing here   \n\n\n\ntail\n",
+      join(dir, "conform.config.jsonc"),
+      '{ "code": { "tsconfig": "packages/conform/tsconfig.json" } }',
     );
-    expect(await runFix(["**/*.md", "--no-llms"], dir)).toBe(0);
-    const fixed = readFileSync(join(dir, "a.md"), "utf8");
-    expect(fixed).not.toContain("here   ");
-    expect(fixed).not.toContain("\n".repeat(3));
+
+    expect(
+      await runFix(["docs/**/*.md", "--no-llms"], dir, {
+        runCode: ({ config, cwd, mode }) => {
+          codeCalls.push({ cwd, mode, tsconfig: config.tsconfig });
+          return Promise.resolve([{ code: 1, tool: "eslint" }]);
+        },
+        runDocs: (options) => {
+          docsCalls.push(options);
+          return Promise.resolve(1);
+        },
+      }),
+    ).toBe(0);
+
+    expect(docsCalls[0]).toMatchObject({
+      cwd: dir,
+      globs: ["docs/**/*.md"],
+      llms: false,
+      mode: "fix",
+      referenceIgnore: [],
+      references: true,
+    });
+    expect(codeCalls).toEqual([
+      { cwd: dir, mode: "fix", tsconfig: "packages/conform/tsconfig.json" },
+    ]);
   });
 
-  it("leaves conformant files untouched", async () => {
-    const good = "# Title\n\nGood.\n";
-    writeFileSync(join(dir, "ok.md"), good);
-    expect(await runFix(["**/*.md", "--no-llms"], dir)).toBe(0);
-    expect(readFileSync(join(dir, "ok.md"), "utf8")).toBe(good);
+  it("skips code fixers with --no-code", async () => {
+    writeFileSync(join(dir, "conform.config.jsonc"), '{ "code": {} }');
+    expect(
+      await runFix(["--no-code"], dir, {
+        runCode: ({ config, cwd, mode }) => {
+          codeCalls.push({ cwd, mode, tsconfig: config.tsconfig });
+          return Promise.resolve([]);
+        },
+        runDocs: (options) => {
+          docsCalls.push(options);
+          return Promise.resolve(0);
+        },
+      }),
+    ).toBe(0);
+    expect(codeCalls).toEqual([]);
+    expect(docsCalls).toHaveLength(1);
   });
 
-  it("reports unfixable residue but still returns 0 (check is the gate)", async () => {
-    writeFileSync(join(dir, "bad.md"), "no heading here\n");
-    expect(await runFix(["**/*.md", "--no-llms"], dir)).toBe(0);
-    // The file is unchanged because MD041 has no autofix.
-    expect(readFileSync(join(dir, "bad.md"), "utf8")).toBe("no heading here\n");
-  });
-
-  it("regenerates llms.txt when an llms config is present", async () => {
-    writeFileSync(join(dir, "conform.config.jsonc"), LLMS_CONFIG);
-    writeFileSync(join(dir, "README.md"), "# Home\n\nRoot doc.\n");
-    expect(await runFix([], dir)).toBe(0);
-    const index = readFileSync(join(dir, "llms.txt"), "utf8");
-    expect(index).toContain("# Test");
-    expect(index).toContain("- [Home](README.md): Root doc.");
-  });
-
-  it("skips llms regeneration with --no-llms", async () => {
-    writeFileSync(join(dir, "conform.config.jsonc"), LLMS_CONFIG);
-    writeFileSync(join(dir, "README.md"), "# Home\n\nRoot doc.\n");
-    expect(await runFix(["--no-llms"], dir)).toBe(0);
-    expect(existsSync(join(dir, "llms.txt"))).toBe(false);
-  });
-
-  it("returns 2 on a malformed config", async () => {
+  it("returns 2 on malformed config files and bad arguments", async () => {
     writeFileSync(join(dir, "conform.config.jsonc"), "{ broken");
-    expect(await runFix([], dir)).toBe(2);
-  });
-
-  it("returns 2 on bad arguments", async () => {
+    expect(await runFix([], dir, { runDocs: () => Promise.resolve(0) })).toBe(
+      2,
+    );
     expect(await runFix(["--config"], dir)).toBe(2);
   });
 });

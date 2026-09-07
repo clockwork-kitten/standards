@@ -1,12 +1,12 @@
 # @clockwork-kitten/conform
 
-The studio conformance engine — one CLI that comes in and checks a repo against the
-`clockwork-kitten` standards. It lints Markdown, validates internal cross-references, and generates
-an `llms.txt` doc index; code checks land in later slices (see the repo `ROADMAP.md`).
+The studio conformance orchestrator — one CLI that coordinates the documentation track owned by
+`@clockwork-kitten/canon` with the code track bundled here (ESLint, Prettier, knip, TypeScript, and
+optional bedrock).
 
-TS/Bun on `mdast` — the reference checker and the `llms.txt` generator walk a shared GFM parse, so
-structural checks agree on document structure. Lives in the `standards` repo for now and is
-structured for later extraction into its own branded repo.
+Canon owns Markdown linting, internal cross-references, and `llms.txt` generation with its own
+pinned parser and `canon.config.*`. Conform keeps the repo-facing `check` / `fix` entrypoint thin:
+run canon first, then run the code tools when `conform.config.*` declares a `code` block.
 
 ## Install (within this workspace)
 
@@ -16,30 +16,45 @@ This package is a Bun workspace member. From the repo root:
 bun install
 ```
 
+During Phase C, canon is consumed from a source checkout rather than a registry package. Make the
+specifier resolvable before running conform:
+
+```sh
+mkdir -p node_modules/@clockwork-kitten
+ln -sfn /path/to/canon node_modules/@clockwork-kitten/canon
+```
+
 ## Usage
 
 ```sh
-# Lint markdown and check internal cross-references in one pass.
+# Run canon docs checks, then the code track when configured.
 conform check
 
-# Restrict to specific globs.
+# Restrict the docs track to specific globs (passed through to canon).
 conform check "docs/**/*.md" "README.md"
 
-# Point at an explicit config file.
+# Point at an explicit conform config for the code track.
+# Canon discovers canon.config.* separately.
 conform check --config ./conform.config.ts
 
-# Skip the reference check, or add cross-repo ignore substrings.
+# Forward reference options to canon.
 conform check --no-references
 conform check --reference-ignore "ops/docs/"
 
-# Generate the llms.txt doc index (writes the file)...
-conform llms
-# ...or verify the committed index is up to date (CI drift gate).
-conform llms --check
+# Run canon docs fixes, then code autofixers when configured.
+conform fix
+conform fix --no-llms
 ```
 
-`conform check` exits non-zero when any file is non-conformant or a reference is broken, and
-`conform llms --check` exits non-zero on drift, so both drop straight into CI.
+`conform check` exits non-zero when canon or any code gate fails. `conform fix` is authoring-time and
+returns non-zero only for argument/config errors; canon reports any doc residue.
+
+Canon owns the `llms` subcommand directly:
+
+```sh
+bun run canon llms
+bun run canon llms --check
+```
 
 ## Configuration
 
@@ -47,38 +62,39 @@ Config is resolved in this order, and the first match wins:
 
 1. an explicit `--config <path>`
 2. `conform.config.ts` (preferred) or `conform.config.jsonc` in the repo root
-3. the bundled studio baseline
+3. no conform config, which means docs-only orchestration (canon still auto-discovers
+   `canon.config.*`)
 
-A repo config **deep-merges** its `markdownlint` block over the studio baseline, so you can adjust
-one rule without re-declaring the whole thing. Set `extends: false` to ignore the baseline entirely.
-`references` and `llms` are per-repo settings the engine reads from the same resolved config.
+A conform config now contains only the optional code track:
 
 ```ts
 // conform.config.ts
 import { defineConfig } from "@clockwork-kitten/conform";
 
 export default defineConfig({
-  markdownlint: {
-    MD013: { line_length: 120 },
-  },
-  references: {
-    // Backtick paths containing any of these are treated as external (another repo).
-    ignore: ["ops/docs/"],
-  },
-  llms: {
-    project: "My Project",
-    summary: "One-line summary rendered as the blockquote.",
-    // A doc joins the first section whose path prefix it matches.
-    sections: [
-      { title: "Top level", prefix: "", shallow: true },
-      { title: "Docs", prefix: "docs/" },
-    ],
+  code: {
+    tsconfig: "packages/conform/tsconfig.json",
+    // knip: false,
+    // bedrock: true,
   },
 });
 ```
 
-The linter, the reference checker, and the `llms.txt` generator read the **same** resolved config
-object and the same pinned parser, so a precondition can never drift from its postcondition.
+Put documentation settings in canon:
+
+```ts
+// canon.config.ts
+import { defineConfig } from "@clockwork-kitten/canon";
+
+export default defineConfig({
+  references: { ignore: ["ops/docs/"] },
+  llms: {
+    project: "My Project",
+    summary: "One-line summary rendered as the blockquote.",
+    sections: [{ title: "Docs", prefix: "docs/" }],
+  },
+});
+```
 
 ## Scripts
 

@@ -1,16 +1,9 @@
 #!/usr/bin/env bun
-import { existsSync, globSync, readFileSync, writeFileSync } from "node:fs";
-import { join, relative } from "node:path";
 import process from "node:process";
 
 import { runCodeTrack } from "../code/run.ts";
 import { ConfigError, resolveConfig } from "../config/resolve.ts";
-import { fixContents, formatIssues, lintFiles } from "../lint/markdown.ts";
-import { checkReferences, formatReferenceIssues } from "../lint/references.ts";
-import { generateLlms } from "../ops/llms.ts";
-
-/** Directory names never descended into when expanding globs. */
-export const IGNORE_DIRS = new Set([".git", ".standards", "node_modules"]);
+import { runDocsTrack } from "../docs/run.ts";
 
 /** Default glob when the user passes no positional patterns. */
 export const DEFAULT_GLOBS = ["**/*.md"] as const;
@@ -24,34 +17,23 @@ export type CheckArgs = {
   code: boolean;
   configPath: string | undefined;
   globs: string[];
-  /** Extra ignore substrings for the reference checker, added to config. */
+  /** Extra ignore substrings forwarded to canon. */
   referenceIgnore: string[];
-  /** Whether to run the internal cross-reference checker (default true). */
+  /** Whether canon should run the reference checker (default true). */
   references: boolean;
 };
 
-/** Expand globs relative to `cwd`, dropping ignored directories. Sorted, unique. */
-export function expandGlobs(globs: string[], cwd: string): string[] {
-  const found = new Set<string>();
-  for (const pattern of globs) {
-    const matches = globSync(pattern, { cwd });
-    for (const relative of matches) {
-      const normalized = relative.replaceAll("\\", "/");
-      const segments = normalized.split("/");
-      if (segments.every((segment) => !IGNORE_DIRS.has(segment))) {
-        found.add(normalized);
-      }
-    }
-  }
-  return [...found].toSorted();
-}
+type RunCheckDeps = {
+  runCode?: typeof runCodeTrack;
+  runDocs?: typeof runDocsTrack;
+};
 
 /**
  * Parse the arguments to `conform check`. Positional args are globs (defaulting
- * to `**\/*.md`); `--config`/`-c` selects a config file; `--no-references`
- * disables the reference checker; `--no-code` disables the code track;
- * `--reference-ignore` (repeatable) adds ignore
- * substrings. Throws on unknown flags or a missing option value.
+ * to `**\/*.md`); `--config`/`-c` selects conform's config file; canon discovers
+ * its own `canon.config.*`; `--no-references` and repeatable
+ * `--reference-ignore` are forwarded to canon; `--no-code` disables the code
+ * track. Throws on unknown flags or a missing option value.
  */
 export function parseCheckArgs(argv: string[]): CheckArgs {
   const globs: string[] = [];
@@ -99,7 +81,16 @@ export function parseCheckArgs(argv: string[]): CheckArgs {
 }
 
 /** Run `conform check`; returns a process exit code. */
-export async function runCheck(argv: string[], cwd: string): Promise<number> {
+export async function runCheck(
+  argv: string[],
+  cwd: string,
+  deps: RunCheckDeps = {},
+): Promise<number> {
+  if (argv.includes("--help") || argv.includes("-h")) {
+    printUsage();
+    return 0;
+  }
+
   let args: CheckArgs;
   try {
     args = parseCheckArgs(argv);
@@ -120,48 +111,24 @@ export async function runCheck(argv: string[], cwd: string): Promise<number> {
     throw error;
   }
 
-  const files = expandGlobs(args.globs, cwd);
-  // markdownlint reads files relative to process.cwd(); pass absolute paths so
-  // a caller-supplied cwd is honored, then relativize findings for display.
-  const absolute = files.map((file) => join(cwd, file));
-  const found = await lintFiles(absolute, resolved.markdownlint);
-  const issues = found.map((issue) => ({
-    ...issue,
-    file: relative(cwd, issue.file),
-  }));
-
-  console.error(`conform check · markdown lint · ${resolved.source}`);
+  const runDocs = deps.runDocs ?? runDocsTrack;
+  const runCode = deps.runCode ?? runCodeTrack;
   let exitCode = 0;
-  if (issues.length > 0) {
-    console.error(formatIssues(issues));
-    console.error(`\n${issues.length} issue(s) across ${files.length} file(s)`);
-    exitCode = 1;
-  } else {
-    console.error(`${files.length} file(s) conformant`);
-  }
 
-  if (args.references) {
-    const ignore = [...resolved.references.ignore, ...args.referenceIgnore];
-    const refIssues = checkReferences(absolute, { ignore, repoRoot: cwd }).map(
-      (issue) => ({
-        ...issue,
-        file: relative(cwd, issue.file),
-      }),
-    );
-    console.error(`conform check · references · ${resolved.source}`);
-    if (refIssues.length > 0) {
-      console.error(formatReferenceIssues(refIssues));
-      console.error(
-        `\n${refIssues.length} broken reference(s) across ${files.length} file(s)`,
-      );
-      exitCode = 1;
-    } else {
-      console.error(`${files.length} file(s) with resolvable references`);
-    }
+  const docsCode = await runDocs({
+    cwd,
+    globs: args.globs,
+    llms: true,
+    mode: "check",
+    referenceIgnore: args.referenceIgnore,
+    references: args.references,
+  });
+  if (docsCode !== 0) {
+    exitCode = 1;
   }
 
   if (args.code && resolved.code) {
-    const results = await runCodeTrack({
+    const results = await runCode({
       config: resolved.code,
       cwd,
       mode: "check",
@@ -170,7 +137,6 @@ export async function runCheck(argv: string[], cwd: string): Promise<number> {
       if (result.code === 0) {
         continue;
       }
-
       console.error(`conform check · code · ${result.tool} failed`);
       exitCode = 1;
     }
@@ -188,16 +154,17 @@ export type FixArgs = {
   code: boolean;
   configPath: string | undefined;
   globs: string[];
-  /** Whether to also regenerate the `llms.txt` index (default true). */
+  /** Whether canon fix should also regenerate the `llms.txt` index (default true). */
   llms: boolean;
 };
 
+type RunFixDeps = RunCheckDeps;
+
 /**
  * Parse the arguments to `conform fix`. Positional args are globs (defaulting to
- * `**\/*.md`); `--config`/`-c` selects a config file; `--no-code` skips the code
- * fixers; `--no-llms` skips the
- * `llms.txt` regeneration that otherwise runs after the markdown autofix. Throws
- * on unknown flags or a missing option value.
+ * `**\/*.md`); `--config`/`-c` selects conform's config file; canon discovers
+ * its own `canon.config.*`; `--no-code` skips the code fixers; `--no-llms` is
+ * forwarded to canon. Throws on unknown flags or a missing option value.
  */
 export function parseFixArgs(argv: string[]): FixArgs {
   const globs: string[] = [];
@@ -234,13 +201,19 @@ export function parseFixArgs(argv: string[]): FixArgs {
 }
 
 /**
- * Run `conform fix`; returns a process exit code. Autofixes fixable markdown
- * rules in place, then (unless `--no-llms`) regenerates `llms.txt` so the tree
- * self-heals in one command. Reports any unfixable residue but does not fail on
- * it — `fix` is authoring-time and `check` stays the failing gate, so CI never
- * runs `fix`. Returns 2 only on an argument or config error.
+ * Run `conform fix`; returns a process exit code. Canon owns doc fixes and
+ * residue reporting; conform returns 2 only on argument/config errors.
  */
-export async function runFix(argv: string[], cwd: string): Promise<number> {
+export async function runFix(
+  argv: string[],
+  cwd: string,
+  deps: RunFixDeps = {},
+): Promise<number> {
+  if (argv.includes("--help") || argv.includes("-h")) {
+    printUsage();
+    return 0;
+  }
+
   let args: FixArgs;
   try {
     args = parseFixArgs(argv);
@@ -261,159 +234,22 @@ export async function runFix(argv: string[], cwd: string): Promise<number> {
     throw error;
   }
 
-  const files = expandGlobs(args.globs, cwd);
-  const contents: Record<string, string> = {};
-  for (const file of files) {
-    contents[file] = readFileSync(join(cwd, file), "utf8");
-  }
+  const runDocs = deps.runDocs ?? runDocsTrack;
+  const runCode = deps.runCode ?? runCodeTrack;
 
-  const fixes = await fixContents(contents, resolved.markdownlint);
-  console.error(`conform fix · markdown · ${resolved.source}`);
-
-  const changed = fixes.filter((fix) => fix.changed);
-  for (const fix of changed) {
-    writeFileSync(join(cwd, fix.file), fix.content);
-  }
-  if (changed.length > 0) {
-    console.error(`fixed ${changed.length} file(s):`);
-    for (const fix of changed) {
-      console.error(`  ${fix.file}`);
-    }
-  } else {
-    console.error(`${files.length} file(s) already conformant`);
-  }
-
-  const residue = fixes.flatMap((fix) => fix.residue);
-  if (residue.length > 0) {
-    console.error(
-      `\n${residue.length} issue(s) fix cannot resolve — run \`conform check\` and fix by hand:`,
-    );
-    console.error(formatIssues(residue));
-  }
+  await runDocs({
+    cwd,
+    globs: args.globs,
+    llms: args.llms,
+    mode: "fix",
+    referenceIgnore: [],
+    references: true,
+  });
 
   if (args.code && resolved.code) {
-    await runCodeTrack({ config: resolved.code, cwd, mode: "fix" });
+    await runCode({ config: resolved.code, cwd, mode: "fix" });
   }
 
-  if (args.llms && resolved.llms) {
-    const content = generateLlms(files, resolved.llms, (file) =>
-      readFileSync(join(cwd, file), "utf8"),
-    );
-    const outPath = join(cwd, resolved.llms.output);
-    const outLabel = relative(cwd, outPath);
-    const current = existsSync(outPath) ? readFileSync(outPath, "utf8") : "";
-    if (current === content) {
-      console.error(`conform fix · llms · ${outLabel} already up to date`);
-    } else {
-      writeFileSync(outPath, content);
-      console.error(
-        `conform fix · llms · wrote ${outLabel} (${content.length} bytes)`,
-      );
-    }
-  }
-
-  return 0;
-}
-
-const LLMS_USAGE = "usage: conform llms [globs...] [--config <path>] [--check]";
-
-/** Parsed arguments for `conform llms`. */
-export type LlmsArgs = {
-  /** Verify the on-disk index matches, rather than writing it. */
-  check: boolean;
-  configPath: string | undefined;
-  globs: string[];
-};
-
-/**
- * Parse the arguments to `conform llms`. Positional args are globs (defaulting
- * to `**\/*.md`); `--config`/`-c` selects a config file; `--check` verifies the
- * committed index instead of writing it. Throws on unknown flags or a missing
- * `--config` value.
- */
-export function parseLlmsArgs(argv: string[]): LlmsArgs {
-  const globs: string[] = [];
-  let configPath: string | undefined;
-  let isCheck = false;
-  for (let index = 0; index < argv.length; index += 1) {
-    const arg = argv[index] as string;
-    if (arg === "--config" || arg === "-c") {
-      const next = argv[index + 1];
-      if (next === undefined) {
-        throw new Error(`${arg} requires a path`);
-      }
-      configPath = next;
-      index += 1;
-    } else if (arg.startsWith("--config=")) {
-      configPath = arg.slice("--config=".length);
-    } else if (arg === "--check") {
-      isCheck = true;
-    } else if (arg.startsWith("-")) {
-      throw new Error(`unknown option: ${arg}`);
-    } else {
-      globs.push(arg);
-    }
-  }
-  return {
-    check: isCheck,
-    configPath,
-    globs: globs.length > 0 ? globs : [...DEFAULT_GLOBS],
-  };
-}
-
-/** Run `conform llms`; returns a process exit code. */
-export async function runLlms(argv: string[], cwd: string): Promise<number> {
-  let args: LlmsArgs;
-  try {
-    args = parseLlmsArgs(argv);
-  } catch (error) {
-    console.error(error instanceof Error ? error.message : String(error));
-    console.error(LLMS_USAGE);
-    return 2;
-  }
-
-  let resolved;
-  try {
-    resolved = await resolveConfig({ configPath: args.configPath, cwd });
-  } catch (error) {
-    if (error instanceof ConfigError) {
-      console.error(error.message);
-      return 2;
-    }
-    throw error;
-  }
-
-  if (!resolved.llms) {
-    console.error(
-      `conform llms · no \`llms\` config found · ${resolved.source}`,
-    );
-    console.error(
-      "Add an `llms` block to your conform config to generate a doc index.",
-    );
-    return 2;
-  }
-
-  const files = expandGlobs(args.globs, cwd);
-  const content = generateLlms(files, resolved.llms, (file) =>
-    readFileSync(join(cwd, file), "utf8"),
-  );
-  const outPath = join(cwd, resolved.llms.output);
-  const outLabel = relative(cwd, outPath);
-
-  if (args.check) {
-    const current = existsSync(outPath) ? readFileSync(outPath, "utf8") : "";
-    if (current !== content) {
-      console.error(
-        `conform llms · ${outLabel} is out of date · run \`conform llms\` to regenerate`,
-      );
-      return 1;
-    }
-    console.error(`conform llms · ${outLabel} is up to date`);
-    return 0;
-  }
-
-  writeFileSync(outPath, content);
-  console.error(`conform llms · wrote ${outLabel} (${content.length} bytes)`);
   return 0;
 }
 
@@ -425,13 +261,16 @@ async function main(): Promise<number> {
   if (subcommand === "fix") {
     return runFix(rest, process.cwd());
   }
-  if (subcommand === "llms") {
-    return runLlms(rest, process.cwd());
+  if (subcommand !== undefined) {
+    console.error(`unknown subcommand: ${subcommand}`);
   }
+  printUsage();
+  return 2;
+}
+
+function printUsage(): void {
   console.error(USAGE);
   console.error(FIX_USAGE);
-  console.error(LLMS_USAGE);
-  return 2;
 }
 
 // Only run when executed directly (e.g. `bun src/cli/main.ts`), not when
