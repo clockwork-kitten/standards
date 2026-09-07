@@ -150,9 +150,12 @@ export default defineConfig({
 
 ## Status
 
-**v0.2 in progress** — the markdown-conformance track now runs through the conform engine
-(`packages/conform`). v0.1 (reusable markdown-conformance + repo-hygiene) is released.
-`clockwork-kitten/ops` is the pilot adopter. See `ROADMAP.md`.
+**v0.5.0 released** — both conformance surfaces are live through one engine (`packages/conform`).
+The documentation track (markdown lint, reference integrity, `llms.txt`, authoring ergonomics with
+`conform fix`) and the code track (ESLint + Prettier + knip + `tsc`, plus an opt-in Astro ruleset)
+run through the same CLI, config, and pinned parser. `clockwork-kitten/bedrock` is wired as an
+opt-in code-track tool but off by default until it ships as an installable dependency. Next up:
+v0.6 schema-aware entry operations. `clockwork-kitten/ops` is the pilot adopter. See `ROADMAP.md`.
 
 ## Relationships
 

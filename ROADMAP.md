@@ -140,9 +140,9 @@ Deferred below the code track so the studio's whole doc pipeline is engine-owned
   upgrade deliberately.
 - Semantic-ish tags; breaking changes to a workflow's inputs, a config's rules, or the engine's CLI
   bump the major.
-- **`v0.1.0` through `v0.3.1` are cut** (tag + GitHub Release). Releases are automated by the `release`
+- **`v0.1.0` through `v0.5.0` are cut** (tag + GitHub Release). Releases are automated by the `release`
   workflow (`workflow_dispatch`): it validates the version, verifies `ci` is green, tags, publishes
-  the Release, and force-moves a major-line alias (`v0.3` → `v0.3.1`) so consumers can pin to a line
+  the Release, and force-moves a major-line alias (`v0.5` → `v0.5.0`) so consumers can pin to a line
   and still get patches. The reusable workflow locks the engine to the exact commit it's pinned at
   (`github.job_workflow_sha`), so the engine and workflow never drift. Full policy in `docs/RELEASING.md`.
 
