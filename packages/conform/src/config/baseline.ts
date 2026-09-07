@@ -10,16 +10,16 @@ import type { MarkdownlintConfig } from "./types.ts";
  * (CK-003).
  */
 export const STUDIO_MARKDOWNLINT_BASELINE: MarkdownlintConfig = {
-	// Every rule on by default; the entries below relax specific rules.
-	default: true,
-	// Prose wraps naturally / long reference lines are fine in a docs repo.
-	MD013: false,
-	// We author in GFM; allow raw HTML if a doc ever needs it.
-	MD033: false,
-	// Decision logs and roadmaps legitimately repeat headings across entries.
-	MD024: { siblings_only: true },
-	// Allow both fenced and indented where convenient; enforce fenced default.
-	MD046: { style: "fenced" },
-	// Ordered lists: allow 1. 1. 1. or 1. 2. 3.
-	MD029: { style: "one_or_ordered" },
+  // Every rule on by default; the entries below relax specific rules.
+  default: true,
+  // Prose wraps naturally / long reference lines are fine in a docs repo.
+  MD013: false,
+  // Decision logs and roadmaps legitimately repeat headings across entries.
+  MD024: { siblings_only: true },
+  // Ordered lists: allow 1. 1. 1. or 1. 2. 3.
+  MD029: { style: "one_or_ordered" },
+  // We author in GFM; allow raw HTML if a doc ever needs it.
+  MD033: false,
+  // Allow both fenced and indented where convenient; enforce fenced default.
+  MD046: { style: "fenced" },
 };

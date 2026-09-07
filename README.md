@@ -11,8 +11,8 @@ Rationale and the full decision live in the `ops` repo: **CK-004** in `docs/DECI
 
 - **Reusable CI workflows** that repos call from their own CI via `uses:` — e.g.
   `markdown-conformance`, `repo-hygiene`, and (later) `code-conformance`.
-- **Versioned shared configs** — the studio markdownlint, Biome/TypeScript, and (later) Astro
-  rulesets — pinned and referenced so there is no per-repo drift.
+- **Versioned shared configs** — the studio markdownlint, ESLint + Prettier + knip + TypeScript,
+  and (later) Astro rulesets — pinned and referenced so there is no per-repo drift.
 - **A shared lefthook base** (`lefthook/base.yml`) repos pin as a pre-commit backstop that runs
   the conform engine on staged files.
 - **Repo-hygiene rules** — required files exist and are non-trivial (`README`, roadmap/ideas
@@ -76,6 +76,42 @@ Add `@clockwork-kitten/conform` (pinned to the same tag) so `bunx conform` resol
 residual drift. This is **authoring-time only** — `fix` runs locally and in the hook, never in CI.
 The hook is a backstop behind the agent, which is expected to run `conform` in its own loop (see
 `AGENTS.md`).
+
+### Shared code configs
+
+The studio's ESLint, Prettier, knip, and TypeScript bases ship inside `@clockwork-kitten/conform`
+and are referenced by the same pinned package consumers already install — so the toolchain
+propagates like the workflows do, with no per-repo drift. They are deliberately **thin**: Prettier
+owns formatting and `clockwork-kitten/bedrock` owns semantic normalization, so this layer only adds
+framework-agnostic correctness, deterministic ordering (imports, exports, object keys, types), the
+"one canonical way" rules (`undefined` over `null`, `is`/`has` boolean names, `.toSorted()` over
+`.sort()`), security, dependency hygiene, and dead-code detection. Markdown stays owned by `conform`
+— keep Prettier off it (see `.prettierignore`).
+
+```js
+// eslint.config.js
+import base from "@clockwork-kitten/conform/configs/eslint.base";
+export default [...base, { rules: { /* repo overrides */ } }];
+```
+
+```jsonc
+// tsconfig.json
+{ "extends": "@clockwork-kitten/conform/configs/tsconfig.base.json" }
+```
+
+```jsonc
+// package.json — Prettier resolves a shared config by module specifier
+{ "prettier": "@clockwork-kitten/conform/configs/prettier.base.json" }
+```
+
+```ts
+// knip.ts — knip has no `extends`, so import and spread the base
+import base from "@clockwork-kitten/conform/configs/knip.base.json" with { type: "json" };
+export default { ...base, workspaces: { /* ... */ } };
+```
+
+`conform check`/`conform fix` will drive these tools directly in a later slice; for now they are
+runnable configs a repo wires into its own scripts.
 
 ## Status
 

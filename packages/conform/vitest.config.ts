@@ -1,18 +1,18 @@
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-	test: {
-		coverage: {
-			provider: "v8",
-			include: ["src/**/*.ts"],
-			// Exclude test files, the CLI entry glue, and the pure re-export barrel.
-			exclude: ["src/**/*.test.ts", "src/index.ts"],
-			thresholds: {
-				lines: 80,
-				functions: 80,
-				branches: 80,
-				statements: 80,
-			},
-		},
-	},
+  test: {
+    coverage: {
+      // Exclude test files, the CLI entry glue, and the pure re-export barrel.
+      exclude: ["src/**/*.test.ts", "src/index.ts"],
+      include: ["src/**/*.ts"],
+      provider: "v8",
+      thresholds: {
+        branches: 80,
+        functions: 80,
+        lines: 80,
+        statements: 80,
+      },
+    },
+  },
 });

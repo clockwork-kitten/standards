@@ -1,0 +1,17 @@
+# Markdown and the generated doc index are owned by `conform` (markdownlint +
+# the llms generator). Keep Prettier out so the two formatters never fight.
+*.md
+**/*.md
+llms.txt
+
+# Tool/CI config owned elsewhere: `.markdownlint.jsonc` is conform's own config,
+# and workflow YAML is CI infrastructure — not application code Prettier should churn.
+.markdownlint.jsonc
+.github/
+
+# Generated / vendored.
+bun.lock
+node_modules
+coverage
+dist
+build
