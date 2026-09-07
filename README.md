@@ -163,7 +163,7 @@ v0.6 schema-aware entry operations. `clockwork-kitten/ops` is the pilot adopter.
   not this home.
 - The **galleycat** provisioner (template + per-repo CI) is a *consumer*; client/site repos
   inherit the standard through the template. One CI story, not two.
-- **[`josephcarey/ai-config`](https://github.com/josephcarey/ai-config)** is the _advisory_ tier:
-  prose standards agents read while writing. This repo is the _enforcement_ tier a machine checks.
+- **[`josephcarey/ai-config`](https://github.com/josephcarey/ai-config)** is the *advisory* tier:
+  prose standards agents read while writing. This repo is the *enforcement* tier a machine checks.
   See [`docs/STANDARDS-ARCHITECTURE.md`](docs/STANDARDS-ARCHITECTURE.md) for how they fit together
   and where a new standard belongs.
