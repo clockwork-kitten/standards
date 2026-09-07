@@ -6,6 +6,23 @@ The sequenced plan for the studio standards home. Status: ☐ todo · ◐ in pro
 Rationale: **CK-004** in the `ops` repo's `docs/DECISIONS.md`. Ideas not yet scheduled live in
 `IDEAS.md`.
 
+## Two conformance surfaces, one engine
+
+The engine grows two coherent capability surfaces, both invoked through the **same** CLI, config, and
+pinned parser — not two products:
+
+- **Documentation-repo conformance & operations** — markdown lint (v0.1–v0.2), structural document
+  operations (v0.3: reference integrity + `llms.txt`), authoring ergonomics (v0.4), and schema-aware
+  entry operations (v0.6), extended across repo boundaries by *cross-repo entry intake* (`IDEAS.md`).
+  Together these are a documentation-repo conformance *product*, not "a markdown linter" — the
+  differentiated value is the structural operations over one shared parse, not the linting.
+- **Code conformance** — the studio lint/format/typecheck/dead-code baseline and `bedrock` (v0.5).
+
+Extraction into a branded repo (`IDEAS.md`) targets the **whole engine**; the documentation surface
+is its first complete product surface, so the natural extraction milestone is *after* v0.6 + intake,
+once that surface is complete and the CLI/config API has stopped churning. This framing does **not**
+change the sequencing below — the code track (v0.5) still finishes first.
+
 ## v0.1 — Markdown conformance + repo-hygiene core
 
 The Markdown track is a lift-and-generalize of the `ops` repo's already-working
