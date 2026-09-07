@@ -13,6 +13,7 @@
 
 - [Releasing — standards](docs/RELEASING.md): How the studio standards home cuts releases. Consuming repos pin to tags published here, so releases are deliberate and versioned. The release workflow (.github/workflows/release.yml) automates the mechanics; a human still decides when and what to release.
 - [Prior art — Deterministic structural tools for conformant Markdown](docs/research/markdown-structural-tooling-prior-art.md): Prior-art scan for the IDEAS.md entry "Deterministic structural tools for conformant Markdown". Compiled 2026-09-04 by a read-only research session (josephcarey-scaling-carnival); preserved here verbatim.
+- [Standards architecture — where a standard lives](docs/STANDARDS-ARCHITECTURE.md): How the studio's engineering standards fit together, and the one rule for deciding where a new standard belongs. The studio invariant (ops CK-004): AI proposes freely → a machine-checkable standard constrains how → a human still merges.
 
 ## Conform engine
 
