@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CodeToolResult } from "../code/run.ts";
 import type { RunDocsOptions } from "../docs/run.ts";
 
-import { parseCheckArgs, parseFixArgs, runCheck, runFix } from "./main.ts";
+import { main, parseCheckArgs, parseFixArgs, runCheck, runFix } from "./main.ts";
 
 const SCRATCH_ROOT = join(process.cwd(), ".test-runs", "cli-main");
 let sequence = 0;
@@ -300,5 +300,52 @@ describe("runFix", () => {
       2,
     );
     expect(await runFix(["--config"], dir)).toBe(2);
+  });
+});
+
+describe("--help", () => {
+  beforeEach(() => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("prints usage and returns 0 for runCheck", async () => {
+    expect(await runCheck(["--help"], process.cwd())).toBe(0);
+    expect(await runCheck(["-h"], process.cwd())).toBe(0);
+    expect(console.error).toHaveBeenCalled();
+  });
+
+  it("prints usage and returns 0 for runFix", async () => {
+    expect(await runFix(["--help"], process.cwd())).toBe(0);
+    expect(await runFix(["-h"], process.cwd())).toBe(0);
+  });
+});
+
+describe("main", () => {
+  let originalArgv: string[];
+
+  beforeEach(() => {
+    originalArgv = process.argv;
+    vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    process.argv = originalArgv;
+    vi.restoreAllMocks();
+  });
+
+  it("returns 2 and reports an unknown subcommand", async () => {
+    process.argv = ["bun", "main.ts", "bogus"];
+    expect(await main()).toBe(2);
+    expect(console.error).toHaveBeenCalledWith("unknown subcommand: bogus");
+  });
+
+  it("returns 2 and prints usage when no subcommand is given", async () => {
+    process.argv = ["bun", "main.ts"];
+    expect(await main()).toBe(2);
+    expect(console.error).toHaveBeenCalled();
   });
 });

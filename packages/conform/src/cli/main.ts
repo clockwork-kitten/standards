@@ -253,7 +253,8 @@ export async function runFix(
   return 0;
 }
 
-async function main(): Promise<number> {
+/** CLI entrypoint: dispatch `check`/`fix`, else print usage and return 2. */
+export async function main(): Promise<number> {
   const [subcommand, ...rest] = process.argv.slice(2);
   if (subcommand === "check") {
     return runCheck(rest, process.cwd());
