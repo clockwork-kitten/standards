@@ -11,7 +11,7 @@ Rationale and the full decision live in the `ops` repo: **CK-004** in `docs/DECI
 
 - **Reusable CI workflows** that repos call from their own CI via `uses:` — e.g.
   `markdown-conformance`, `repo-hygiene`, and (later) `code-conformance`.
-- **Versioned shared configs** — the studio markdownlint, ESLint + Prettier + knip + TypeScript,
+- **Versioned shared configs** — canon for docs plus ESLint + Prettier + knip + TypeScript
   and (later) Astro rulesets — pinned and referenced so there is no per-repo drift.
 - **A shared lefthook base** (`lefthook/base.yml`) repos pin as a pre-commit backstop that runs
   the conform engine on staged files.
@@ -45,12 +45,10 @@ jobs:
 Both are `workflow_call` reusable workflows with safe defaults you can override via
 `with:` — e.g. `markdown-conformance` takes `paths`, `config`, `reference-check`,
 `reference-ignore`, and `llms-check`; `repo-hygiene` takes a `required-files` list
-(default `README.md LICENSE`). By default `markdown-conformance` runs the conform engine
-(`@clockwork-kitten/conform`) against the studio markdownlint baseline shipped in this
-repo — markdown lint plus the internal cross-reference check in one pass — so there is no
-per-repo config drift; point `config` at a `conform.config.*` to adjust individual rules.
-The engine is automatically locked to the exact `standards` commit you pin the workflow at,
-so the workflow and the engine it runs can never drift — you never set an engine ref.
+(default `README.md LICENSE`). By default `markdown-conformance` checks out canon (`@clockwork-kitten/canon`) at its
+`v0.1` line alias and runs markdown lint plus the internal cross-reference check in one
+pass. Point `config` at a `canon.config.*` for repo-specific doc settings, or override
+`canon-ref` when you need to pin canon to an exact tag or SHA.
 
 Consumers **pin to a tag** and upgrade deliberately (propagation vs stability). Pin to an exact
 version (`@v0.3.0`) for maximum stability, or to a moving line alias (`@v0.3`) to pick up patches
@@ -85,7 +83,7 @@ propagates like the workflows do, with no per-repo drift. They are deliberately 
 owns formatting and `clockwork-kitten/bedrock` owns semantic normalization, so this layer only adds
 framework-agnostic correctness, deterministic ordering (imports, exports, object keys, types), the
 "one canonical way" rules (`undefined` over `null`, `is`/`has` boolean names, `.toSorted()` over
-`.sort()`), security, dependency hygiene, and dead-code detection. Markdown stays owned by `conform`
+`.sort()`), security, dependency hygiene, and dead-code detection. Markdown stays owned by canon and is orchestrated through `conform`
 — keep Prettier off it (see `.prettierignore`).
 
 ```js
@@ -128,8 +126,8 @@ export default { ...base, workspaces: { /* ... */ } };
 
 `conform check` and `conform fix` drive these tools directly: add a `code` block to your
 `conform.config.*` to opt in, and one `conform check` runs ESLint, Prettier (`--check`), knip, and
-`tsc --noEmit` alongside the markdown track — while `conform fix` runs the ESLint/Prettier
-autofixers (knip and `tsc` are check-only gates). `clockwork-kitten/bedrock` semantic normalization
+`tsc --noEmit` alongside the canon docs track — while `conform fix` runs canon fix plus
+the ESLint/Prettier autofixers (knip and `tsc` are check-only gates). `clockwork-kitten/bedrock` semantic normalization
 is available as an opt-in code-track tool (`code.bedrock`; `--report` in check, `--fix` in fix),
 off by default. The pinned toolchain ships as engine dependencies, so pinning
 `@clockwork-kitten/conform` gets the whole code stack — no separate installs. `fix` is
@@ -150,12 +148,10 @@ export default defineConfig({
 
 ## Status
 
-**v0.5.0 released** — both conformance surfaces are live through one engine (`packages/conform`).
-The documentation track (markdown lint, reference integrity, `llms.txt`, authoring ergonomics with
-`conform fix`) and the code track (ESLint + Prettier + knip + `tsc`, plus an opt-in Astro ruleset)
-run through the same CLI, config, and pinned parser. `clockwork-kitten/bedrock` is wired as an
-opt-in code-track tool but off by default until it ships as an installable dependency. Next up:
-v0.6 schema-aware entry operations. `clockwork-kitten/ops` is the pilot adopter. See `ROADMAP.md`.
+**Phase C in progress** — `packages/conform` is now the orchestrator: it delegates docs
+(markdown lint, reference integrity, `llms.txt`) to canon and runs the code track (ESLint +
+Prettier + knip + `tsc`, plus opt-in bedrock) from `conform.config.*`. Canon is consumed
+from a source checkout while package distribution is finalized. See `ROADMAP.md`.
 
 ## Relationships
 

@@ -25,7 +25,7 @@ export default {
       // infer it. `eslint.config.js` is only referenced by the eslint bin (which
       // conform bundles, so knip's eslint plugin can't see it here), so name it
       // explicitly too.
-      entry: ["conform.config.ts", "eslint.config.js"],
+      entry: ["canon.config.ts", "conform.config.ts", "eslint.config.js"],
     },
     "packages/conform": {
       // `prettier-plugin-astro` is loaded by the shipped `configs/prettier.astro.json`

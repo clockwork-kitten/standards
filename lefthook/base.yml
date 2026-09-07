@@ -21,8 +21,8 @@
 # `conform` must be resolvable locally — add `@clockwork-kitten/conform`, pinned
 # to the same tag, so `bunx conform` finds it. `fix` runs with `--no-llms`: on a
 # partial staged set it must not regenerate `llms.txt` from a subset (that would
-# truncate the index). The `llms.txt` drift check stays in CI (`conform llms
-# --check`) and the agent's in-loop `conform fix`.
+# truncate the index). The `llms.txt` drift check stays in CI (canon `llms --check`)
+# and the agent's in-loop `conform fix`.
 pre-commit:
   parallel: false
   commands:

@@ -2,10 +2,10 @@ name: ci
 
 # The standards repo dogfoods its own conformance tooling on every PR: if the
 # tools can't keep this repo conformant, they aren't ready to ship. One
-# `conform check` runs the whole baseline — markdown lint, the internal
-# cross-reference check, and the code track (ESLint + Prettier + knip + the
-# TypeScript typecheck) — and the repo-hygiene and reusable-markdown workflows
-# round out the checks.
+# `conform check` orchestrates canon for docs (markdown lint, references, and
+# llms.txt ownership) plus the code track (ESLint + Prettier + knip + the
+# TypeScript typecheck), and the repo-hygiene/reusable-markdown workflows round
+# out the checks.
 
 on:
   pull_request:
@@ -27,6 +27,20 @@ jobs:
           bun-version: latest
       - name: Install dependencies
         run: bun install --frozen-lockfile
+      - name: Checkout canon
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: clockwork-kitten/canon
+          ref: v0.1
+          path: .canon
+      - name: Install canon (runtime deps only)
+        working-directory: .canon
+        run: bun install --frozen-lockfile --production
+      - name: Link canon for conform orchestration
+        run: |
+          set -euo pipefail
+          mkdir -p node_modules/@clockwork-kitten
+          ln -sfn "$PWD/.canon" node_modules/@clockwork-kitten/canon
       - name: Test the engine
         run: bun run test
       - name: Conform check — markdown, references, and the code track (dogfood)
@@ -37,13 +51,10 @@ jobs:
   hygiene:
     uses: ./.github/workflows/repo-hygiene.yml
     with:
-      required-files: 'README.md ROADMAP.md IDEAS.md LICENSE .markdownlint.jsonc llms.txt'
+      required-files: 'README.md ROADMAP.md IDEAS.md LICENSE llms.txt'
 
-  # Exercise the published reusable workflow end-to-end against this repo (self
-  # mode: the engine is this checkout, so the workflow tests the PR's own engine).
-  # It auto-discovers the root conform.config.ts, so references resolve with the
-  # same cross-repo ignores as the local dogfood above.
+  # Exercise the reusable markdown workflow end-to-end against this repo. It
+  # checks out canon at its default ref and auto-discovers canon.config.ts, so
+  # references resolve with the same cross-repo ignores as local dogfood.
   reusable-markdown:
     uses: ./.github/workflows/markdown-conformance.yml
-    with:
-      self: true
