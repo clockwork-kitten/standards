@@ -6,11 +6,16 @@ commitments. When one is ready, promote it to `ROADMAP.md` and/or a decision in 
 
 ## Product extraction — a releasable conformance tool
 
-If the conformance engine becomes genuinely worth shipping, extract it into its **own branded
-repo** rather than branding this governance container (the `bedrock` precedent: a named tool in
-its own repo). Parked brand-name candidates: **`mimic`**, **`conform`**. Revisit visibility
-(public) and license (**Apache-2.0** for the patent grant) at that point — see the `ops` repo's
-`docs/oss-policy.md`.
+If the conformance engine becomes genuinely worth shipping, extract **the whole engine** into its
+**own branded repo** rather than branding this governance container (the `bedrock` precedent: a named
+tool in its own repo). Parked brand-name candidates: **`mimic`**, **`conform`**.
+
+The engine's **documentation-repo conformance & operations** surface — markdown lint + reference
+integrity + `llms.txt` + schema-aware entry operations (v0.6) + cross-repo entry intake — is its
+first complete, differentiated product surface (code conformance is the second). The natural
+extraction milestone is once that surface is complete and the CLI/config API has stopped churning,
+not mid-flux. Revisit visibility (public) and license (**Apache-2.0** for the patent grant) at that
+point — see the `ops` repo's `docs/oss-policy.md`.
 
 ## Accessibility gates in the code track
 
