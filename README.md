@@ -94,6 +94,22 @@ import base from "@clockwork-kitten/conform/configs/eslint.base";
 export default [...base, { rules: { /* repo overrides */ } }];
 ```
 
+Site/client repos add the **Astro overlay** on top of the base — `eslint-plugin-astro` plus the
+accessibility rules, self-scoped to `*.astro`. Formatting is owned by `prettier-plugin-astro`
+(`configs/prettier.astro.json`) and `.astro` type-checking is `astro check`'s job in CI:
+
+```js
+// eslint.config.js (an Astro site/client repo)
+import base from "@clockwork-kitten/conform/configs/eslint.base";
+import astro from "@clockwork-kitten/conform/configs/eslint.astro";
+export default [...base, ...astro];
+```
+
+```jsonc
+// package.json — the Astro-aware Prettier config swaps in for the base
+{ "prettier": "@clockwork-kitten/conform/configs/prettier.astro.json" }
+```
+
 ```jsonc
 // tsconfig.json
 { "extends": "@clockwork-kitten/conform/configs/tsconfig.base.json" }

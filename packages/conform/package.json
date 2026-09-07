@@ -9,7 +9,9 @@
   "exports": {
     ".": "./src/index.ts",
     "./configs/eslint.base": "./configs/eslint.base.js",
+    "./configs/eslint.astro": "./configs/eslint.astro.js",
     "./configs/prettier.base.json": "./configs/prettier.base.json",
+    "./configs/prettier.astro.json": "./configs/prettier.astro.json",
     "./configs/knip.base.json": "./configs/knip.base.json",
     "./configs/tsconfig.base.json": "./configs/tsconfig.base.json"
   },
@@ -23,7 +25,9 @@
   },
   "dependencies": {
     "eslint": "^10.10.0",
+    "eslint-plugin-astro": "~3.1.0",
     "eslint-plugin-depend": "^1.5.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-perfectionist": "^5.11.0",
     "eslint-plugin-security": "^4.0.1",
     "eslint-plugin-unicorn": "^74.0.0",
@@ -36,6 +40,7 @@
     "mdast-util-to-string": "^4.0.0",
     "micromark-extension-gfm": "^3.0.0",
     "prettier": "^3.9.6",
+    "prettier-plugin-astro": "~0.14.1",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.69.0",
     "unist-util-visit": "^5.1.0"
