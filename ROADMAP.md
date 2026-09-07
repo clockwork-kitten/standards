@@ -6,22 +6,26 @@ The sequenced plan for the studio standards home. Status: ☐ todo · ◐ in pro
 Rationale: **CK-004** in the `ops` repo's `docs/DECISIONS.md`. Ideas not yet scheduled live in
 `IDEAS.md`.
 
-## Two conformance surfaces, one engine
+## Two conformance surfaces, one orchestrator
 
-The engine grows two coherent capability surfaces, both invoked through the **same** CLI, config, and
-pinned parser — not two products:
+`conform` is the studio's conformance **orchestrator**: one CLI + one config that runs every
+conformance tool in a single pass, the way it already runs ESLint, Prettier, knip, `tsc`, and
+`bedrock`. It spans two surfaces:
 
 - **Documentation-repo conformance & operations** — markdown lint (v0.1–v0.2), structural document
   operations (v0.3: reference integrity + `llms.txt`), authoring ergonomics (v0.4), and schema-aware
-  entry operations (v0.6), extended across repo boundaries by *cross-repo entry intake* (`IDEAS.md`).
-  Together these are a documentation-repo conformance *product*, not "a markdown linter" — the
-  differentiated value is the structural operations over one shared parse, not the linting.
-- **Code conformance** — the studio lint/format/typecheck/dead-code baseline and `bedrock` (v0.5).
+  entry operations + cross-repo intake (v0.7, built in `canon`). The differentiated value is the
+  structural operations over one shared parse, not the linting. **This surface is being extracted
+  into its own repo, `canon` (v0.6)** — a standalone, independently-consumable doc-conformance tool
+  with its own pinned parser, config, CLI, and release line, so any documentation repo can adopt it
+  without the code track. `conform` then invokes `canon` as just another tool.
+- **Code conformance** — the studio lint/format/typecheck/dead-code baseline and `bedrock` (v0.5),
+  which `conform` runs as external tools.
 
-Extraction into a branded repo (`IDEAS.md`) targets the **whole engine**; the documentation surface
-is its first complete product surface, so the natural extraction milestone is *after* v0.6 + intake,
-once that surface is complete and the CLI/config API has stopped churning. This framing does **not**
-change the sequencing below — the code track (v0.5) still finishes first.
+Naming: **`conform`** (orchestrator) runs **`canon`** (docs) and **`bedrock`** (code semantics) as
+sibling tools. `conform` stays in this repo for now; `standards` is expected to narrow to *being* the
+`conform` repo over time. Record the extraction + naming as a **CK-0NN** decision in the `ops` repo's
+`docs/DECISIONS.md`.
 
 ## v0.1 — Markdown conformance + repo-hygiene core
 
@@ -45,7 +49,7 @@ The v0.1 tracks are shell/Python jobs wired straight into reusable workflows. v0
 them into a single distributable **conform engine** — one CLI that comes in and tests everything —
 so markdown lint, structural document operations, hygiene, and (later) code checks share one parser
 and one config instead of drifting apart. TS/Bun on `mdast`. It lives at `packages/conform/` in this
-repo now, structured for later extraction into its own branded repo (see `IDEAS.md`).
+repo now; the documentation surface is extracted into its own repo (`canon`) at v0.6.
 
 **Design (locked):**
 
@@ -122,17 +126,38 @@ the `ops` repo's `docs/DECISIONS.md`.
 | 3 | Invoke `clockwork-kitten/bedrock` as a check | ◐ | Engine wiring landed: bedrock is a code-track tool (`conform check` → `bedrock --report`, `conform fix` → `bedrock --fix`), opt in with `code.bedrock` (`true` scopes to `src`, or pass globs). **Off by default** and not yet dogfooded because bedrock isn't installable — not on npm (the npm `bedrock` is unrelated), no release tag, `dist/` gitignored with no `prepare` script. **Activation** (bundle the dep, default on, and remove the interim ESLint rules `no-var`/`prefer-const`/`eqeqeq`/`prefer-arrow-callback`) follows once bedrock ships a consumable artifact |
 | 4 | Opinionated Astro ruleset for site/client repos | ☑ | Shipped as `@clockwork-kitten/conform/configs/eslint.astro` (`eslint-plugin-astro` `recommended` + `jsx-a11y`, self-scoped to `*.astro`, layered after the base) + `configs/prettier.astro.json` (`prettier-plugin-astro`). Reuse baseline — house-policy structural rules are a follow-up. Dogfooded via `.astro` fixtures + an ESLint-API test (no Astro sources here). `astro check` stays a consumer-CI type gate |
 
-## v0.6 — Schema-aware entry operations
+## v0.6 — Extract `canon` (doc-conformance tool)
 
-Promoted from `IDEAS.md`. Typed, schema-aware entry operations agents call instead of splicing prose —
-the engine's original structural contribution, gated behind the checks that guarantee the invariants.
-Deferred below the code track so the studio's whole doc pipeline is engine-owned first.
+The documentation surface is complete enough to stand on its own, and its signature features (entry
+operations, cross-repo intake) are exactly what make it an independent product — so it moves into its
+own repo now rather than being built inside this governance/orchestration container. `canon` owns the
+pinned mdast/GFM parser and every doc-structural operation in-process (keeping the v0.2 one-parser,
+one-config guarantee *inside* canon); `conform` invokes it as one opaque tool, like ESLint or
+`bedrock`. Any pure-documentation repo (e.g. `ops`) can adopt `canon` alone. Prior art for the
+schema-driven-docs model: Astro Content Collections / Contentlayer (schema-validated frontmatter),
+Vale and remark-lint (prose/structural linting); the opinionated default-schema posture is the "paved
+road" / convention-over-configuration pattern.
 
 | # | Task | Status | Notes |
 | --- | --- | --- | --- |
-| 1 | Per-document schemas in `conform.config` (`ideas`, `decisions`, `roadmap`) | ☐ | The same config the linter consumes; shape = `## I-NNN`, monotonic IDs, one separator |
+| 1 | Create `clockwork-kitten/canon`; move the doc surface | ☐ | `lint/{markdown,references,parse}`, `ops/llms`, the markdownlint base config, the doc config types (`markdownlint`/`references`/`llms`), and the doc skills; preserve history where feasible |
+| 2 | Give `canon` its own config, CLI, CI, and release line | ☐ | `canon.config.*`; `canon check`/`fix`/`llms`; dogfood on itself; cut `canon@v0.1.0`. Ships opinionated studio-default schemas but accepts custom ones |
+| 3 | Slim `conform` to orchestrate `canon` | ☐ | Drop the in-process doc surface; add a `canon` tool runner (bundled like eslint/bedrock); `conform check`/`fix` runs canon + code tools; reusable `markdown-conformance.yml` runs canon; major bump for the CLI-surface change |
+| 4 | Re-pin `ops` to consume `canon` directly | ☐ | ops only ever needed docs — proves the independent-adoption model end to end |
+
+## v0.7 — Schema-aware entry operations + cross-repo intake (in `canon`)
+
+Built in the new `canon` repo, not here (listed for continuity; tracked on `canon`'s own roadmap once
+it exists). Typed, schema-aware entry operations agents call instead of splicing prose — the doc
+tool's original structural contribution — plus a standardized way to propose a schema-valid entry
+into *another* repo, gated behind the checks that guarantee the invariants.
+
+| # | Task | Status | Notes |
+| --- | --- | --- | --- |
+| 1 | Per-document schemas in `canon.config` (`ideas`, `decisions`, `roadmap`) | ☐ | The same config the linter consumes; shape = `## I-NNN`, monotonic IDs, one separator |
 | 2 | `entry delete` / `add` / `move` / `renumber` positional splices | ☐ | Re-lint against the same schema as postcondition |
-| 3 | Surface decision: a CLI and/or an MCP tool for agents | ☐ | Answers the idea's open question |
+| 3 | Cross-repo intake: producer (`entry add --repo`) + receiver (`entry-intake.yml`) | ☐ | Opens a PR, never direct-commits — preserves the human-merge gate |
+| 4 | Surface decision: a CLI and/or an MCP tool for agents | ☐ | Answers the idea's open question |
 
 ## Release & versioning
 
@@ -149,8 +174,8 @@ Deferred below the code track so the studio's whole doc pipeline is engine-owned
 ## Open items
 
 - **License choice at extraction.** Currently `LICENSE` is MIT. Reconsider **Apache-2.0** (patent
-  grant) if the conformance engine is extracted/commercialized — see `IDEAS.md` and the `ops`
-  `docs/oss-policy.md`.
+  grant) for `canon` (and later `conform`) when extracted/commercialized — see the `ops` repo's
+  `docs/oss-policy.md`. Set this at the point each repo is spun out.
 - **Public vs private.** **Now public** — private consumers (e.g. `ops`) must be able to fetch the
   reusable workflows and the engine, which a private home blocked. Revisit only if a future home
   needs to hold non-public material.
