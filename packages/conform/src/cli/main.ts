@@ -160,6 +160,22 @@ export type FixArgs = {
 
 type RunFixDeps = RunCheckDeps;
 
+/** CLI entrypoint: dispatch `check`/`fix`, else print usage and return 2. */
+export async function main(): Promise<number> {
+  const [subcommand, ...rest] = process.argv.slice(2);
+  if (subcommand === "check") {
+    return runCheck(rest, process.cwd());
+  }
+  if (subcommand === "fix") {
+    return runFix(rest, process.cwd());
+  }
+  if (subcommand !== undefined) {
+    console.error(`unknown subcommand: ${subcommand}`);
+  }
+  printUsage();
+  return 2;
+}
+
 /**
  * Parse the arguments to `conform fix`. Positional args are globs (defaulting to
  * `**\/*.md`); `--config`/`-c` selects conform's config file; canon discovers
@@ -251,22 +267,6 @@ export async function runFix(
   }
 
   return 0;
-}
-
-/** CLI entrypoint: dispatch `check`/`fix`, else print usage and return 2. */
-export async function main(): Promise<number> {
-  const [subcommand, ...rest] = process.argv.slice(2);
-  if (subcommand === "check") {
-    return runCheck(rest, process.cwd());
-  }
-  if (subcommand === "fix") {
-    return runFix(rest, process.cwd());
-  }
-  if (subcommand !== undefined) {
-    console.error(`unknown subcommand: ${subcommand}`);
-  }
-  printUsage();
-  return 2;
 }
 
 function printUsage(): void {

@@ -5,7 +5,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CodeToolResult } from "../code/run.ts";
 import type { RunDocsOptions } from "../docs/run.ts";
 
-import { main, parseCheckArgs, parseFixArgs, runCheck, runFix } from "./main.ts";
+import {
+  main,
+  parseCheckArgs,
+  parseFixArgs,
+  runCheck,
+  runFix,
+} from "./main.ts";
 
 const SCRATCH_ROOT = join(process.cwd(), ".test-runs", "cli-main");
 let sequence = 0;

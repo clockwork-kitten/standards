@@ -13,6 +13,10 @@ import base from "@clockwork-kitten/conform/configs/knip.base.json" with { type:
  */
 export default {
   ...base,
+  // canon is checked out into `.canon/` in CI (and by consumers running
+  // `conform check`); it's a vendored tool that owns its own hygiene, so keep
+  // knip out of it.
+  ignore: ["**/.canon/**"],
   // Root scripts (`lint`, `format`, `deadcode`) call these bins, which are
   // provided transitively by the conform workspace dependency.
   ignoreBinaries: ["eslint", "prettier", "knip"],
