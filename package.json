@@ -7,16 +7,17 @@
   ],
   "scripts": {
     "check:md": "conform check",
-    "llms": "conform llms",
+    "llms": "bun run canon llms",
     "fix:md": "conform fix",
-    "check:llms": "conform llms --check",
+    "check:llms": "bun run canon llms --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "deadcode": "knip",
     "test": "bun run --cwd packages/conform test",
-    "typecheck": "bun run --cwd packages/conform typecheck"
+    "typecheck": "bun run --cwd packages/conform typecheck",
+    "canon": "bun ./node_modules/@clockwork-kitten/canon/src/cli/main.ts"
   },
   "prettier": "@clockwork-kitten/conform/configs/prettier.base.json",
   "devDependencies": {

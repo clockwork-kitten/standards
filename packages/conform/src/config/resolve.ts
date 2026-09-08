@@ -3,14 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { isAbsolute, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
-import type {
-  ConformConfig,
-  MarkdownlintConfig,
-  ReferencesConfig,
-} from "./types.ts";
-
-import { STUDIO_MARKDOWNLINT_BASELINE } from "./baseline.ts";
-import { deepMerge, isPlainObject, type PlainObject } from "./merge.ts";
+import type { ConformConfig } from "./types.ts";
 
 /** Raised when a config file exists but cannot be loaded or parsed. */
 export class ConfigError extends Error {
@@ -42,66 +35,9 @@ export type ResolvedCodeConfig = {
 export type ResolvedConfig = {
   /** The code-track settings, or `undefined` when the repo declares no `code` block. */
   code: ResolvedCodeConfig | undefined;
-  /** The `llms.txt` generator config, or `undefined` when the repo declares none. */
-  llms: ResolvedLlmsConfig | undefined;
-  markdownlint: MarkdownlintConfig;
-  references: ResolvedReferencesConfig;
   /** Human-readable description of the config source, for logging. */
   source: string;
 };
-
-/** The `llms.txt` generator settings for a run, with defaults applied. */
-export type ResolvedLlmsConfig = {
-  output: string;
-  project: string;
-  sections: ResolvedLlmsSection[];
-  summary: string;
-};
-
-/** A section of the `llms.txt` index with defaults applied. */
-export type ResolvedLlmsSection = {
-  prefix: string;
-  shallow: boolean;
-  title: string;
-};
-
-/** The reference-checker settings for a run, with defaults applied. */
-export type ResolvedReferencesConfig = Required<ReferencesConfig>;
-
-/**
- * Compute the effective markdownlint config from a loaded conform config.
- *
- * Unless `extends` is `false`, the config's `markdownlint` overrides are
- * deep-merged over the studio baseline so a repo can adjust one rule without
- * re-declaring the whole baseline. This is pure — the linter and, later, the
- * structural operations consume exactly this object.
- */
-export function resolveMarkdownlintConfig(
-  config: ConformConfig,
-): MarkdownlintConfig {
-  const overrides = (config.markdownlint ?? {}) as PlainObject;
-  if (config.extends === false) {
-    return { ...overrides } as MarkdownlintConfig;
-  }
-  return deepMerge(
-    STUDIO_MARKDOWNLINT_BASELINE as PlainObject,
-    overrides,
-  ) as MarkdownlintConfig;
-}
-
-/**
- * Compute the effective reference-checker settings from a loaded conform config.
- * The checker has no studio baseline, so this only fills defaults; `ignore`
- * defaults to empty (resolve every internal reference).
- */
-export function resolveReferencesConfig(
-  config: ConformConfig,
-): ResolvedReferencesConfig {
-  return { ignore: [...(config.references?.ignore ?? [])] };
-}
-
-/** Default output path for the generated doc index. */
-export const DEFAULT_LLMS_OUTPUT = "llms.txt";
 
 /** Default tsconfig used by the code-track typecheck. */
 export const DEFAULT_TSCONFIG = "tsconfig.json";
@@ -109,9 +45,7 @@ export const DEFAULT_TSCONFIG = "tsconfig.json";
 /** Default path(s) bedrock normalizes when `code.bedrock` is `true`. */
 export const DEFAULT_BEDROCK_FILES = ["src"];
 
-/**
- * Find the first existing config file at `cwd`, or `undefined` if none.
- */
+/** Find the first existing config file at `cwd`, or `undefined` if none. */
 export function discoverConfigPath(cwd: string): string | undefined {
   for (const name of CONFIG_FILENAMES) {
     const candidate = resolve(cwd, name);
@@ -187,10 +121,9 @@ export function resolveCodeConfig(
 }
 
 /**
- * Resolve the effective config for a run: an explicit `configPath` wins,
- * otherwise the first `conform.config.*` found at `cwd`, otherwise the bundled
- * studio baseline. Throws {@link ConfigError} only when a config file is present
- * but broken.
+ * Resolve the effective conform config for a run: an explicit `configPath` wins,
+ * otherwise the first `conform.config.*` found at `cwd`, otherwise no code track
+ * is declared. Documentation config is discovered by canon from `canon.config.*`.
  */
 export async function resolveConfig(options: {
   configPath?: string | undefined;
@@ -206,49 +139,19 @@ export async function resolveConfig(options: {
   if (!path) {
     return {
       code: undefined,
-      llms: undefined,
-      markdownlint: { ...STUDIO_MARKDOWNLINT_BASELINE },
-      references: { ignore: [] },
-      source: "studio baseline (no config file found)",
+      source: "no config file found",
     };
   }
 
   const config = await loadConfigFile(path);
   return {
     code: resolveCodeConfig(config),
-    llms: resolveLlmsConfig(config),
-    markdownlint: resolveMarkdownlintConfig(config),
-    references: resolveReferencesConfig(config),
     source: path,
   };
 }
 
-/**
- * Compute the effective `llms.txt` generator settings, or `undefined` when the
- * config declares no `llms` block. Applies section defaults (`prefix` → `""`,
- * `shallow` → `false`) and the default output path.
- */
-export function resolveLlmsConfig(
-  config: ConformConfig,
-): ResolvedLlmsConfig | undefined {
-  const llms = config.llms;
-  if (!llms) {
-    return undefined;
-  }
-  return {
-    output: llms.output ?? DEFAULT_LLMS_OUTPUT,
-    project: llms.project,
-    sections: llms.sections.map((section) => ({
-      prefix: section.prefix ?? "",
-      shallow: section.shallow ?? false,
-      title: section.title,
-    })),
-    summary: llms.summary,
-  };
-}
-
 function isConfigModule(value: unknown): value is ConformConfig {
-  return isPlainObject(value);
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 /**

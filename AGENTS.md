@@ -1,8 +1,8 @@
 # Agent guide — standards
 
 How agents work in this repo. The studio invariant: **AI proposes freely, a
-machine-checkable standard constrains _how_, a human still merges.** `conform` is
-that machine-checkable standard for docs; you are the AI that proposes.
+machine-checkable standard constrains _how_, a human still merges.** `conform` orchestrates
+that machine-checkable standard: canon for docs plus the code track; you are the AI that proposes.
 
 ## Run `conform` in your own loop
 
@@ -39,7 +39,7 @@ Enable the hook locally with `bunx lefthook install`.
 ## `fix` is authoring-time only
 
 `conform fix` runs locally, in your loop, and in the pre-commit hook — never in
-CI. CI only ever runs `conform check` (and `conform llms --check`) and fails on
+CI. CI runs `conform check` plus `bun run check:llms` (canon `llms --check`) and fails on
 drift. Auto-fixing or auto-committing in CI would fight the human-merge gate and
 produce surprising diffs, so never wire `fix` into a workflow.
 

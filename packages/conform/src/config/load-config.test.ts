@@ -1,5 +1,4 @@
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
@@ -10,14 +9,19 @@ import {
   resolveConfig,
 } from "./resolve.ts";
 
+const SCRATCH_ROOT = join(process.cwd(), ".test-runs", "load-config");
+let sequence = 0;
 let dir: string;
 
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), "conform-cfg-"));
+  sequence += 1;
+  dir = join(SCRATCH_ROOT, String(sequence));
+  rmSync(dir, { force: true, recursive: true });
+  mkdirSync(dir, { recursive: true });
 });
 
 afterEach(() => {
-  rmSync(dir, { force: true, recursive: true });
+  rmSync(SCRATCH_ROOT, { force: true, recursive: true });
 });
 
 describe("discoverConfigPath", () => {
@@ -37,18 +41,21 @@ describe("loadConfigFile", () => {
     const path = join(dir, "conform.config.jsonc");
     writeFileSync(
       path,
-      '{\n  // a comment\n  "markdownlint": { "MD013": true },\n}',
+      '{\n  // a comment\n  "code": { "tsconfig": "packages/x/tsconfig.json" },\n}',
     );
     expect(await loadConfigFile(path)).toEqual({
-      markdownlint: { MD013: true },
+      code: { tsconfig: "packages/x/tsconfig.json" },
     });
   });
 
   it("imports a TypeScript config's default export", async () => {
     const path = join(dir, "conform.config.ts");
-    writeFileSync(path, "export default { markdownlint: { MD041: false } };");
+    writeFileSync(
+      path,
+      'export default { code: { tsconfig: "packages/x/tsconfig.json" } };',
+    );
     expect(await loadConfigFile(path)).toEqual({
-      markdownlint: { MD041: false },
+      code: { tsconfig: "packages/x/tsconfig.json" },
     });
   });
 
@@ -66,32 +73,30 @@ describe("loadConfigFile", () => {
 });
 
 describe("resolveConfig", () => {
-  it("falls back to the studio baseline when no config file exists", async () => {
+  it("returns no code track when no config file exists", async () => {
     const resolved = await resolveConfig({ cwd: dir });
-    expect(resolved.markdownlint.MD013).toBe(false);
-    expect(resolved.source).toContain("baseline");
+    expect(resolved).toEqual({
+      code: undefined,
+      source: "no config file found",
+    });
   });
 
-  it("merges a discovered config over the baseline", async () => {
+  it("resolves a discovered code config", async () => {
     writeFileSync(
       join(dir, "conform.config.jsonc"),
-      '{ "markdownlint": { "MD013": true } }',
+      '{ "code": { "tsconfig": "packages/conform/tsconfig.json" } }',
     );
     const resolved = await resolveConfig({ cwd: dir });
-    expect(resolved.markdownlint.MD013).toBe(true);
-    expect(resolved.markdownlint.MD033).toBe(false);
+    expect(resolved.code?.tsconfig).toBe("packages/conform/tsconfig.json");
     expect(resolved.source).toBe(join(dir, "conform.config.jsonc"));
   });
 
   it("honors an explicit relative configPath", async () => {
-    writeFileSync(
-      join(dir, "custom.jsonc"),
-      '{ "extends": false, "markdownlint": { "default": true } }',
-    );
+    writeFileSync(join(dir, "custom.jsonc"), '{ "code": { "knip": false } }');
     const resolved = await resolveConfig({
       configPath: "custom.jsonc",
       cwd: dir,
     });
-    expect(resolved.markdownlint).toEqual({ default: true });
+    expect(resolved.code?.knip).toBe(false);
   });
 });

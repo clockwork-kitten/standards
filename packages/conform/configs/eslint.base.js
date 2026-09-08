@@ -28,7 +28,15 @@ import tseslint from "typescript-eslint";
  *     export default [...base, { rules: { ... } }];
  */
 export default tseslint.config(
-  { ignores: ["**/dist/**", "**/build/**", "**/coverage/**", "**/*.d.ts"] },
+  {
+    ignores: [
+      "**/.canon/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/coverage/**",
+      "**/*.d.ts",
+    ],
+  },
   // Anchor file enumeration so `eslint .` picks up TypeScript, not just `.js`.
   { files: ["**/*.{js,mjs,cjs,ts,mts,cts}"] },
   ...tseslint.configs.recommended,

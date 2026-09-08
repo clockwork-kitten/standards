@@ -7,49 +7,45 @@ name: markdown-conformance
 #     markdown:
 #       uses: clockwork-kitten/standards/.github/workflows/markdown-conformance.yml@v0.3.0
 #
-# It runs the conform engine (packages/conform, @clockwork-kitten/conform) against
-# the studio baseline: markdown lint plus the internal cross-reference checker, in
-# one `conform check` invocation, and can optionally verify a generated `llms.txt`
-# doc index (`llms-check`). The engine isn't published to a registry, so this
-# workflow checks out the engine and runs its CLI against the calling repo.
+# It runs canon, the standalone documentation-conformance tool, against the
+# calling repo: markdown lint plus internal cross-reference checks in one `canon
+# check` invocation, and can optionally verify a generated `llms.txt` doc index
+# (`llms-check`). Canon isn't consumed from npm here; this workflow checks out
+# clockwork-kitten/canon from source, installs its production deps, and runs its
+# CLI directly against the calling repo.
 #
-# Engine/workflow lockstep: by default the engine is pinned to the EXACT
-# clockwork-kitten/standards commit this workflow was called at
-# (github.job_workflow_sha). So `uses: ...@v0.3.0` runs the v0.3.0 engine, and
-# `@v0.3` (the moving alias) always runs the matching engine — the two can never
-# diverge, and consumers never set a ref. Sensible defaults; override via inputs.
+# Engine/workflow lockstep: canon is now a separate repo, so github.job_workflow_sha
+# no longer pins the engine. The workflow pins canon through `canon-ref`, which
+# defaults to the moving major alias `v0.1`; consumers can override it when they
+# need an exact canon tag or SHA.
 
 on:
   workflow_call:
     inputs:
       paths:
-        description: 'Globs the engine checks (space-separated). node_modules/.git/.standards are always ignored.'
+        description: 'Globs canon checks (space-separated). node_modules/.git/.canon are always ignored.'
         type: string
         default: '**/*.md'
       config:
-        description: 'Path to a conform.config.* in the calling repo. Empty auto-discovers one, else the bundled studio baseline.'
+        description: 'Path to a canon.config.* in the calling repo. Empty auto-discovers one.'
         type: string
         default: ''
       reference-check:
-        description: 'Run the internal cross-reference checker as part of the engine check.'
+        description: 'Run canon reference checks.'
         type: boolean
         default: true
       reference-ignore:
-        description: 'Substrings marking a backtick path as external/cross-repo, not resolved (space-separated). Layered on top of the config''s references.ignore.'
+        description: 'Substrings marking a backtick path as external/cross-repo, not resolved (space-separated).'
         type: string
         default: ''
       llms-check:
-        description: 'Verify the committed llms.txt is up to date. Requires an `llms` block in the calling repo''s conform config.'
+        description: 'Verify the committed llms.txt is up to date. Requires an `llms` block in canon config.'
         type: boolean
         default: false
-      self:
-        description: 'Dogfood mode: the engine is the calling checkout itself (skip the engine checkout). Only clockwork-kitten/standards sets this.'
-        type: boolean
-        default: false
-      standards-ref:
-        description: 'Advanced override: pin the engine to a specific clockwork-kitten/standards ref instead of the commit this workflow was called at. Empty (default) auto-locks the engine to github.job_workflow_sha.'
+      canon-ref:
+        description: 'Canon ref to check out from clockwork-kitten/canon.'
         type: string
-        default: ''
+        default: 'v0.1'
 
 permissions:
   contents: read
@@ -60,57 +56,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Checkout standards engine
-        if: ${{ !inputs.self }}
+      - name: Checkout canon
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          repository: clockwork-kitten/standards
-          # Empty standards-ref → lock to the exact commit this reusable workflow
-          # was resolved to, so the engine always matches the pinned workflow.
-          ref: ${{ inputs.standards-ref != '' && inputs.standards-ref || github.job_workflow_sha }}
-          path: .standards
+          repository: clockwork-kitten/canon
+          ref: ${{ inputs.canon-ref }}
+          path: .canon
       - name: Set up Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
           bun-version: latest
-      - name: Resolve engine root
-        id: engine
-        env:
-          SELF: ${{ inputs.self }}
-        run: |
-          set -euo pipefail
-          if [ "$SELF" = "true" ]; then
-            echo "root=." >> "$GITHUB_OUTPUT"
-          else
-            echo "root=.standards" >> "$GITHUB_OUTPUT"
-          fi
-      - name: Install engine (runtime deps only)
-        working-directory: ${{ steps.engine.outputs.root }}
+      - name: Install canon (runtime deps only)
+        working-directory: .canon
         run: bun install --frozen-lockfile --production
-      - name: Link engine for config self-imports
-        env:
-          ENGINE_ROOT: ${{ steps.engine.outputs.root }}
+      - name: Link canon for config self-imports
         run: |
           set -euo pipefail
-          # A repo `conform.config.ts` imports `@clockwork-kitten/conform`; make that
-          # specifier resolvable from the caller root, whether the engine lives here
-          # (self mode) or under `.standards`. jsonc/plain configs don't need this.
           mkdir -p node_modules/@clockwork-kitten
-          ln -sfn "$PWD/$ENGINE_ROOT/packages/conform" node_modules/@clockwork-kitten/conform
-      - name: Run the conform engine (markdown lint + references)
+          ln -sfn "$PWD/.canon" node_modules/@clockwork-kitten/canon
+      - name: Run canon check (markdown lint + references)
         env:
-          ENGINE_ROOT: ${{ steps.engine.outputs.root }}
           CONFIG: ${{ inputs.config }}
           PATHS: ${{ inputs.paths }}
           REFERENCE_CHECK: ${{ inputs.reference-check }}
           REFERENCE_IGNORE: ${{ inputs.reference-ignore }}
         run: |
           set -euo pipefail
-          # This is the markdown-conformance track: never run the code track,
-          # even when the calling repo's config declares a `code` block (that
-          # runs in the repo's own `conform check` / a code-conformance workflow,
-          # with full dev dependencies installed).
-          args=(check --no-code $PATHS)
+          args=(check $PATHS)
           if [ -n "$CONFIG" ]; then
             args+=(--config "$CONFIG")
           fi
@@ -120,11 +92,10 @@ jobs:
           for sub in $REFERENCE_IGNORE; do
             args+=(--reference-ignore "$sub")
           done
-          bun "$ENGINE_ROOT/packages/conform/src/cli/main.ts" "${args[@]}"
+          bun .canon/src/cli/main.ts "${args[@]}"
       - name: Verify llms.txt is up to date
         if: inputs.llms-check
         env:
-          ENGINE_ROOT: ${{ steps.engine.outputs.root }}
           CONFIG: ${{ inputs.config }}
         run: |
           set -euo pipefail
@@ -132,4 +103,4 @@ jobs:
           if [ -n "$CONFIG" ]; then
             args+=(--config "$CONFIG")
           fi
-          bun "$ENGINE_ROOT/packages/conform/src/cli/main.ts" "${args[@]}"
+          bun .canon/src/cli/main.ts "${args[@]}"
