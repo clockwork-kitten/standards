@@ -43,6 +43,22 @@ CI. CI runs `conform check` plus `bun run check:llms` (canon `llms --check`) and
 drift. Auto-fixing or auto-committing in CI would fight the human-merge gate and
 produce surprising diffs, so never wire `fix` into a workflow.
 
+## Reusable workflows pin their engine by explicit ref, never `job_workflow_sha`
+
+A reusable workflow that checks out its own engine must pin that checkout to an
+explicit input ref (a tag or alias) — never `github.job_workflow_sha`. Despite
+the name, `job_workflow_sha` resolves to the caller-side ref that started the
+run, which for a consumer on `main` is standards `main`, not the tag the
+consumer pinned. So a workflow that used it did **not** isolate consumers: it
+always ran `main`'s engine, and merging a breaking change to `main` broke every
+`@v0.x` consumer at once (this is what happened when canon landed — pinned
+consumers hit `Cannot locate package "@clockwork-kitten/canon"`).
+
+The v0.6 `markdown-conformance.yml` does it right: it checks out
+`clockwork-kitten/canon` at an explicit `canon-ref` input (default the `v0.1`
+alias), a real ref that a caller cannot accidentally slide onto `main`. Keep
+new reusable workflows on this pattern.
+
 ## Conventions
 
 - **Conventional Commits.** Include the trailer
