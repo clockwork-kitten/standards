@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/engine-manifest/1",
+  "description": "Published engine implementation, capability, and vector coverage declaration.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "engine",
+    "package",
+    "compatibleSchemaMajors",
+    "implementedRuleIds",
+    "vectorCoverageIds",
+    "capabilities",
+    "commandClasses",
+    "fixerFileClasses",
+    "supportedResultMinors",
+    "manifestHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "engine": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/engine"
+    },
+    "package": {
+      "type": "object",
+      "required": ["name", "version", "integrity"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^@clockwork-kitten/(canon|crucible|conform)$"
+        },
+        "version": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+        },
+        "integrity": {
+          "type": ["string", "null"],
+          "pattern": "^sha512-[A-Za-z0-9+/]+={0,2}$"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "compatibleSchemaMajors": {
+      "type": "object",
+      "required": ["rule", "policy", "profile", "suppression", "result"],
+      "properties": {
+        "rule": {
+          "$ref": "#/$defs/positiveIntegerArray"
+        },
+        "policy": {
+          "$ref": "#/$defs/positiveIntegerArray"
+        },
+        "profile": {
+          "$ref": "#/$defs/positiveIntegerArray"
+        },
+        "suppression": {
+          "$ref": "#/$defs/positiveIntegerArray"
+        },
+        "result": {
+          "$ref": "#/$defs/positiveIntegerArray"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "implementedRuleIds": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/ruleId"
+      },
+      "uniqueItems": true
+    },
+    "vectorCoverageIds": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+      },
+      "uniqueItems": true
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+      },
+      "uniqueItems": true
+    },
+    "commandClasses": {
+      "type": "array",
+      "items": {
+        "enum": ["static", "executing", "fix", "report", "policy-operation"]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "fixerFileClasses": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/fileClass"
+      },
+      "uniqueItems": true
+    },
+    "supportedResultMinors": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[1-9][0-9]*$": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "manifestHash": {
+      "type": ["string", "null"],
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "extensions": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/extensions"
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "engine": {
+          "const": "canon"
+        },
+        "package": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "@clockwork-kitten/canon"
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "engine": {
+          "const": "crucible"
+        },
+        "package": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "@clockwork-kitten/crucible"
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "engine": {
+          "const": "conform"
+        },
+        "package": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "@clockwork-kitten/conform"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "positiveIntegerArray": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "unevaluatedProperties": false
+}

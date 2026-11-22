@@ -1,0 +1,378 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/rule/1",
+  "description": "Authoritative metadata and ownership contract for one permanent Crux rule ID.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "ruleId",
+    "title",
+    "summary",
+    "rationale",
+    "remediation",
+    "owner",
+    "fileClass",
+    "aspect",
+    "checkKind",
+    "domains",
+    "lifecycle",
+    "defaultSeverity",
+    "introduced",
+    "selectors",
+    "topInvariant",
+    "implementation",
+    "fix",
+    "suppressionFormIds",
+    "vectors"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "#/$defs/semver"
+    },
+    "ruleId": {
+      "$ref": "#/$defs/ruleId"
+    },
+    "title": {
+      "$ref": "#/$defs/nonEmptyText"
+    },
+    "summary": {
+      "$ref": "#/$defs/nonEmptyText"
+    },
+    "rationale": {
+      "$ref": "#/$defs/nonEmptyText"
+    },
+    "remediation": {
+      "$ref": "#/$defs/nonEmptyText"
+    },
+    "owner": {
+      "$ref": "#/$defs/engine"
+    },
+    "fileClass": {
+      "$ref": "#/$defs/fileClass"
+    },
+    "aspect": {
+      "$ref": "#/$defs/kebabId"
+    },
+    "checkKind": {
+      "enum": ["static", "executing"]
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/domain"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "lifecycle": {
+      "enum": ["proposed", "warn", "error", "deprecated", "removed"]
+    },
+    "defaultSeverity": {
+      "enum": ["info", "warning", "error"]
+    },
+    "introduced": {
+      "$ref": "#/$defs/releaseMetadata"
+    },
+    "deprecated": {
+      "$ref": "#/$defs/releaseMetadata"
+    },
+    "removed": {
+      "$ref": "#/$defs/releaseMetadata"
+    },
+    "replacementRuleId": {
+      "$ref": "#/$defs/ruleId"
+    },
+    "selectors": {
+      "type": "object",
+      "required": ["repositoryShapes", "include", "exclude"],
+      "properties": {
+        "repositoryShapes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/kebabId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "include": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/boundedPattern"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/boundedPattern"
+          },
+          "uniqueItems": true
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "topInvariant": {
+      "type": "boolean"
+    },
+    "promotion": {
+      "$ref": "#/$defs/promotion"
+    },
+    "implementation": {
+      "type": "object",
+      "required": ["capabilities", "adapterRequirements"],
+      "properties": {
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/kebabId"
+          },
+          "uniqueItems": true
+        },
+        "adapterRequirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/kebabId"
+          },
+          "uniqueItems": true
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "fix": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "maxPasses", "writableFileClasses"],
+          "properties": {
+            "kind": {
+              "const": "none"
+            },
+            "maxPasses": {
+              "type": "integer",
+              "const": 0
+            },
+            "writableFileClasses": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "maxPasses", "writableFileClasses"],
+          "properties": {
+            "kind": {
+              "const": "bounded"
+            },
+            "maxPasses": {
+              "type": "integer",
+              "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            },
+            "writableFileClasses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/fileClass"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      ]
+    },
+    "suppressionFormIds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/kebabId"
+      },
+      "uniqueItems": true
+    },
+    "vectors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["vectorId", "kind", "engine", "expectedOutcome"],
+        "properties": {
+          "vectorId": {
+            "$ref": "#/$defs/kebabId"
+          },
+          "kind": {
+            "enum": ["positive", "negative"]
+          },
+          "engine": {
+            "$ref": "#/$defs/engine"
+          },
+          "expectedOutcome": {
+            "enum": ["pass", "fail"]
+          }
+        },
+        "unevaluatedProperties": false
+      },
+      "uniqueItems": true
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "lifecycle": {
+          "const": "proposed"
+        },
+        "defaultSeverity": {
+          "const": "info"
+        },
+        "topInvariant": {
+          "const": false
+        },
+        "promotion": {
+          "$ref": "#/$defs/promotion"
+        }
+      },
+      "required": ["promotion"]
+    },
+    {
+      "properties": {
+        "lifecycle": {
+          "const": "warn"
+        },
+        "defaultSeverity": {
+          "const": "warning"
+        },
+        "promotion": {
+          "$ref": "#/$defs/promotion"
+        }
+      },
+      "required": ["promotion"]
+    },
+    {
+      "properties": {
+        "lifecycle": {
+          "const": "error"
+        },
+        "defaultSeverity": {
+          "const": "error"
+        }
+      }
+    },
+    {
+      "properties": {
+        "lifecycle": {
+          "const": "deprecated"
+        },
+        "deprecated": {
+          "$ref": "#/$defs/releaseMetadata"
+        }
+      },
+      "required": ["deprecated"]
+    },
+    {
+      "properties": {
+        "lifecycle": {
+          "const": "removed"
+        },
+        "defaultSeverity": {
+          "const": "info"
+        },
+        "topInvariant": {
+          "const": false
+        },
+        "deprecated": {
+          "$ref": "#/$defs/releaseMetadata"
+        },
+        "removed": {
+          "$ref": "#/$defs/releaseMetadata"
+        }
+      },
+      "required": ["deprecated", "removed"]
+    }
+  ],
+  "$defs": {
+    "boundedPattern": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "domain": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$",
+      "maxLength": 160
+    },
+    "engine": {
+      "enum": ["canon", "crucible", "conform"]
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$",
+        "maxLength": 160
+      },
+      "additionalProperties": true
+    },
+    "fileClass": {
+      "enum": [
+        "documentation",
+        "source",
+        "test",
+        "tool-config",
+        "repository-metadata",
+        "generated",
+        "vendored"
+      ]
+    },
+    "kebabId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "maxLength": 120
+    },
+    "nonEmptyText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "promotion": {
+      "type": "object",
+      "required": ["condition", "falsePositiveCeiling"],
+      "properties": {
+        "condition": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "falsePositiveCeiling": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "releaseMetadata": {
+      "type": "object",
+      "required": ["version", "date"],
+      "properties": {
+        "version": {
+          "$ref": "#/$defs/semver"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "ruleId": {
+      "type": "string",
+      "pattern": "^crux/[a-z][a-z0-9-]*/[a-z][a-z0-9-]*$",
+      "maxLength": 160
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "maxLength": 128
+    }
+  },
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/policy/1",
+  "description": "Ordered authoritative rules and shared policy data.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "policyId",
+    "policyVersion",
+    "rules",
+    "studioGlossary",
+    "fileClassRules",
+    "controlledTokens",
+    "suppressions",
+    "profiles"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "policyId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "maxLength": 120
+    },
+    "policyVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1"
+      },
+      "minItems": 1
+    },
+    "studioGlossary": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["term", "definition"],
+        "properties": {
+          "term": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "definition": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        },
+        "unevaluatedProperties": false
+      }
+    },
+    "fileClassRules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fileClass", "include", "exclude"],
+        "properties": {
+          "fileClass": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/fileClass"
+          },
+          "include": {
+            "type": "array",
+            "items": {
+              "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/boundedPattern"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "exclude": {
+            "type": "array",
+            "items": {
+              "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/boundedPattern"
+            },
+            "uniqueItems": true
+          }
+        },
+        "unevaluatedProperties": false
+      },
+      "minItems": 1
+    },
+    "controlledTokens": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "token",
+          "tokenization",
+          "declarations",
+          "warning",
+          "excludeGenerated",
+          "excludeVendored",
+          "abbreviations"
+        ],
+        "properties": {
+          "token": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "tokenization": {
+            "enum": ["exact", "kebab", "camel", "pascal", "snake"]
+          },
+          "declarations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "warning": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "excludeGenerated": {
+            "type": "boolean"
+          },
+          "excludeVendored": {
+            "type": "boolean"
+          },
+          "abbreviations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "uniqueItems": true
+          }
+        },
+        "unevaluatedProperties": false
+      }
+    },
+    "suppressions": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/suppression/1"
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/profile/1"
+      },
+      "minItems": 1
+    },
+    "extensions": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/extensions"
+    }
+  },
+  "unevaluatedProperties": false
+}

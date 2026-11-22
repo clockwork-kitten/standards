@@ -1,0 +1,27 @@
+{
+  "name": "removed ID reused",
+  "fixtureRevision": 1,
+  "previous": [
+    {
+      "ruleId": "crux/code/legacy-rule",
+      "owner": "crucible",
+      "fileClass": "source",
+      "aspect": "content",
+      "checkKind": "static",
+      "domains": ["source.typescript"],
+      "lifecycle": "removed"
+    }
+  ],
+  "current": [
+    {
+      "ruleId": "crux/code/legacy-rule",
+      "owner": "crucible",
+      "fileClass": "source",
+      "aspect": "content",
+      "checkKind": "static",
+      "domains": ["source.typescript"],
+      "lifecycle": "proposed"
+    }
+  ],
+  "expectedErrors": ["removed rule ID was reused: crux/code/legacy-rule"]
+}

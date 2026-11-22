@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/suppression/1",
+  "description": "One recognized inline suppression syntax and its sole parser owner.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "suppressionId",
+    "owner",
+    "parser",
+    "syntax",
+    "fileClasses",
+    "requiresLedgerEntry"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "suppressionId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "maxLength": 120
+    },
+    "owner": {
+      "enum": ["canon", "crucible", "conform"]
+    },
+    "parser": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "syntax": {
+      "type": "object",
+      "required": ["kind", "pattern", "maxLength"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "line-comment",
+            "block-comment",
+            "document-directive",
+            "metadata"
+          ]
+        },
+        "pattern": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "maxLength": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "fileClasses": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "documentation",
+          "source",
+          "test",
+          "tool-config",
+          "repository-metadata"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "requiresLedgerEntry": {
+      "const": true
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$"
+      },
+      "additionalProperties": true
+    }
+  },
+  "unevaluatedProperties": false
+}

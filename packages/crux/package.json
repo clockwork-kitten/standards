@@ -1,0 +1,32 @@
+{
+  "name": "@clockwork-kitten/crux",
+  "version": "0.0.0",
+  "description": "Inert policy schemas and generated TypeScript declarations for the Clockwork Kitten toolchain.",
+  "type": "module",
+  "exports": {
+    "./schemas/engine-manifest": "./schemas/engine-manifest.schema.json",
+    "./schemas/policy": "./schemas/policy.schema.json",
+    "./schemas/profile": "./schemas/profile.schema.json",
+    "./schemas/rule": "./schemas/rule.schema.json",
+    "./schemas/suppression": "./schemas/suppression.schema.json",
+    "./types": "./types/index.d.ts"
+  },
+  "files": [
+    "README.md",
+    "schemas",
+    "types"
+  ],
+  "scripts": {
+    "check:generated": "bun ./scripts/generate-types.ts --check",
+    "generate:types": "bun ./scripts/generate-types.ts",
+    "test": "bun test ./test && bun run check:generated",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.3",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "json-schema-to-typescript": "^15.0.4",
+    "typescript": "^5.7.3"
+  }
+}
