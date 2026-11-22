@@ -404,6 +404,12 @@ function validateFinding(finding: Finding, index: number): string[] {
   const errors: string[] = [];
   const matchedRecord = finding.matchedRecord;
   if (
+    (finding.kind === "integrity" || finding.kind === "protected-review") &&
+    finding.evidence.truncated
+  ) {
+    errors.push(`findings[${index}] priority finding evidence is truncated`);
+  }
+  if (
     requiresUnsuppressedOutcome(finding) &&
     NON_FAILING_DISPOSITIONS.has(finding.disposition)
   ) {

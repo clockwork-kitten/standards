@@ -108,6 +108,27 @@ function finding(
   };
 }
 
+function forbiddenFindingKind(
+  findingClass:
+    | "compatibility"
+    | "engine-failure"
+    | "incomplete"
+    | "integrity"
+    | "protected-review"
+    | "unsupported",
+): EngineResult["findings"][number]["kind"] {
+  switch (findingClass) {
+    case "compatibility":
+    case "integrity":
+    case "protected-review": {
+      return findingClass;
+    }
+    default: {
+      return "policy";
+    }
+  }
+}
+
 function forbiddenFindingState(
   findingClass:
     | "compatibility"
@@ -237,15 +258,10 @@ function mutateEngineResult(
       ),
       "baselined" | "disabled-by-override" | "excepted" | "not-enforced",
     ];
-    const findingKinds = new Set([
-      "compatibility",
-      "integrity",
-      "protected-review",
-    ]);
     result.findings = [
       finding({
         disposition,
-        kind: findingKinds.has(findingClass) ? findingClass : "policy",
+        kind: forbiddenFindingKind(findingClass),
         matchedRecord:
           disposition === "baselined"
             ? { kind: "baseline", recordId: "baseline-1" }
@@ -321,6 +337,37 @@ function mutateEngineResult(
     }
     case "review-classification": {
       result.findings = [finding({ kind: "protected-review" })];
+      result.repository.baseRevision = "b".repeat(40);
+      break;
+    }
+    case "truncated-integrity": {
+      result.findings = [
+        finding({
+          evidence: {
+            byteLength: 8,
+            identity: "stable evidence",
+            redactions: [],
+            summary: "Evidence",
+            truncated: true,
+          },
+          kind: "integrity",
+        }),
+      ];
+      break;
+    }
+    case "truncated-protected-review": {
+      result.findings = [
+        finding({
+          evidence: {
+            byteLength: 8,
+            identity: "stable evidence",
+            redactions: [],
+            summary: "Evidence",
+            truncated: true,
+          },
+          kind: "protected-review",
+        }),
+      ];
       result.repository.baseRevision = "b".repeat(40);
       break;
     }

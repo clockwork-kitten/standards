@@ -274,6 +274,16 @@
       "name": "protected review findings cannot be marked not enforced",
       "mutation": "forbidden-disposition:protected-review:not-enforced",
       "expectedError": "cannot use not-enforced disposition"
+    },
+    {
+      "name": "integrity finding evidence cannot be truncated",
+      "mutation": "truncated-integrity",
+      "expectedError": "priority finding evidence is truncated"
+    },
+    {
+      "name": "protected review finding evidence cannot be truncated",
+      "mutation": "truncated-protected-review",
+      "expectedError": "priority finding evidence is truncated"
     }
   ],
   "conformResultCases": [

@@ -126,8 +126,24 @@
               "lifecycle": "error"
             }
           ],
-          "disabled": [],
-          "notEnforced": []
+          "disabled": [
+            {
+              "ruleId": "crux/code/disabled",
+              "title": "Disabled code rule",
+              "summary": "Disabled by an approved override.",
+              "owner": "crucible",
+              "lifecycle": "warn"
+            }
+          ],
+          "notEnforced": [
+            {
+              "ruleId": "crux/repository/not-enforced",
+              "title": "Not enforced repository rule",
+              "summary": "Known but not enforced by this profile.",
+              "owner": "conform",
+              "lifecycle": "proposed"
+            }
+          ]
         },
         "glossary": [
           {
@@ -191,8 +207,24 @@
               "lifecycle": "error"
             }
           ],
-          "disabled": [],
-          "notEnforced": []
+          "disabled": [
+            {
+              "ruleId": "crux/code/disabled",
+              "title": "Disabled code rule",
+              "summary": "Disabled by an approved override.",
+              "owner": "crucible",
+              "lifecycle": "warn"
+            }
+          ],
+          "notEnforced": [
+            {
+              "ruleId": "crux/repository/not-enforced",
+              "title": "Not enforced repository rule",
+              "summary": "Known but not enforced by this profile.",
+              "owner": "conform",
+              "lifecycle": "proposed"
+            }
+          ]
         },
         "glossary": [
           {
@@ -254,9 +286,29 @@
           "value": "studio-next"
         },
         {
-          "name": "rules",
+          "name": "policy version",
+          "path": ["policy", "policyVersion"],
+          "value": "1.0.1"
+        },
+        {
+          "name": "effective policy hash",
+          "path": ["policy", "effectivePolicyHash"],
+          "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "name": "active rules",
           "path": ["rules", "active", 0, "summary"],
           "value": "Documentation follows the revised canonical format."
+        },
+        {
+          "name": "disabled rules",
+          "path": ["rules", "disabled", 0, "summary"],
+          "value": "Disabled by a revised approved override."
+        },
+        {
+          "name": "not-enforced rules",
+          "path": ["rules", "notEnforced", 0, "summary"],
+          "value": "Known but not enforced by the revised profile."
         },
         {
           "name": "glossary",
@@ -299,8 +351,8 @@
           "value": false
         }
       ],
-      "canonical": "{\"architectureReferences\":[{\"path\":\"docs/ARCHITECTURE.md\",\"title\":\"Architecture\"}],\"bundleId\":\"conform-1.0.0\",\"canonicalResultPath\":\".conform/results/conform.json\",\"commands\":[{\"command\":\"bun run check\",\"name\":\"check\"}],\"exceptions\":[{\"exceptionId\":\"legacy-doc\",\"rationale\":\"Migration is tracked separately.\",\"ruleId\":\"crux/docs/format\",\"scope\":[\"docs/legacy.md\"]}],\"extensions\":{\"studio.context\":{\"enabled\":true}},\"glossary\":[{\"definition\":\"Stable across supported environments.\",\"term\":\"canonical\"}],\"policy\":{\"effectivePolicyHash\":\"4444444444444444444444444444444444444444444444444444444444444444\",\"policyId\":\"studio\",\"policyVersion\":\"1.0.0\"},\"profiles\":[\"full\",\"static\"],\"rules\":{\"active\":[{\"lifecycle\":\"error\",\"owner\":\"canon\",\"ruleId\":\"crux/docs/format\",\"summary\":\"Documentation follows the canonical format.\",\"title\":\"Format documentation\"}],\"disabled\":[],\"notEnforced\":[]},\"schemaVersion\":\"1.0.0\",\"topInvariants\":[{\"lifecycle\":\"error\",\"owner\":\"canon\",\"ruleId\":\"crux/docs/format\",\"summary\":\"Documentation follows the canonical format.\",\"title\":\"Format documentation\"}]}",
-      "sha256": "4688b76017f71cc857534d82a3a2eac05d6d6b8d5472b30f29d1b802e8bdc96d"
+      "canonical": "{\"architectureReferences\":[{\"path\":\"docs/ARCHITECTURE.md\",\"title\":\"Architecture\"}],\"bundleId\":\"conform-1.0.0\",\"canonicalResultPath\":\".conform/results/conform.json\",\"commands\":[{\"command\":\"bun run check\",\"name\":\"check\"}],\"exceptions\":[{\"exceptionId\":\"legacy-doc\",\"rationale\":\"Migration is tracked separately.\",\"ruleId\":\"crux/docs/format\",\"scope\":[\"docs/legacy.md\"]}],\"extensions\":{\"studio.context\":{\"enabled\":true}},\"glossary\":[{\"definition\":\"Stable across supported environments.\",\"term\":\"canonical\"}],\"policy\":{\"effectivePolicyHash\":\"4444444444444444444444444444444444444444444444444444444444444444\",\"policyId\":\"studio\",\"policyVersion\":\"1.0.0\"},\"profiles\":[\"full\",\"static\"],\"rules\":{\"active\":[{\"lifecycle\":\"error\",\"owner\":\"canon\",\"ruleId\":\"crux/docs/format\",\"summary\":\"Documentation follows the canonical format.\",\"title\":\"Format documentation\"}],\"disabled\":[{\"lifecycle\":\"warn\",\"owner\":\"crucible\",\"ruleId\":\"crux/code/disabled\",\"summary\":\"Disabled by an approved override.\",\"title\":\"Disabled code rule\"}],\"notEnforced\":[{\"lifecycle\":\"proposed\",\"owner\":\"conform\",\"ruleId\":\"crux/repository/not-enforced\",\"summary\":\"Known but not enforced by this profile.\",\"title\":\"Not enforced repository rule\"}]},\"schemaVersion\":\"1.0.0\",\"topInvariants\":[{\"lifecycle\":\"error\",\"owner\":\"canon\",\"ruleId\":\"crux/docs/format\",\"summary\":\"Documentation follows the canonical format.\",\"title\":\"Format documentation\"}]}",
+      "sha256": "2254a4bf04e0c05812a7b3759ec55dd7a18f33c850447aac53aa705f3ba5356a"
     },
     {
       "name": "fingerprint excludes location prose host and time metadata",
