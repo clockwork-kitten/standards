@@ -40,6 +40,10 @@ unimplemented, incomplete, unlocked, unsupported, compatibility-failure, and
 engine-failure states cannot enter a baseline. Fingerprint-version changes
 carry explicit owner package, bundle, before/after count, and mapping-hash
 metadata; an absent migration is never an automatic rebaseline.
+Development-only reconciliation rejects duplicate occurrence identities,
+mixed or non-current fingerprint versions, disconnected migration histories,
+and any migration whose exact occurrence totals do not remain consistent
+through the current baseline.
 
 Exception expiry is data for an explicit as-of report, not ambient-clock
 verdict state. Suppression forms identify one engine owner and a parser with
@@ -82,3 +86,6 @@ identities. Development-only catalog validation reconciles manifest rule,
 vector, and capability claims against supplied policy records, including
 complete coverage for applicable owned rules. This relational validation is
 not exported from the inert package and does not add runtime behavior.
+Development-only artifact reconciliation likewise checks baseline, exception,
+and repository-override references against authoritative rule existence,
+lifecycle, and ownership.

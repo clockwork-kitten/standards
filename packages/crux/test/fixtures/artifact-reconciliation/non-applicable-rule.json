@@ -1,0 +1,25 @@
+{
+  "name": "proposed rule references across policy artifacts",
+  "fixtureRevision": 1,
+  "rules": [
+    {
+      "ruleId": "crux/docs/future-format",
+      "owner": "canon",
+      "lifecycle": "proposed"
+    }
+  ],
+  "baselineRuleId": "crux/docs/future-format",
+  "exceptionReference": {
+    "ruleId": "crux/docs/future-format",
+    "owner": "canon"
+  },
+  "overrideReference": {
+    "ruleId": "crux/docs/future-format",
+    "owner": "canon"
+  },
+  "expectedErrors": [
+    "baseline references non-applicable proposed rule: crux/docs/future-format",
+    "exception references non-applicable proposed rule: crux/docs/future-format",
+    "override references non-applicable proposed rule: crux/docs/future-format"
+  ]
+}

@@ -12,6 +12,10 @@ import type {
 } from "../types/index.js";
 
 import {
+  validateArtifactPolicyReferences,
+  validateBaselineIntegrity,
+} from "../scripts/artifact-validation.js";
+import {
   type LegacyIdentity,
   type MigrationDispositionEntry,
   validateMigrationDispositions,
@@ -33,6 +37,26 @@ const SCHEMA_FILES = [
 
 type AliasFixture = NamedFixture & {
   entry: Record<string, unknown>;
+};
+
+type ArtifactReconciliationFixture = NamedFixture & {
+  baselineRuleId: string;
+  exceptionReference: {
+    owner: "canon" | "conform" | "crucible";
+    ruleId: string;
+  };
+  expectedErrors: string[];
+  overrideReference: {
+    owner: "canon" | "conform" | "crucible";
+    ruleId: string;
+  };
+  rules: Parameters<typeof validateArtifactPolicyReferences>[0];
+};
+
+type BaselineIntegrityFixture = NamedFixture & {
+  baseline: Baseline;
+  currentFingerprintVersion: string;
+  expectedErrors: string[];
 };
 
 type BaselineStateFixture = NamedFixture & {
@@ -144,7 +168,7 @@ describe("baseline and fingerprint schemas", () => {
     ).toBe(true);
   });
 
-  test("reject unknown, removed, legacy, and every unbaselinable state", async () => {
+  test("rejects unknown properties and every unbaselinable state", async () => {
     const ajv = await createValidator();
     const validate = ajv.getSchema(
       "https://schemas.clockwork-kitten.dev/crux/baseline/1",
@@ -155,13 +179,6 @@ describe("baseline and fingerprint schemas", () => {
     const unknown = await readFixture<NamedFixture & { unknownField: boolean }>(
       "baseline/unknown-field.json",
     );
-    const removed = await readFixture<NamedFixture & { findingState: string }>(
-      "baseline/removed-rule.json",
-    );
-    const legacy = await readFixture<NamedFixture & { ruleId: string }>(
-      "baseline/legacy-rule.json",
-    );
-
     expect(forbidden.fixtureRevision, forbidden.name).toBe(1);
     expect(
       validate?.({
@@ -169,33 +186,6 @@ describe("baseline and fingerprint schemas", () => {
         unknownField: unknown.unknownField,
       }),
       unknown.name,
-    ).toBe(false);
-    expect(
-      validate?.({
-        ...baseline,
-        entries: [
-          {
-            ...baseline.entries[0],
-            findingState: removed.findingState,
-          },
-        ],
-      }),
-      removed.name,
-    ).toBe(false);
-    expect(
-      validate?.({
-        ...baseline,
-        entries: [
-          {
-            ...baseline.entries[0],
-            record: {
-              ...fingerprint,
-              ruleId: legacy.ruleId,
-            },
-          },
-        ],
-      }),
-      legacy.name,
     ).toBe(false);
     for (const state of forbidden.states) {
       expect(
@@ -210,6 +200,105 @@ describe("baseline and fingerprint schemas", () => {
         }),
         state,
       ).toBe(false);
+    }
+  });
+});
+
+describe("baseline integrity reconciliation", () => {
+  test("produces exact deterministic fixture verdicts", async () => {
+    const fixtureNames = [
+      "broken-chain.json",
+      "duplicate-identity.json",
+      "missing-chain.json",
+      "mixed-versions.json",
+      "unmigrated-version.json",
+      "valid-migrated.json",
+    ];
+
+    for (const fixtureName of fixtureNames) {
+      const fixture = await readFixture<BaselineIntegrityFixture>(
+        `baseline-integrity/${fixtureName}`,
+      );
+
+      expect(fixture.fixtureRevision, fixture.name).toBe(1);
+      expect(
+        validateBaselineIntegrity(
+          fixture.baseline,
+          fixture.currentFingerprintVersion,
+        ),
+        fixture.name,
+      ).toEqual(fixture.expectedErrors.toSorted());
+    }
+  });
+});
+
+describe("artifact-to-policy reconciliation", () => {
+  test("rejects genuine unknown, removed, non-applicable, and wrong-owner references", async () => {
+    const fixtureNames = [
+      "non-applicable-rule.json",
+      "removed-rule.json",
+      "unknown-rule.json",
+      "valid-references.json",
+      "wrong-owner.json",
+    ];
+
+    for (const fixtureName of fixtureNames) {
+      const fixture = await readFixture<ArtifactReconciliationFixture>(
+        `artifact-reconciliation/${fixtureName}`,
+      );
+
+      expect(fixture.fixtureRevision, fixture.name).toBe(1);
+      expect(
+        validateArtifactPolicyReferences(
+          fixture.rules,
+          {
+            ...baseline,
+            entries: [
+              {
+                findingState: "active",
+                record: {
+                  ...fingerprint,
+                  ruleId: fixture.baselineRuleId,
+                },
+              },
+            ],
+          },
+          {
+            entries: [
+              {
+                createdBy: "@maintainer",
+                createdOn: "2026-11-22",
+                exceptionId: "temporary-docs-exception",
+                owner: "@docs-team",
+                rationale: "A reviewed temporary exception.",
+                reference: "https://github.com/example/repo/issues/12",
+                ruleId: fixture.exceptionReference.ruleId,
+                ruleOwner: fixture.exceptionReference.owner,
+                scope: {
+                  kind: "repository",
+                },
+              },
+            ],
+            ledgerId: "repository-exceptions",
+            schemaVersion: "1.0.0",
+          },
+          {
+            profileId: "ci",
+            repositoryShape: "typescript-package",
+            schemaVersion: "1.0.0",
+            severityOverrides: [
+              {
+                owner: fixture.overrideReference.owner,
+                rationale: "A reviewed temporary override.",
+                reference: "https://github.com/example/repo/issues/12",
+                ruleId: fixture.overrideReference.ruleId,
+                severity: "warning",
+              },
+            ],
+          },
+        ),
+        fixture.name,
+      ).toEqual(fixture.expectedErrors.toSorted());
     }
   });
 });

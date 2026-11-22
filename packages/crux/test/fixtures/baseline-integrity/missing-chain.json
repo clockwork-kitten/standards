@@ -1,0 +1,44 @@
+{
+  "name": "migration chain missing its current-version edge",
+  "fixtureRevision": 1,
+  "currentFingerprintVersion": "1.0.0",
+  "baseline": {
+    "schemaVersion": "1.0.0",
+    "baselineId": "initial-adoption",
+    "bundleId": "t1-candidate",
+    "effectivePolicyHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "repositoryRevision": "dddddddddddddddddddddddddddddddddddddddd",
+    "fingerprintVersion": "1.0.0",
+    "entries": [
+      {
+        "findingState": "active",
+        "record": {
+          "schemaVersion": "1.0.0",
+          "fingerprintVersion": "1.0.0",
+          "algorithm": "sha256",
+          "ruleId": "crux/docs/markdown-format",
+          "path": "docs/README.md",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "count": 2,
+          "structuralSummary": "Two headings omit the required spacing."
+        }
+      }
+    ],
+    "migrations": [
+      {
+        "migrationId": "fingerprint-v09",
+        "owner": "canon",
+        "ownerPackageVersion": "0.9.0",
+        "bundleId": "t1-candidate",
+        "fromFingerprintVersion": "0.8.0",
+        "toFingerprintVersion": "0.9.0",
+        "beforeCount": 2,
+        "afterCount": 2,
+        "mappingHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      }
+    ]
+  },
+  "expectedErrors": [
+    "fingerprint migration chain stops before current version: 0.9.0"
+  ]
+}

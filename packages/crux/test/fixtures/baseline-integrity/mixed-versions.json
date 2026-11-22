@@ -1,0 +1,32 @@
+{
+  "name": "mixed baseline and entry fingerprint versions",
+  "fixtureRevision": 1,
+  "currentFingerprintVersion": "1.0.0",
+  "baseline": {
+    "schemaVersion": "1.0.0",
+    "baselineId": "initial-adoption",
+    "bundleId": "t1-candidate",
+    "effectivePolicyHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "repositoryRevision": "dddddddddddddddddddddddddddddddddddddddd",
+    "fingerprintVersion": "1.0.0",
+    "entries": [
+      {
+        "findingState": "active",
+        "record": {
+          "schemaVersion": "1.0.0",
+          "fingerprintVersion": "2.0.0",
+          "algorithm": "sha256",
+          "ruleId": "crux/docs/markdown-format",
+          "path": "docs/README.md",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "count": 2,
+          "structuralSummary": "Two headings omit the required spacing."
+        }
+      }
+    ],
+    "migrations": []
+  },
+  "expectedErrors": [
+    "entry fingerprint version does not match baseline for crux/docs/markdown-format:docs/README.md:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: 2.0.0 != 1.0.0"
+  ]
+}
