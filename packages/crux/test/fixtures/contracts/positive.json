@@ -68,14 +68,14 @@
           },
           "capabilities": ["typecheck"],
           "verdictProducing": true,
-          "manifestHash": null
+          "manifestHash": "6666666666666666666666666666666666666666666666666666666666666666"
         }
       ]
     },
     "schemaMajors": {
       "lock": 1,
       "policy": 1,
-      "result": 1
+      "result": 2
     },
     "environment": {
       "nodeMajors": [24, 26],
@@ -83,7 +83,14 @@
       "packageManagerLocks": ["bun.lock", "package-lock.json"],
       "verdictRuntime": "node"
     },
-    "capabilities": ["aggregate-results", "markdown-parser", "typecheck"],
+    "profiles": ["full", "static"],
+    "capabilities": [
+      "aggregate-results",
+      "markdown-parser",
+      "policy-contracts",
+      "typecheck",
+      "typescript-parser"
+    ],
     "resultMajorSupport": {
       "current": 2,
       "previous": {
@@ -155,12 +162,26 @@
         "verdictProducing": true,
         "manifestHash": "2222222222222222222222222222222222222222222222222222222222222222"
       },
-      "tools": []
+      "tools": [
+        {
+          "componentId": "typescript",
+          "role": "tool",
+          "package": {
+            "name": "typescript",
+            "version": "5.7.3",
+            "registryUrl": "https://registry.npmjs.org/typescript",
+            "integrity": "sha512-YQ=="
+          },
+          "capabilities": ["typecheck"],
+          "verdictProducing": true,
+          "manifestHash": "6666666666666666666666666666666666666666666666666666666666666666"
+        }
+      ]
     },
     "schemaMajors": {
       "lock": 1,
       "policy": 1,
-      "result": 1
+      "result": 2
     },
     "environment": {
       "nodeMajor": 24,
@@ -168,7 +189,13 @@
       "packageManagerLock": "package-lock.json",
       "verdictRuntime": "node"
     },
-    "capabilities": ["aggregate-results", "markdown-parser"],
+    "capabilities": [
+      "aggregate-results",
+      "markdown-parser",
+      "policy-contracts",
+      "typecheck",
+      "typescript-parser"
+    ],
     "effectivePolicyInputs": [
       {
         "inputId": ".conform/policy.jsonc",

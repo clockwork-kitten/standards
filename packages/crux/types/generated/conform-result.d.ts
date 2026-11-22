@@ -43,7 +43,7 @@ export interface ConformResult {
     package?: "@clockwork-kitten/conform";
   };
   repository: RepositoryRevision;
-  environment: Environment;
+  environment: ObservedEnvironment;
   command: "check" | "fix" | "report" | "policy-operation";
   profile: string;
   scope: Scope;
@@ -90,14 +90,16 @@ export interface RepositoryRevision {
   baseRevision?: string;
 }
 /**
+ * Observed execution environment. Unsupported values remain representable so canonical unsupported results can be emitted.
+ *
  * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxEngineResult1`'s JSON-Schema
- * via the `definition` "environment".
+ * via the `definition` "observedEnvironment".
  */
-export interface Environment {
-  nodeMajor: 24 | 26;
-  operatingSystem: "linux" | "darwin";
-  packageManagerLock: "package-lock.json" | "bun.lock";
-  verdictRuntime: "node";
+export interface ObservedEnvironment {
+  nodeMajor: number;
+  operatingSystem: string;
+  packageManagerLock: string;
+  verdictRuntime: string;
 }
 /**
  * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxEngineResult1`'s JSON-Schema
@@ -122,7 +124,7 @@ export interface HttpsSchemasClockworkKittenDevCruxEngineResult1 {
   runId: string;
   engine: EngineIdentity;
   repository: RepositoryRevision;
-  environment: Environment;
+  environment: ObservedEnvironment;
   command: "check" | "fix" | "report" | "policy-operation";
   profile: string;
   scope: Scope;

@@ -26,10 +26,16 @@ type NegativeFixture = {
   cases: {
     from: ContractName;
     name: string;
-    patch: {
-      path: (number | string)[];
-      value: unknown;
-    };
+    patch:
+      | {
+          operation: "remove";
+          path: (number | string)[];
+        }
+      | {
+          operation?: "replace";
+          path: (number | string)[];
+          value: unknown;
+        };
     schemaId: string;
   }[];
   fixtureRevision: number;
@@ -42,7 +48,7 @@ type PositiveFixture = Record<ContractName, Record<string, unknown>> & {
 function applyPatch(
   source: Record<string, unknown>,
   path: (number | string)[],
-  value: unknown,
+  patch: { operation: "remove" } | { operation?: "replace"; value: unknown },
 ): Record<string, unknown> {
   const result = structuredClone(source);
   let target: unknown = result;
@@ -63,7 +69,15 @@ function applyPatch(
   if (finalSegment === undefined) {
     throw new TypeError("Patch path cannot be empty");
   }
-  (target as Record<number | string, unknown>)[finalSegment] = value;
+  if (patch.operation === "remove") {
+    if (typeof finalSegment === "number" && Array.isArray(target)) {
+      target.splice(finalSegment, 1);
+    } else {
+      delete (target as Record<number | string, unknown>)[finalSegment];
+    }
+  } else {
+    (target as Record<number | string, unknown>)[finalSegment] = patch.value;
+  }
   return result;
 }
 
@@ -121,7 +135,7 @@ describe("lock, bundle, result, and context contracts", () => {
       const artifact = applyPatch(
         positive[fixtureCase.from],
         fixtureCase.patch.path,
-        fixtureCase.patch.value,
+        fixtureCase.patch,
       );
       expect(
         ajv.getSchema(fixtureCase.schemaId)?.(artifact),

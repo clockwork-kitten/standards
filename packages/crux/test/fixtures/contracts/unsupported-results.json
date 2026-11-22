@@ -1,0 +1,32 @@
+{
+  "fixtureRevision": 1,
+  "observations": [
+    {
+      "name": "Windows is representable as an unsupported observation",
+      "environment": {
+        "nodeMajor": 24,
+        "operatingSystem": "windows",
+        "packageManagerLock": "package-lock.json",
+        "verdictRuntime": "node"
+      }
+    },
+    {
+      "name": "unsupported Node majors are representable",
+      "environment": {
+        "nodeMajor": 22,
+        "operatingSystem": "linux",
+        "packageManagerLock": "package-lock.json",
+        "verdictRuntime": "node"
+      }
+    },
+    {
+      "name": "Bun verdict execution is representable as unsupported",
+      "environment": {
+        "nodeMajor": 24,
+        "operatingSystem": "linux",
+        "packageManagerLock": "bun.lock",
+        "verdictRuntime": "bun"
+      }
+    }
+  ]
+}

@@ -38,7 +38,7 @@
       "$ref": "#/$defs/repositoryRevision"
     },
     "environment": {
-      "$ref": "#/$defs/environment"
+      "$ref": "#/$defs/observedEnvironment"
     },
     "command": {
       "enum": ["check", "fix", "report", "policy-operation"]
@@ -157,7 +157,8 @@
       },
       "unevaluatedProperties": false
     },
-    "environment": {
+    "observedEnvironment": {
+      "description": "Observed execution environment. Unsupported values remain representable so canonical unsupported results can be emitted.",
       "type": "object",
       "required": [
         "nodeMajor",
@@ -167,16 +168,23 @@
       ],
       "properties": {
         "nodeMajor": {
-          "enum": [24, 26]
+          "type": "integer",
+          "minimum": 1
         },
         "operatingSystem": {
-          "enum": ["linux", "darwin"]
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "maxLength": 64
         },
         "packageManagerLock": {
-          "enum": ["package-lock.json", "bun.lock"]
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+          "maxLength": 128
         },
         "verdictRuntime": {
-          "const": "node"
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "maxLength": 64
         }
       },
       "unevaluatedProperties": false

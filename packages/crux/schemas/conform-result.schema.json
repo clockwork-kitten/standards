@@ -55,7 +55,7 @@
       "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/repositoryRevision"
     },
     "environment": {
-      "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/environment"
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/observedEnvironment"
     },
     "command": {
       "enum": ["check", "fix", "report", "policy-operation"]

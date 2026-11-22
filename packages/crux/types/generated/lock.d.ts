@@ -3,6 +3,16 @@
  * Do not edit directly; run `bun run --cwd packages/crux generate:types`.
  */
 
+export type ComponentRecord = {
+  [k: string]: unknown;
+} & {
+  componentId: string;
+  role: "policy" | "engine" | "orchestrator" | "tool";
+  package: PackageRecord;
+  capabilities: Capabilities;
+  verdictProducing: boolean;
+  manifestHash: string | null;
+};
 export type Capabilities = string[];
 
 /**
@@ -104,14 +114,6 @@ export interface Components {
   tools: (ComponentRecord & {
     role?: "tool";
   })[];
-}
-export interface ComponentRecord {
-  componentId: string;
-  role: "policy" | "engine" | "orchestrator" | "tool";
-  package: PackageRecord;
-  capabilities: Capabilities;
-  verdictProducing: boolean;
-  manifestHash: string | null;
 }
 export interface SchemaMajors {
   lock: number;

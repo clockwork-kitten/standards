@@ -29,7 +29,7 @@
       }
     },
     {
-      "name": "lock rejects installation layout",
+      "name": "lock rejects installation layout fields",
       "schemaId": "https://schemas.clockwork-kitten.dev/crux/lock/1",
       "from": "lock",
       "patch": {
@@ -38,12 +38,52 @@
       }
     },
     {
-      "name": "result rejects Bun as the verdict runtime",
-      "schemaId": "https://schemas.clockwork-kitten.dev/crux/engine-result/1",
-      "from": "engineResult",
+      "name": "lock rejects installation layout in effective policy input IDs",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/lock/1",
+      "from": "lock",
       "patch": {
-        "path": ["environment", "verdictRuntime"],
-        "value": "bun"
+        "path": ["effectivePolicyInputs", 0, "inputId"],
+        "value": "node_modules/layout"
+      }
+    },
+    {
+      "name": "bundle rejects missing manifest hashes for verdict tools",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/bundle/1",
+      "from": "bundle",
+      "patch": {
+        "operation": "remove",
+        "path": ["components", "tools", 0, "manifestHash"]
+      }
+    },
+    {
+      "name": "bundle rejects null manifest hashes for verdict tools",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/bundle/1",
+      "from": "bundle",
+      "patch": {
+        "path": ["components", "tools", 0, "manifestHash"],
+        "value": null
+      }
+    },
+    {
+      "name": "bundle rejects a result support window shorter than one minor",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/bundle/1",
+      "from": "bundle",
+      "patch": {
+        "path": [
+          "resultMajorSupport",
+          "previous",
+          "minimumConformMinorReleases"
+        ],
+        "value": 0
+      }
+    },
+    {
+      "name": "bundle rejects a result support window shorter than 90 days",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/bundle/1",
+      "from": "bundle",
+      "patch": {
+        "path": ["resultMajorSupport", "previous", "minimumDays"],
+        "value": 89
       }
     },
     {

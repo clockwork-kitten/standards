@@ -10,6 +10,20 @@
 export type BundleId = string;
 /**
  * This interface was referenced by `CompatibilityBundle`'s JSON-Schema
+ * via the `definition` "componentRecord".
+ */
+export type ComponentRecord = {
+  [k: string]: unknown;
+} & {
+  componentId: string;
+  role: "policy" | "engine" | "orchestrator" | "tool";
+  package: PackageRecord;
+  capabilities: Capabilities;
+  verdictProducing: boolean;
+  manifestHash: Sha256 | null;
+};
+/**
+ * This interface was referenced by `CompatibilityBundle`'s JSON-Schema
  * via the `definition` "registryUrl".
  */
 export type RegistryUrl = string;
@@ -30,6 +44,13 @@ export type Capabilities = string[];
  * via the `definition` "sha256".
  */
 export type Sha256 = string;
+/**
+ * @minItems 1
+ *
+ * This interface was referenced by `CompatibilityBundle`'s JSON-Schema
+ * via the `definition` "profiles".
+ */
+export type Profiles = [string, ...string[]];
 
 /**
  * Offline-readable exact compatibility metadata shipped by one Conform release.
@@ -40,6 +61,7 @@ export interface CompatibilityBundle {
   components: Components;
   schemaMajors: SchemaMajors;
   environment: EnvironmentSupport;
+  profiles: Profiles;
   capabilities: Capabilities;
   resultMajorSupport: ResultMajorSupport;
   extensions?: Extensions;
@@ -88,18 +110,6 @@ export interface Components {
   tools: (ComponentRecord & {
     role?: "tool";
   })[];
-}
-/**
- * This interface was referenced by `CompatibilityBundle`'s JSON-Schema
- * via the `definition` "componentRecord".
- */
-export interface ComponentRecord {
-  componentId: string;
-  role: "policy" | "engine" | "orchestrator" | "tool";
-  package: PackageRecord;
-  capabilities: Capabilities;
-  verdictProducing: boolean;
-  manifestHash: Sha256 | null;
 }
 /**
  * This interface was referenced by `CompatibilityBundle`'s JSON-Schema

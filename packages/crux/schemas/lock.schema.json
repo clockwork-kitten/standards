@@ -80,7 +80,7 @@
         "properties": {
           "inputId": {
             "type": "string",
-            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))[A-Za-z0-9._/-]+$",
+            "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*(?:^|/)(?:node_modules|\\.pnpm|\\.yarn|\\.bun)(?:/|$))[A-Za-z0-9._/-]+$",
             "maxLength": 512
           },
           "kind": {

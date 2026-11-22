@@ -9,6 +9,7 @@
     "components",
     "schemaMajors",
     "environment",
+    "profiles",
     "capabilities",
     "resultMajorSupport"
   ],
@@ -27,6 +28,9 @@
     },
     "environment": {
       "$ref": "#/$defs/environmentSupport"
+    },
+    "profiles": {
+      "$ref": "#/$defs/profiles"
     },
     "capabilities": {
       "$ref": "#/$defs/capabilities"
@@ -116,6 +120,25 @@
           ]
         }
       },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "verdictProducing": {
+                "const": true
+              }
+            },
+            "required": ["verdictProducing"]
+          },
+          "then": {
+            "properties": {
+              "manifestHash": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        }
+      ],
       "unevaluatedProperties": false
     },
     "components": {
@@ -335,6 +358,14 @@
       "items": {
         "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
       },
+      "uniqueItems": true
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+      },
+      "minItems": 1,
       "uniqueItems": true
     },
     "resultMajorSupport": {

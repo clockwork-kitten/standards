@@ -1,0 +1,181 @@
+{
+  "fixtureRevision": 1,
+  "bundleCases": [
+    {
+      "name": "result support current must match schema major",
+      "mutation": "result-current-mismatch",
+      "expectedError": "resultMajorSupport.current"
+    },
+    {
+      "name": "result support previous must be immediately previous",
+      "mutation": "result-previous-mismatch",
+      "expectedError": "resultMajorSupport.previous.major"
+    },
+    {
+      "name": "first bundle requires Node 24 and 26",
+      "mutation": "missing-node-major",
+      "expectedError": "first-bundle Node majors"
+    },
+    {
+      "name": "first bundle requires Linux and macOS",
+      "mutation": "missing-operating-system",
+      "expectedError": "first-bundle operating systems"
+    },
+    {
+      "name": "first bundle requires npm and Bun lock installation",
+      "mutation": "missing-package-manager-lock",
+      "expectedError": "first-bundle package manager locks"
+    },
+    {
+      "name": "first bundle requires static and full profiles",
+      "mutation": "missing-profile",
+      "expectedError": "first-bundle profiles"
+    },
+    {
+      "name": "bundle capabilities preserve all component capabilities",
+      "mutation": "missing-capability",
+      "expectedError": "bundle capabilities"
+    }
+  ],
+  "lockCases": [
+    {
+      "name": "lock rejects mismatched component versions",
+      "mutation": "component-version",
+      "expectedError": "components"
+    },
+    {
+      "name": "lock rejects mismatched component registry sources",
+      "mutation": "component-registry",
+      "expectedError": "components"
+    },
+    {
+      "name": "lock rejects mismatched component SRIs",
+      "mutation": "component-integrity",
+      "expectedError": "components"
+    },
+    {
+      "name": "lock rejects mismatched component manifest hashes",
+      "mutation": "component-manifest",
+      "expectedError": "components"
+    },
+    {
+      "name": "lock rejects mismatched schema majors",
+      "mutation": "schema-major",
+      "expectedError": "schemaMajors"
+    },
+    {
+      "name": "lock rejects missing capabilities",
+      "mutation": "capability",
+      "expectedError": "capabilities"
+    },
+    {
+      "name": "lock rejects unsupported environment selections",
+      "mutation": "environment",
+      "expectedError": "supported bundle tuple"
+    },
+    {
+      "name": "lock rejects missing tool entries",
+      "mutation": "missing-tool",
+      "expectedError": "components"
+    },
+    {
+      "name": "lock rejects extra tool entries",
+      "mutation": "extra-tool",
+      "expectedError": "components"
+    },
+    {
+      "name": "lock rejects mismatched policy packages",
+      "mutation": "policy-package",
+      "expectedError": "policyPackage"
+    },
+    {
+      "name": "lock reconciliation rejects install-layout input IDs",
+      "mutation": "installation-input",
+      "expectedError": "forbidden path"
+    },
+    {
+      "name": "lock reconciliation rejects absolute input IDs",
+      "mutation": "absolute-input",
+      "expectedError": "forbidden path"
+    },
+    {
+      "name": "lock reconciliation rejects host-specific fields",
+      "mutation": "hostname-field",
+      "expectedError": "environment-specific field"
+    }
+  ],
+  "engineResultCases": [
+    {
+      "name": "counts must be derived from findings",
+      "mutation": "counts",
+      "expectedError": "counts"
+    },
+    {
+      "name": "non-complete results must classify fail",
+      "mutation": "classification",
+      "expectedError": "classification"
+    },
+    {
+      "name": "failing finding states must classify fail",
+      "mutation": "failure-classification",
+      "expectedError": "classification"
+    },
+    {
+      "name": "review signals must classify pass-review-required",
+      "mutation": "review-classification",
+      "expectedError": "classification"
+    },
+    {
+      "name": "baselined findings require baseline references",
+      "mutation": "missing-baseline-reference",
+      "expectedError": "needs baseline"
+    },
+    {
+      "name": "excepted findings require exception references",
+      "mutation": "missing-exception-reference",
+      "expectedError": "needs exception"
+    },
+    {
+      "name": "matched records are forbidden on active findings",
+      "mutation": "unexpected-matched-record",
+      "expectedError": "unmatched record"
+    },
+    {
+      "name": "disposition and finding state must agree",
+      "mutation": "disposition-state",
+      "expectedError": "disposition and state"
+    },
+    {
+      "name": "change-relative results require base metadata",
+      "mutation": "missing-base",
+      "expectedError": "baseRevision"
+    },
+    {
+      "name": "findings require stable canonical ordering",
+      "mutation": "finding-order",
+      "expectedError": "stable order"
+    }
+  ],
+  "conformResultCases": [
+    {
+      "name": "aggregate findings preserve validated engine partials",
+      "mutation": "missing-engine-finding",
+      "expectedError": "aggregate findings"
+    },
+    {
+      "name": "aggregate metadata must match engine partials",
+      "mutation": "engine-metadata",
+      "expectedError": "runId"
+    },
+    {
+      "name": "aggregate completion preserves engine failure state",
+      "mutation": "engine-completion",
+      "expectedError": "preserve engine failure state"
+    },
+    {
+      "name": "engine partials require stable ordering",
+      "mutation": "engine-order",
+      "expectedError": "engineResults stable order"
+    }
+  ]
+}

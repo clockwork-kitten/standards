@@ -107,6 +107,7 @@ const bundle: CompatibilityBundle = {
     packageManagerLocks: ["bun.lock", "package-lock.json"],
     verdictRuntime: "node",
   },
+  profiles: ["full", "static"],
   resultMajorSupport: {
     current: 2,
     previous: {
@@ -118,7 +119,7 @@ const bundle: CompatibilityBundle = {
   schemaMajors: {
     lock: 1,
     policy: 1,
-    result: 1,
+    result: 2,
   },
   schemaVersion: "1.0.0",
 };
@@ -191,21 +192,21 @@ const context: DerivedContext = {
   topInvariants: [],
 };
 
-const invalidRuntime: EngineResult = {
+const unsupportedRuntime: EngineResult = {
   ...engineResult,
+  classification: "fail",
+  completionState: "unsupported",
   environment: {
     ...engineResult.environment,
-    // @ts-expect-error Bun is an adopter package manager, not a verdict runtime
     verdictRuntime: "bun",
   },
 };
-
-void invalidRuntime;
 
 test("generated declarations agree with valid contract records", () => {
   expect(bundle.environment.nodeMajors).toEqual([24, 26]);
   expect(lock.policyPackage.name).toBe("@clockwork-kitten/crux");
   expect(engineResult.classification).toBe("pass");
+  expect(unsupportedRuntime.completionState).toBe("unsupported");
   expect(conformResult.engineResults).toHaveLength(1);
   expect(context.canonicalResultPath).toBe(".conform/result.json");
 });
