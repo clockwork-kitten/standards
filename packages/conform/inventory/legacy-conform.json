@@ -710,7 +710,7 @@
       "diagnosticOnly": true,
       "migration": {
         "kind": "destination",
-        "target": "Conform→Canon docs adapter API",
+        "target": "Conform\u2192Canon docs adapter API",
         "canonicalId": null,
         "rationale": "Docs mode typing describes pass-through behavior to Canon."
       }
@@ -724,7 +724,7 @@
       "diagnosticOnly": true,
       "migration": {
         "kind": "destination",
-        "target": "Conform→Canon docs adapter API",
+        "target": "Conform\u2192Canon docs adapter API",
         "canonicalId": null,
         "rationale": "Docs runner options stay in the orchestrator layer."
       }
@@ -738,7 +738,7 @@
       "diagnosticOnly": true,
       "migration": {
         "kind": "destination",
-        "target": "Conform→Canon docs adapter API",
+        "target": "Conform\u2192Canon docs adapter API",
         "canonicalId": null,
         "rationale": "Docs execution remains Canon-owned behavior invoked by Conform."
       }
@@ -1244,7 +1244,7 @@
       "diagnosticOnly": true,
       "migration": {
         "kind": "destination",
-        "target": "Conform→Canon docs orchestration",
+        "target": "Conform\u2192Canon docs orchestration",
         "canonicalId": null,
         "rationale": "Docs conformance is Canon-owned and invoked by Conform."
       }
@@ -1454,29 +1454,27 @@
       "path": "packages/conform/configs/eslint.base.js",
       "contentSummary": {
         "explicitRules": {
-          "constructor-super": "off",
-          "getter-return": "off",
-          "no-class-assign": "off",
-          "no-const-assign": "off",
-          "no-dupe-args": "off",
-          "no-dupe-class-members": "off",
-          "no-dupe-keys": "off",
-          "no-func-assign": "off",
-          "no-import-assign": "off",
-          "no-new-native-nonconstructor": "off",
-          "no-new-symbol": "off",
-          "no-obj-calls": "off",
-          "no-redeclare": "off",
-          "no-setter-return": "off",
-          "no-this-before-super": "off",
-          "no-undef": "off",
-          "no-unreachable": "off",
-          "no-unsafe-negation": "off",
+          "eqeqeq": ["error", "always"],
           "no-var": "error",
-          "no-with": "off",
+          "prefer-arrow-callback": "error",
           "prefer-const": "error",
-          "prefer-rest-params": "error",
-          "prefer-spread": "error"
+          "security/detect-non-literal-fs-filename": "off",
+          "security/detect-object-injection": "off",
+          "unicorn/filename-case": [
+            "error",
+            {
+              "case": "kebabCase"
+            }
+          ],
+          "unicorn/import-style": "off",
+          "unicorn/name-replacements": "off",
+          "unicorn/no-exports-in-scripts": "off",
+          "unicorn/no-nested-ternary": "off",
+          "unicorn/no-top-level-assignment-in-function": "off",
+          "unicorn/prefer-switch": "off",
+          "unicorn/prevent-abbreviations": "off",
+          "unicorn/require-array-sort-compare": "off",
+          "unicorn/single-line-block-comment-style": "off"
         },
         "ignores": [
           "**/.canon/**",
@@ -1485,7 +1483,13 @@
           "**/coverage/**",
           "**/*.d.ts"
         ],
-        "presets": ["tseslint.configs.recommended"]
+        "presets": [
+          "...tseslint.configs.recommended",
+          "unicorn.configs.recommended",
+          "security.configs.recommended",
+          "depend.configs[\"flat/recommended\"]",
+          "perfectionist.configs[\"recommended-natural\"]"
+        ]
       },
       "source": ["packages/conform/configs/eslint.base.js"],
       "diagnosticOnly": true,
@@ -1503,15 +1507,15 @@
         "globals": "17.12.0",
         "typescript-eslint": "8.69.0"
       },
-      "effectiveHash": "5b1f1cce18ff9d787799fe753f0b95035a361304f78f8b894983f70fb34dfb13",
+      "effectiveHash": "c343dc755c89ee78e56ff0ff65ba952a053a04e7337a4322ce2e41c95a2b8e5e",
       "itemDispositions": [
         {
-          "key": "preset:typescript-eslint.configs.recommended",
+          "key": "preset:...tseslint.configs.recommended",
           "migration": {
             "kind": "destination",
             "target": "Crucible ESLint baseline presets",
             "canonicalId": null,
-            "rationale": "Recommended TypeScript ESLint preset remains Crucible-owned lint baseline behavior."
+            "rationale": "ESLint preset forwarding remains Crucible-owned lint baseline behavior."
           }
         },
         {
@@ -1520,7 +1524,7 @@
             "kind": "destination",
             "target": "Crucible ESLint baseline presets",
             "canonicalId": null,
-            "rationale": "Unicorn recommended preset remains Crucible-owned lint baseline behavior."
+            "rationale": "ESLint preset forwarding remains Crucible-owned lint baseline behavior."
           }
         },
         {
@@ -1529,7 +1533,7 @@
             "kind": "destination",
             "target": "Crucible ESLint baseline presets",
             "canonicalId": null,
-            "rationale": "Security preset remains Crucible-owned lint baseline behavior."
+            "rationale": "ESLint preset forwarding remains Crucible-owned lint baseline behavior."
           }
         },
         {
@@ -1538,7 +1542,7 @@
             "kind": "destination",
             "target": "Crucible ESLint baseline presets",
             "canonicalId": null,
-            "rationale": "Dependency hygiene preset remains Crucible-owned lint baseline behavior."
+            "rationale": "ESLint preset forwarding remains Crucible-owned lint baseline behavior."
           }
         },
         {
@@ -1547,7 +1551,7 @@
             "kind": "destination",
             "target": "Crucible ESLint baseline presets",
             "canonicalId": null,
-            "rationale": "Deterministic ordering preset remains Crucible-owned lint baseline behavior."
+            "rationale": "ESLint preset forwarding remains Crucible-owned lint baseline behavior."
           }
         },
         {
@@ -1592,7 +1596,7 @@
             "kind": "destination",
             "target": "Crucible ESLint local overrides",
             "canonicalId": null,
-            "rationale": "Security false-positive override remains Crucible-owned lint behavior."
+            "rationale": "Local ESLint override remains Crucible-owned lint behavior."
           }
         },
         {
@@ -1601,7 +1605,7 @@
             "kind": "destination",
             "target": "Crucible ESLint local overrides",
             "canonicalId": null,
-            "rationale": "Security false-positive override remains Crucible-owned lint behavior."
+            "rationale": "Local ESLint override remains Crucible-owned lint behavior."
           }
         },
         {
@@ -1610,7 +1614,88 @@
             "kind": "destination",
             "target": "Crucible ESLint local overrides",
             "canonicalId": null,
-            "rationale": "Filename convention remains Crucible-owned lint behavior."
+            "rationale": "Local ESLint override remains Crucible-owned lint behavior."
+          }
+        },
+        {
+          "key": "rule:unicorn/import-style",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint local overrides",
+            "canonicalId": null,
+            "rationale": "Local ESLint override remains Crucible-owned lint behavior."
+          }
+        },
+        {
+          "key": "rule:unicorn/name-replacements",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint local overrides",
+            "canonicalId": null,
+            "rationale": "Local ESLint override remains Crucible-owned lint behavior."
+          }
+        },
+        {
+          "key": "rule:unicorn/no-exports-in-scripts",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint local overrides",
+            "canonicalId": null,
+            "rationale": "Local ESLint override remains Crucible-owned lint behavior."
+          }
+        },
+        {
+          "key": "rule:unicorn/no-nested-ternary",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint local overrides",
+            "canonicalId": null,
+            "rationale": "Local ESLint override remains Crucible-owned lint behavior."
+          }
+        },
+        {
+          "key": "rule:unicorn/no-top-level-assignment-in-function",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint local overrides",
+            "canonicalId": null,
+            "rationale": "Local ESLint override remains Crucible-owned lint behavior."
+          }
+        },
+        {
+          "key": "rule:unicorn/prefer-switch",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint local overrides",
+            "canonicalId": null,
+            "rationale": "Local ESLint override remains Crucible-owned lint behavior."
+          }
+        },
+        {
+          "key": "rule:unicorn/prevent-abbreviations",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint local overrides",
+            "canonicalId": null,
+            "rationale": "Local ESLint override remains Crucible-owned lint behavior."
+          }
+        },
+        {
+          "key": "rule:unicorn/require-array-sort-compare",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint local overrides",
+            "canonicalId": null,
+            "rationale": "Local ESLint override remains Crucible-owned lint behavior."
+          }
+        },
+        {
+          "key": "rule:unicorn/single-line-block-comment-style",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint local overrides",
+            "canonicalId": null,
+            "rationale": "Local ESLint override remains Crucible-owned lint behavior."
           }
         }
       ]
@@ -1993,9 +2078,10 @@
       "id": "consumer.ops",
       "name": "clockwork-kitten/ops",
       "mode": "reusable-workflow-consumer",
-      "followUpIssue": "https://github.com/clockwork-kitten/standards/issues/27",
+      "followUpIssue": "https://github.com/clockwork-kitten/ops/issues/12",
       "evidence": [
-        "uses standards/.github/workflows/markdown-conformance.yml@v0.6 in .github/workflows/docs.yml"
+        "uses standards/.github/workflows/markdown-conformance.yml@v0.6 in .github/workflows/docs.yml",
+        "repo-local cutover issue: https://github.com/clockwork-kitten/ops/issues/12"
       ],
       "source": [
         "https://github.com/clockwork-kitten/ops/blob/main/.github/workflows/docs.yml"
@@ -2012,9 +2098,10 @@
       "id": "consumer.incubator",
       "name": "clockwork-kitten/incubator",
       "mode": "legacy-reusable-workflow-consumer",
-      "followUpIssue": "https://github.com/clockwork-kitten/standards/issues/27",
+      "followUpIssue": "https://github.com/clockwork-kitten/incubator/issues/2",
       "evidence": [
-        "uses standards/.github/workflows/markdown-conformance.yml@v0.4.0 in .github/workflows/conformance.yml"
+        "uses standards/.github/workflows/markdown-conformance.yml@v0.4.0 in .github/workflows/conformance.yml",
+        "repo-local cutover issue: https://github.com/clockwork-kitten/incubator/issues/2"
       ],
       "source": [
         "https://github.com/clockwork-kitten/incubator/blob/main/.github/workflows/conformance.yml"

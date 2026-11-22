@@ -154,7 +154,17 @@
         "notes": "Required authority-known home-adoption PR evidence; closed historical context only."
       }
     ],
-    "notes": "Search coverage is limited to indexed default branches and searchable issue/PR metadata."
+    "notes": "Search coverage is limited to indexed default branches and searchable issue/PR metadata.",
+    "consumerCutoverIssues": [
+      {
+        "repository": "clockwork-kitten/ops",
+        "url": "https://github.com/clockwork-kitten/ops/issues/12"
+      },
+      {
+        "repository": "clockwork-kitten/incubator",
+        "url": "https://github.com/clockwork-kitten/incubator/issues/2"
+      }
+    ]
   },
   "versionEvidence": {
     "npmCheckCommand": "npm view @clockwork-kitten/conform version",

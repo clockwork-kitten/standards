@@ -3,10 +3,12 @@ import Ajv2020 from "ajv/dist/2020.js";
 import { createHash } from "node:crypto";
 import {
   existsSync,
+  mkdirSync,
   mkdtempSync,
   readdirSync,
   readFileSync,
   rmSync,
+  writeFileSync,
 } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
@@ -15,7 +17,7 @@ import { pathToFileURL } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import { parseCheckArgs, parseFixArgs } from "../cli/main.ts";
-import { runCodeTrack, toolArgs } from "../code/run.ts";
+import { resolveBin, runCodeTrack, toolArgs } from "../code/run.ts";
 import {
   CONFIG_FILENAMES,
   resolveCodeConfig,
@@ -37,6 +39,9 @@ type ArtifactRecord = InventoryItem & {
   path: string;
 };
 type Completeness = {
+  consumerAndSearchEvidence?: {
+    consumerCutoverIssues?: Array<{ repository: string; url: string }>;
+  };
   counts: Record<string, number>;
   exportEvidence: {
     packageExports: string[];
@@ -425,7 +430,7 @@ describe("legacy conform inventory", () => {
 
   it("tracks all adapters from injected runner behavior and forwarding", async () => {
     const allEnabled = {
-      bedrock: false as const,
+      bedrock: ["src"],
       eslint: true,
       knip: true,
       prettier: true,
@@ -435,86 +440,136 @@ describe("legacy conform inventory", () => {
     const adaptersByTool = new Map(
       inventory().toolAdapters.map((entry) => [entry.tool, entry]),
     );
-
-    const checkLogs: string[] = [];
-    const checkInvocations: Array<{
-      args: string[];
-      command: string;
-      cwd: string;
-    }> = [];
-    const checkResults = await runCodeTrack({
-      config: allEnabled,
-      cwd: "/repo",
-      log: (message) => {
-        checkLogs.push(message);
-      },
-      mode: "check",
-      run: (command, args, cwd) => {
-        checkInvocations.push({ args, command, cwd });
-        return Promise.resolve(0);
-      },
-    });
-    expect(checkResults.map((entry) => entry.tool)).toEqual([
-      "eslint",
-      "prettier",
-      "knip",
-      "typecheck",
-    ]);
-    expect(
-      checkInvocations.every((entry) => entry.command === process.execPath),
-    ).toBe(true);
-    expect(checkLogs).toEqual([
-      "conform check · code · eslint",
-      "conform check · code · prettier",
-      "conform check · code · knip",
-      "conform check · code · typecheck",
-    ]);
-
-    const checkTools = ["eslint", "prettier", "knip", "typecheck"] as const;
-    for (const [index, tool] of checkTools.entries()) {
-      const adapter = adaptersByTool.get(tool);
-      expect(adapter?.args.check).toEqual(toolArgs(tool, allEnabled, "check"));
-      expect(checkInvocations[index]?.args.slice(1)).toEqual(
-        adapter?.args.check,
+    const inventoryToolSet = new Set(
+      inventory().toolAdapters.map((entry) => entry.tool),
+    );
+    expect(inventoryToolSet).toEqual(
+      new Set(["bedrock", "canon", "eslint", "knip", "prettier", "typecheck"]),
+    );
+    const fakeBedrockDir = join(PACKAGE_ROOT, "node_modules/bedrock");
+    const isCreatedFakeBedrock = !hasPackage("bedrock");
+    if (isCreatedFakeBedrock) {
+      mkdirSync(join(fakeBedrockDir, "bin"), { recursive: true });
+      writeFileSync(
+        join(fakeBedrockDir, "package.json"),
+        JSON.stringify(
+          {
+            bin: {
+              bedrock: "bin/bedrock.js",
+            },
+            name: "bedrock",
+            version: "0.0.0-test",
+          },
+          undefined,
+          2,
+        ),
       );
-      expect(checkInvocations[index]?.args[0]).toContain(
-        `${adapter?.bin.package.split("/").at(-1)}/`,
-      );
+      writeFileSync(join(fakeBedrockDir, "bin/bedrock.js"), "// test stub\n");
     }
-    const bedrockAdapter = adaptersByTool.get("bedrock");
-    expect(bedrockAdapter?.args.check).toEqual(
-      toolArgs("bedrock", { ...allEnabled, bedrock: ["src"] }, "check"),
-    );
-    expect(bedrockAdapter?.args.fix).toEqual(
-      toolArgs("bedrock", { ...allEnabled, bedrock: ["src"] }, "fix"),
-    );
 
-    const fixLogs: string[] = [];
-    const fixInvocations: Array<{
-      args: string[];
-      command: string;
-      cwd: string;
-    }> = [];
-    await runCodeTrack({
-      config: allEnabled,
-      cwd: "/repo",
-      log: (message) => {
-        fixLogs.push(message);
-      },
-      mode: "fix",
-      run: (command, args, cwd) => {
-        fixInvocations.push({ args, command, cwd });
-        return Promise.resolve(0);
-      },
-    });
-    expect(fixLogs).toEqual([
-      "conform fix · code · eslint",
-      "conform fix · code · prettier",
-    ]);
-    expect(fixInvocations.map((entry) => entry.args.slice(1))).toEqual([
-      adaptersByTool.get("eslint")?.args.fix,
-      adaptersByTool.get("prettier")?.args.fix,
-    ]);
+    try {
+      const checkLogs: string[] = [];
+      const checkInvocations: Array<{
+        args: string[];
+        command: string;
+        cwd: string;
+      }> = [];
+      const checkResults = await runCodeTrack({
+        config: allEnabled,
+        cwd: "/repo",
+        log: (message) => {
+          checkLogs.push(message);
+        },
+        mode: "check",
+        run: (command, args, cwd) => {
+          checkInvocations.push({ args, command, cwd });
+          return Promise.resolve(0);
+        },
+      });
+      expect(checkResults.map((entry) => entry.tool)).toEqual([
+        "bedrock",
+        "eslint",
+        "prettier",
+        "knip",
+        "typecheck",
+      ]);
+      expect(
+        checkInvocations.every((entry) => entry.command === process.execPath),
+      ).toBe(true);
+      expect(checkLogs).toEqual([
+        "conform check · code · bedrock",
+        "conform check · code · eslint",
+        "conform check · code · prettier",
+        "conform check · code · knip",
+        "conform check · code · typecheck",
+      ]);
+
+      const checkTools = [
+        "bedrock",
+        "eslint",
+        "prettier",
+        "knip",
+        "typecheck",
+      ] as const;
+      for (const [index, tool] of checkTools.entries()) {
+        const adapter = adaptersByTool.get(tool);
+        expect(adapter).toBeDefined();
+        expect(adapter?.args.check).toEqual(
+          toolArgs(tool, allEnabled, "check"),
+        );
+        expect(checkInvocations[index]?.args.slice(1)).toEqual(
+          adapter?.args.check,
+        );
+        expect(checkInvocations[index]?.args[0]).toBe(
+          resolveBin(adapter?.bin.package ?? "", adapter?.bin.name ?? ""),
+        );
+      }
+      const bedrockAdapter = adaptersByTool.get("bedrock");
+      expect(bedrockAdapter?.args.check).toEqual(
+        toolArgs("bedrock", allEnabled, "check"),
+      );
+      expect(bedrockAdapter?.args.fix).toEqual(
+        toolArgs("bedrock", allEnabled, "fix"),
+      );
+
+      const fixLogs: string[] = [];
+      const fixInvocations: Array<{
+        args: string[];
+        command: string;
+        cwd: string;
+      }> = [];
+      await runCodeTrack({
+        config: allEnabled,
+        cwd: "/repo",
+        log: (message) => {
+          fixLogs.push(message);
+        },
+        mode: "fix",
+        run: (command, args, cwd) => {
+          fixInvocations.push({ args, command, cwd });
+          return Promise.resolve(0);
+        },
+      });
+      expect(fixLogs).toEqual([
+        "conform fix · code · bedrock",
+        "conform fix · code · eslint",
+        "conform fix · code · prettier",
+      ]);
+      expect(fixInvocations.map((entry) => entry.args.slice(1))).toEqual([
+        adaptersByTool.get("bedrock")?.args.fix,
+        adaptersByTool.get("eslint")?.args.fix,
+        adaptersByTool.get("prettier")?.args.fix,
+      ]);
+      expect(fixInvocations.map((entry) => entry.args[0])).toEqual([
+        resolveBin("bedrock", "bedrock"),
+        resolveBin("eslint", "eslint"),
+        resolveBin("prettier", "prettier"),
+      ]);
+    } finally {
+      if (isCreatedFakeBedrock) {
+        rmSync(fakeBedrockDir, { force: true, recursive: true });
+      }
+    }
 
     const docsAdapter = adaptersByTool.get("canon");
     if (!hasPackage("@clockwork-kitten/canon")) {
@@ -610,21 +665,25 @@ describe("legacy conform inventory", () => {
     const eslintBase = (await import(
       pathToFileURL(join(CONFIG_DIR, "eslint.base.js")).href
     )) as {
-      default: Array<{ ignores?: string[]; rules?: Record<string, unknown> }>;
+      default: Array<{
+        ignores?: string[];
+        languageOptions?: unknown;
+        rules?: Record<string, unknown>;
+      }>;
     };
-    const eslintBaseRules =
-      eslintBase.default.find((entry) => entry.rules)?.rules ?? {};
+    const eslintBaseLocalOverride = eslintBase.default.findLast(
+      (entry) => entry.languageOptions && entry.rules,
+    );
+    const eslintBaseRules = eslintBaseLocalOverride?.rules ?? {};
     const eslintBaseIgnores =
       eslintBase.default.find((entry) => entry.ignores)?.ignores ?? [];
-    const eslintBaseSource = readFileSync(
-      join(CONFIG_DIR, "eslint.base.js"),
-      "utf8",
-    );
-    const eslintPresetRefs = eslintBaseSource
-      .matchAll(/^\s*\.\.\.([^,]+),$/gm)
-      .map((match) => match[1]?.trim())
-      .filter((entry): entry is string => entry !== undefined)
-      .toArray();
+    const eslintPresetRefs = [
+      "...tseslint.configs.recommended",
+      "unicorn.configs.recommended",
+      "security.configs.recommended",
+      'depend.configs["flat/recommended"]',
+      'perfectionist.configs["recommended-natural"]',
+    ];
     const eslintSummary = {
       explicitRules: eslintBaseRules,
       ignores: eslintBaseIgnores,
@@ -644,6 +703,21 @@ describe("legacy conform inventory", () => {
       "typescript-eslint": packageVersion("typescript-eslint"),
     });
     expect(eslintArtifact?.itemDispositions.length).toBeGreaterThan(0);
+    const eslintDispositionKeys = (
+      eslintArtifact?.itemDispositions.map((entry) => entry.key) ?? []
+    ).toSorted();
+    const expectedRuleDispositionKeys = Object.keys(eslintBaseRules)
+      .map((key) => `rule:${key}`)
+      .toSorted();
+    const expectedPresetDispositionKeys = eslintPresetRefs
+      .map((key) => `preset:${key}`)
+      .toSorted();
+    expect(
+      eslintDispositionKeys.filter((key) => key.startsWith("rule:")),
+    ).toEqual(expectedRuleDispositionKeys);
+    expect(
+      eslintDispositionKeys.filter((key) => key.startsWith("preset:")),
+    ).toEqual(expectedPresetDispositionKeys);
 
     const prettierBaseSummary = readJsonFile(
       join(CONFIG_DIR, "prettier.base.json"),
@@ -791,6 +865,43 @@ describe("legacy conform inventory", () => {
       fixtureFiles.map(
         (name) => `packages/conform/src/code/__fixtures__/astro/${name}`,
       ),
+    );
+  });
+
+  it("tracks separate repo-local cutover issue per discovered external consumer", () => {
+    const consumerById = new Map(
+      inventory().consumers.map((entry) => [entry.id, entry]),
+    );
+    const opsConsumer = consumerById.get("consumer.ops") as
+      (InventoryItem & { followUpIssue?: string; name: string }) | undefined;
+    const incubatorConsumer = consumerById.get("consumer.incubator") as
+      (InventoryItem & { followUpIssue?: string; name: string }) | undefined;
+
+    expect(opsConsumer?.name).toBe("clockwork-kitten/ops");
+    expect(incubatorConsumer?.name).toBe("clockwork-kitten/incubator");
+    expect(opsConsumer?.followUpIssue).toMatch(
+      /^https:\/\/github\.com\/clockwork-kitten\/ops\/issues\/\d+$/,
+    );
+    expect(incubatorConsumer?.followUpIssue).toMatch(
+      /^https:\/\/github\.com\/clockwork-kitten\/incubator\/issues\/\d+$/,
+    );
+    expect(opsConsumer?.followUpIssue).not.toBe(
+      incubatorConsumer?.followUpIssue,
+    );
+
+    const cutoverIssues =
+      completeness().consumerAndSearchEvidence?.consumerCutoverIssues ?? [];
+    expect(cutoverIssues).toEqual(
+      expect.arrayContaining([
+        {
+          repository: "clockwork-kitten/ops",
+          url: opsConsumer?.followUpIssue,
+        },
+        {
+          repository: "clockwork-kitten/incubator",
+          url: incubatorConsumer?.followUpIssue,
+        },
+      ]),
     );
   });
 });
