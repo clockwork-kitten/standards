@@ -154,6 +154,126 @@
       "name": "findings require stable canonical ordering",
       "mutation": "finding-order",
       "expectedError": "stable order"
+    },
+    {
+      "name": "integrity findings cannot be baselined",
+      "mutation": "forbidden-disposition:integrity:baselined",
+      "expectedError": "cannot use baselined disposition"
+    },
+    {
+      "name": "integrity findings cannot be excepted",
+      "mutation": "forbidden-disposition:integrity:excepted",
+      "expectedError": "cannot use excepted disposition"
+    },
+    {
+      "name": "integrity findings cannot be disabled by override",
+      "mutation": "forbidden-disposition:integrity:disabled-by-override",
+      "expectedError": "cannot use disabled-by-override disposition"
+    },
+    {
+      "name": "integrity findings cannot be marked not enforced",
+      "mutation": "forbidden-disposition:integrity:not-enforced",
+      "expectedError": "cannot use not-enforced disposition"
+    },
+    {
+      "name": "compatibility findings cannot be baselined",
+      "mutation": "forbidden-disposition:compatibility:baselined",
+      "expectedError": "cannot use baselined disposition"
+    },
+    {
+      "name": "compatibility findings cannot be excepted",
+      "mutation": "forbidden-disposition:compatibility:excepted",
+      "expectedError": "cannot use excepted disposition"
+    },
+    {
+      "name": "compatibility findings cannot be disabled by override",
+      "mutation": "forbidden-disposition:compatibility:disabled-by-override",
+      "expectedError": "cannot use disabled-by-override disposition"
+    },
+    {
+      "name": "compatibility findings cannot be marked not enforced",
+      "mutation": "forbidden-disposition:compatibility:not-enforced",
+      "expectedError": "cannot use not-enforced disposition"
+    },
+    {
+      "name": "unsupported findings cannot be baselined",
+      "mutation": "forbidden-disposition:unsupported:baselined",
+      "expectedError": "cannot use baselined disposition"
+    },
+    {
+      "name": "unsupported findings cannot be excepted",
+      "mutation": "forbidden-disposition:unsupported:excepted",
+      "expectedError": "cannot use excepted disposition"
+    },
+    {
+      "name": "unsupported findings cannot be disabled by override",
+      "mutation": "forbidden-disposition:unsupported:disabled-by-override",
+      "expectedError": "cannot use disabled-by-override disposition"
+    },
+    {
+      "name": "unsupported findings cannot be marked not enforced",
+      "mutation": "forbidden-disposition:unsupported:not-enforced",
+      "expectedError": "cannot use not-enforced disposition"
+    },
+    {
+      "name": "incomplete findings cannot be baselined",
+      "mutation": "forbidden-disposition:incomplete:baselined",
+      "expectedError": "cannot use baselined disposition"
+    },
+    {
+      "name": "incomplete findings cannot be excepted",
+      "mutation": "forbidden-disposition:incomplete:excepted",
+      "expectedError": "cannot use excepted disposition"
+    },
+    {
+      "name": "incomplete findings cannot be disabled by override",
+      "mutation": "forbidden-disposition:incomplete:disabled-by-override",
+      "expectedError": "cannot use disabled-by-override disposition"
+    },
+    {
+      "name": "incomplete findings cannot be marked not enforced",
+      "mutation": "forbidden-disposition:incomplete:not-enforced",
+      "expectedError": "cannot use not-enforced disposition"
+    },
+    {
+      "name": "engine failure findings cannot be baselined",
+      "mutation": "forbidden-disposition:engine-failure:baselined",
+      "expectedError": "cannot use baselined disposition"
+    },
+    {
+      "name": "engine failure findings cannot be excepted",
+      "mutation": "forbidden-disposition:engine-failure:excepted",
+      "expectedError": "cannot use excepted disposition"
+    },
+    {
+      "name": "engine failure findings cannot be disabled by override",
+      "mutation": "forbidden-disposition:engine-failure:disabled-by-override",
+      "expectedError": "cannot use disabled-by-override disposition"
+    },
+    {
+      "name": "engine failure findings cannot be marked not enforced",
+      "mutation": "forbidden-disposition:engine-failure:not-enforced",
+      "expectedError": "cannot use not-enforced disposition"
+    },
+    {
+      "name": "protected review findings cannot be baselined",
+      "mutation": "forbidden-disposition:protected-review:baselined",
+      "expectedError": "cannot use baselined disposition"
+    },
+    {
+      "name": "protected review findings cannot be excepted",
+      "mutation": "forbidden-disposition:protected-review:excepted",
+      "expectedError": "cannot use excepted disposition"
+    },
+    {
+      "name": "protected review findings cannot be disabled by override",
+      "mutation": "forbidden-disposition:protected-review:disabled-by-override",
+      "expectedError": "cannot use disabled-by-override disposition"
+    },
+    {
+      "name": "protected review findings cannot be marked not enforced",
+      "mutation": "forbidden-disposition:protected-review:not-enforced",
+      "expectedError": "cannot use not-enforced disposition"
     }
   ],
   "conformResultCases": [

@@ -108,6 +108,29 @@ function finding(
   };
 }
 
+function forbiddenFindingState(
+  findingClass:
+    | "compatibility"
+    | "engine-failure"
+    | "incomplete"
+    | "integrity"
+    | "protected-review"
+    | "unsupported",
+  disposition:
+    "baselined" | "disabled-by-override" | "excepted" | "not-enforced",
+): EngineResult["findings"][number]["state"] {
+  switch (findingClass) {
+    case "engine-failure":
+    case "incomplete":
+    case "unsupported": {
+      return findingClass;
+    }
+    default: {
+      return disposition;
+    }
+  }
+}
+
 async function loadJson<T>(path: string): Promise<T> {
   return JSON.parse(await readFile(path, "utf8")) as T;
 }
@@ -201,6 +224,42 @@ function mutateEngineResult(
 ): EngineResult {
   const result = clone(source);
   const fixtureFinding = finding();
+  if (mutation.startsWith("forbidden-disposition:")) {
+    const [, findingClass, disposition] = mutation.split(":") as [
+      string,
+      (
+        | "compatibility"
+        | "engine-failure"
+        | "incomplete"
+        | "integrity"
+        | "protected-review"
+        | "unsupported"
+      ),
+      "baselined" | "disabled-by-override" | "excepted" | "not-enforced",
+    ];
+    const findingKinds = new Set([
+      "compatibility",
+      "integrity",
+      "protected-review",
+    ]);
+    result.findings = [
+      finding({
+        disposition,
+        kind: findingKinds.has(findingClass) ? findingClass : "policy",
+        matchedRecord:
+          disposition === "baselined"
+            ? { kind: "baseline", recordId: "baseline-1" }
+            : disposition === "excepted"
+              ? { kind: "exception", recordId: "exception-1" }
+              : undefined,
+        state: forbiddenFindingState(findingClass, disposition),
+      }),
+    ];
+    if (findingClass === "protected-review") {
+      result.repository.baseRevision = "b".repeat(40);
+    }
+    return result;
+  }
   switch (mutation) {
     case "classification": {
       result.completionState = "unsupported";
@@ -356,6 +415,28 @@ function mutateLock(source: PolicyLock, mutation: string): PolicyLock {
   return lock;
 }
 
+function withClassifiedFinding(
+  source: EngineResult,
+  classifiedFinding: EngineResult["findings"][number],
+  classification: EngineResult["classification"],
+): EngineResult {
+  const result = clone(source);
+  result.findings = [classifiedFinding];
+  result.counts = {
+    error: classifiedFinding.effectiveSeverity === "error" ? 1 : 0,
+    failing: classification === "fail" ? 1 : 0,
+    info: classifiedFinding.effectiveSeverity === "info" ? 1 : 0,
+    reviewRequired: classification === "pass-review-required" ? 1 : 0,
+    total: 1,
+    warning: classifiedFinding.effectiveSeverity === "warning" ? 1 : 0,
+  };
+  result.classification = classification;
+  if (classifiedFinding.kind === "protected-review") {
+    result.repository.baseRevision = "b".repeat(40);
+  }
+  return result;
+}
+
 function withValidWarning(result: EngineResult): EngineResult {
   const engineResult = clone(result);
   engineResult.findings = [finding()];
@@ -429,6 +510,11 @@ describe("development-only lock and result reconciliation", () => {
       expect(result.errors.join("\n"), fixtureCase.name).toContain(
         fixtureCase.expectedError,
       );
+      if (fixtureCase.mutation.startsWith("forbidden-disposition:")) {
+        expect(result.errors.join("\n"), fixtureCase.name).toContain(
+          "classification",
+        );
+      }
     }
     for (const fixtureCase of fixture.conformResultCases) {
       const result = validateConformResult(
@@ -471,6 +557,58 @@ describe("development-only lock and result reconciliation", () => {
       expect(
         validateEngineResult(result, positive.bundle),
         observation.name,
+      ).toEqual({ errors: [], valid: true });
+    }
+  });
+
+  test("classifies mandatory failure and review findings positively", async () => {
+    const positive = await loadJson<PositiveFixture>(
+      join(FIXTURE_DIRECTORY, "positive.json"),
+    );
+    const cases = [
+      {
+        classification: "fail",
+        name: "integrity",
+        value: finding({ kind: "integrity" }),
+      },
+      {
+        classification: "fail",
+        name: "compatibility",
+        value: finding({ kind: "compatibility" }),
+      },
+      {
+        classification: "fail",
+        name: "unsupported",
+        value: finding({ state: "unsupported" }),
+      },
+      {
+        classification: "fail",
+        name: "incomplete",
+        value: finding({ state: "incomplete" }),
+      },
+      {
+        classification: "fail",
+        name: "engine failure",
+        value: finding({ state: "engine-failure" }),
+      },
+      {
+        classification: "pass-review-required",
+        name: "protected review",
+        value: finding({ kind: "protected-review" }),
+      },
+    ] as const;
+
+    for (const fixtureCase of cases) {
+      expect(
+        validateEngineResult(
+          withClassifiedFinding(
+            positive.engineResult,
+            fixtureCase.value,
+            fixtureCase.classification,
+          ),
+          positive.bundle,
+        ),
+        fixtureCase.name,
       ).toEqual({ errors: [], valid: true });
     }
   });

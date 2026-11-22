@@ -1,5 +1,5 @@
 {
-  "fixtureRevision": 2,
+  "fixtureRevision": 3,
   "algorithm": "RFC 8785",
   "hash": "SHA-256",
   "targetRuntimes": ["node-24", "node-26", "bun-development"],
@@ -104,16 +104,12 @@
       "sha256": "b9a424aedbd3dfbc76ad19c7292e2511568b4f4ba8de99bf2fd79912ac576a11"
     },
     {
-      "name": "context excludes its hash and environment-specific metadata",
+      "name": "context excludes only its self-referential hash",
       "artifact": "context",
-      "excludedFields": [
-        "absolutePath",
-        "contextHash",
-        "generatedAt",
-        "hostname",
-        "installationLayout"
-      ],
+      "excludedFields": ["contextHash"],
       "input": {
+        "schemaVersion": "1.0.0",
+        "contextHash": "5555555555555555555555555555555555555555555555555555555555555555",
         "bundleId": "conform-1.0.0",
         "policy": {
           "effectivePolicyHash": "4444444444444444444444444444444444444444444444444444444444444444",
@@ -121,18 +117,64 @@
           "policyVersion": "1.0.0"
         },
         "rules": {
-          "active": [],
+          "active": [
+            {
+              "ruleId": "crux/docs/format",
+              "title": "Format documentation",
+              "summary": "Documentation follows the canonical format.",
+              "owner": "canon",
+              "lifecycle": "error"
+            }
+          ],
           "disabled": [],
           "notEnforced": []
         },
+        "glossary": [
+          {
+            "term": "canonical",
+            "definition": "Stable across supported environments."
+          }
+        ],
+        "exceptions": [
+          {
+            "exceptionId": "legacy-doc",
+            "ruleId": "crux/docs/format",
+            "scope": ["docs/legacy.md"],
+            "rationale": "Migration is tracked separately."
+          }
+        ],
+        "architectureReferences": [
+          {
+            "title": "Architecture",
+            "path": "docs/ARCHITECTURE.md"
+          }
+        ],
+        "commands": [
+          {
+            "name": "check",
+            "command": "bun run check"
+          }
+        ],
+        "profiles": ["full", "static"],
+        "topInvariants": [
+          {
+            "ruleId": "crux/docs/format",
+            "title": "Format documentation",
+            "summary": "Documentation follows the canonical format.",
+            "owner": "canon",
+            "lifecycle": "error"
+          }
+        ],
         "canonicalResultPath": ".conform/results/conform.json",
-        "contextHash": "5555555555555555555555555555555555555555555555555555555555555555",
-        "absolutePath": "/Users/first/repository",
-        "generatedAt": "2026-11-22T00:00:00Z",
-        "hostname": "builder-01",
-        "installationLayout": "node_modules/layout"
+        "extensions": {
+          "studio.context": {
+            "enabled": true
+          }
+        }
       },
       "excludedVariant": {
+        "schemaVersion": "1.0.0",
+        "contextHash": "9999999999999999999999999999999999999999999999999999999999999999",
         "bundleId": "conform-1.0.0",
         "policy": {
           "effectivePolicyHash": "4444444444444444444444444444444444444444444444444444444444444444",
@@ -140,19 +182,125 @@
           "policyVersion": "1.0.0"
         },
         "rules": {
-          "active": [],
+          "active": [
+            {
+              "ruleId": "crux/docs/format",
+              "title": "Format documentation",
+              "summary": "Documentation follows the canonical format.",
+              "owner": "canon",
+              "lifecycle": "error"
+            }
+          ],
           "disabled": [],
           "notEnforced": []
         },
+        "glossary": [
+          {
+            "term": "canonical",
+            "definition": "Stable across supported environments."
+          }
+        ],
+        "exceptions": [
+          {
+            "exceptionId": "legacy-doc",
+            "ruleId": "crux/docs/format",
+            "scope": ["docs/legacy.md"],
+            "rationale": "Migration is tracked separately."
+          }
+        ],
+        "architectureReferences": [
+          {
+            "title": "Architecture",
+            "path": "docs/ARCHITECTURE.md"
+          }
+        ],
+        "commands": [
+          {
+            "name": "check",
+            "command": "bun run check"
+          }
+        ],
+        "profiles": ["full", "static"],
+        "topInvariants": [
+          {
+            "ruleId": "crux/docs/format",
+            "title": "Format documentation",
+            "summary": "Documentation follows the canonical format.",
+            "owner": "canon",
+            "lifecycle": "error"
+          }
+        ],
         "canonicalResultPath": ".conform/results/conform.json",
-        "contextHash": "9999999999999999999999999999999999999999999999999999999999999999",
-        "absolutePath": "C:/second/repository",
-        "generatedAt": "2030-01-01T00:00:00Z",
-        "hostname": "builder-99",
-        "installationLayout": ".bun/install/cache"
+        "extensions": {
+          "studio.context": {
+            "enabled": true
+          }
+        }
       },
-      "canonical": "{\"bundleId\":\"conform-1.0.0\",\"canonicalResultPath\":\".conform/results/conform.json\",\"policy\":{\"effectivePolicyHash\":\"4444444444444444444444444444444444444444444444444444444444444444\",\"policyId\":\"studio\",\"policyVersion\":\"1.0.0\"},\"rules\":{\"active\":[],\"disabled\":[],\"notEnforced\":[]}}",
-      "sha256": "33e31e1b338515c06f86f6f3f6ca1ada7032c710c6589de81822a86e0ecbef55"
+      "includedMutations": [
+        {
+          "name": "schema version",
+          "path": ["schemaVersion"],
+          "value": "1.0.1"
+        },
+        {
+          "name": "bundle ID",
+          "path": ["bundleId"],
+          "value": "conform-1.0.1"
+        },
+        {
+          "name": "policy ID",
+          "path": ["policy", "policyId"],
+          "value": "studio-next"
+        },
+        {
+          "name": "rules",
+          "path": ["rules", "active", 0, "summary"],
+          "value": "Documentation follows the revised canonical format."
+        },
+        {
+          "name": "glossary",
+          "path": ["glossary", 0, "definition"],
+          "value": "Stable across every supported environment."
+        },
+        {
+          "name": "exceptions",
+          "path": ["exceptions", 0, "rationale"],
+          "value": "Migration is complete in the next release."
+        },
+        {
+          "name": "architecture references",
+          "path": ["architectureReferences", 0, "title"],
+          "value": "System architecture"
+        },
+        {
+          "name": "commands",
+          "path": ["commands", 0, "command"],
+          "value": "bun run ci"
+        },
+        {
+          "name": "profiles",
+          "path": ["profiles", 0],
+          "value": "ci"
+        },
+        {
+          "name": "top invariants",
+          "path": ["topInvariants", 0, "summary"],
+          "value": "Documentation always follows the canonical format."
+        },
+        {
+          "name": "result location",
+          "path": ["canonicalResultPath"],
+          "value": ".conform/results/revised.json"
+        },
+        {
+          "name": "extensions",
+          "path": ["extensions", "studio.context", "enabled"],
+          "value": false
+        }
+      ],
+      "canonical": "{\"architectureReferences\":[{\"path\":\"docs/ARCHITECTURE.md\",\"title\":\"Architecture\"}],\"bundleId\":\"conform-1.0.0\",\"canonicalResultPath\":\".conform/results/conform.json\",\"commands\":[{\"command\":\"bun run check\",\"name\":\"check\"}],\"exceptions\":[{\"exceptionId\":\"legacy-doc\",\"rationale\":\"Migration is tracked separately.\",\"ruleId\":\"crux/docs/format\",\"scope\":[\"docs/legacy.md\"]}],\"extensions\":{\"studio.context\":{\"enabled\":true}},\"glossary\":[{\"definition\":\"Stable across supported environments.\",\"term\":\"canonical\"}],\"policy\":{\"effectivePolicyHash\":\"4444444444444444444444444444444444444444444444444444444444444444\",\"policyId\":\"studio\",\"policyVersion\":\"1.0.0\"},\"profiles\":[\"full\",\"static\"],\"rules\":{\"active\":[{\"lifecycle\":\"error\",\"owner\":\"canon\",\"ruleId\":\"crux/docs/format\",\"summary\":\"Documentation follows the canonical format.\",\"title\":\"Format documentation\"}],\"disabled\":[],\"notEnforced\":[]},\"schemaVersion\":\"1.0.0\",\"topInvariants\":[{\"lifecycle\":\"error\",\"owner\":\"canon\",\"ruleId\":\"crux/docs/format\",\"summary\":\"Documentation follows the canonical format.\",\"title\":\"Format documentation\"}]}",
+      "sha256": "4688b76017f71cc857534d82a3a2eac05d6d6b8d5472b30f29d1b802e8bdc96d"
     },
     {
       "name": "fingerprint excludes location prose host and time metadata",

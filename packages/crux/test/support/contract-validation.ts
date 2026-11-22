@@ -300,8 +300,7 @@ function deriveCounts(findings: Finding[]): ResultCounts {
     info: findings.filter((finding) => finding.effectiveSeverity === "info")
       .length,
     reviewRequired: findings.filter(
-      (finding) =>
-        finding.kind === "protected-review" && finding.disposition === "active",
+      (finding) => finding.kind === "protected-review",
     ).length,
     total: findings.length,
     warning: findings.filter(
@@ -343,15 +342,14 @@ function isEqualJson(left: unknown, right: unknown): boolean {
 }
 
 function isFailingFinding(finding: Finding): boolean {
+  if (requiresFailingOutcome(finding)) {
+    return true;
+  }
   if (NON_FAILING_DISPOSITIONS.has(finding.disposition)) {
     return false;
   }
   return (
-    finding.kind === "integrity" ||
-    finding.kind === "compatibility" ||
-    FAILURE_STATES.has(finding.state) ||
-    (finding.kind !== "protected-review" &&
-      finding.effectiveSeverity === "error")
+    finding.kind !== "protected-review" && finding.effectiveSeverity === "error"
   );
 }
 
@@ -382,6 +380,18 @@ function requireEqual(
   }
 }
 
+function requiresFailingOutcome(finding: Finding): boolean {
+  return (
+    finding.kind === "integrity" ||
+    finding.kind === "compatibility" ||
+    FAILURE_STATES.has(finding.state)
+  );
+}
+
+function requiresUnsuppressedOutcome(finding: Finding): boolean {
+  return requiresFailingOutcome(finding) || finding.kind === "protected-review";
+}
+
 function sortedUnique(
   values: readonly (number | string)[],
 ): (number | string)[] {
@@ -393,6 +403,14 @@ function sortedUnique(
 function validateFinding(finding: Finding, index: number): string[] {
   const errors: string[] = [];
   const matchedRecord = finding.matchedRecord;
+  if (
+    requiresUnsuppressedOutcome(finding) &&
+    NON_FAILING_DISPOSITIONS.has(finding.disposition)
+  ) {
+    errors.push(
+      `findings[${index}] ${finding.kind}/${finding.state} cannot use ${finding.disposition} disposition`,
+    );
+  }
   if (finding.disposition === "baselined") {
     if (matchedRecord?.kind !== "baseline") {
       errors.push(`findings[${index}] baselined disposition needs baseline`);
