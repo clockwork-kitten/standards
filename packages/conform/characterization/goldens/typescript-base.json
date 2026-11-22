@@ -1,0 +1,33 @@
+{
+  "normalized": {
+    "config": {
+      "_comment": "Strict, framework-agnostic base. Consumers extend this and supply target/module/moduleResolution/lib/types to match their runtime (Bun engine, SvelteKit UI, Astro site, Hono backend).",
+      "$schema": "https://json.schemastore.org/tsconfig",
+      "compilerOptions": {
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "isolatedModules": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+        "noUncheckedIndexedAccess": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "verbatimModuleSyntax": true
+      },
+      "display": "@clockwork-kitten studio base"
+    },
+    "dependencyVersions": {
+      "typescript": "5.9.3"
+    }
+  },
+  "p01Inventory": {
+    "legacyHeadSha": "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5",
+    "path": "packages/conform/inventory/legacy-conform.json"
+  },
+  "p01References": ["artifact.config.tsconfig.base"],
+  "schemaVersion": "1.0.0",
+  "surface": "typescript-base"
+}

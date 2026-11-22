@@ -1,0 +1,26 @@
+{
+  "normalized": {
+    "config": {
+      "overrides": [
+        {
+          "files": "*.astro",
+          "options": {
+            "parser": "astro"
+          }
+        }
+      ],
+      "plugins": ["prettier-plugin-astro"]
+    },
+    "dependencyVersions": {
+      "prettier": "3.9.6",
+      "prettier-plugin-astro": "0.14.1"
+    }
+  },
+  "p01Inventory": {
+    "legacyHeadSha": "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5",
+    "path": "packages/conform/inventory/legacy-conform.json"
+  },
+  "p01References": ["artifact.config.prettier.astro"],
+  "schemaVersion": "1.0.0",
+  "surface": "prettier-astro"
+}

@@ -20,6 +20,7 @@
     "configs"
   ],
   "scripts": {
+    "characterize:update": "bun scripts/write-characterization-goldens.ts",
     "test": "vitest run --coverage",
     "typecheck": "tsc --noEmit"
   },

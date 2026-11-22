@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "1.0.0",
+  "p01Inventory": {
+    "path": "packages/conform/inventory/legacy-conform.json",
+    "legacyHeadSha": "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5"
+  },
+  "goldens": {
+    "config-resolution.json": {
+      "p01References": [
+        "config.discovery.conform.config.ts",
+        "config.discovery.conform.config.mts",
+        "config.discovery.conform.config.mjs",
+        "config.discovery.conform.config.js",
+        "config.discovery.conform.config.jsonc",
+        "config.discovery.conform.config.json",
+        "config.loader.typescript-default-export",
+        "config.loader.jsonc",
+        "config.key.code",
+        "config.key.code.bedrock",
+        "config.key.code.eslint",
+        "config.key.code.knip",
+        "config.key.code.prettier",
+        "config.key.code.tsconfig",
+        "config.key.code.typecheck",
+        "default.config.default.docsOnlyCode",
+        "default.config.default.docsOnlySource",
+        "default.config.default.noCodeBlock",
+        "default.config.default.tsconfig",
+        "default.config.default.bedrockFalse",
+        "default.config.default.bedrockEmptyArray",
+        "default.config.default.bedrockWhenTrue",
+        "default.config.default.eslint",
+        "default.config.default.knip",
+        "default.config.default.prettier",
+        "default.config.default.typecheck"
+      ],
+      "intentionalDifferenceReferences": [
+        "config.key.code.bedrock",
+        "default.config.default.bedrockFalse",
+        "default.config.default.bedrockEmptyArray",
+        "default.config.default.bedrockWhenTrue"
+      ]
+    },
+    "eslint-astro.json": {
+      "p01References": ["artifact.config.eslint.astro"],
+      "intentionalDifferenceReferences": []
+    },
+    "eslint-base.json": {
+      "p01References": ["artifact.config.eslint.base"],
+      "intentionalDifferenceReferences": ["artifact.config.eslint.base"]
+    },
+    "execution-candidates.json": {
+      "p01References": [
+        "artifact.config.eslint.base",
+        "artifact.config.eslint.astro",
+        "artifact.config.prettier.base",
+        "artifact.config.prettier.astro",
+        "artifact.config.knip.base",
+        "artifact.config.tsconfig.base",
+        "adapter.code.bedrock",
+        "adapter.code.eslint",
+        "adapter.code.knip",
+        "adapter.code.prettier",
+        "adapter.code.typecheck",
+        "adapter.docs.canon",
+        "config.discovery.conform.config.ts",
+        "config.discovery.conform.config.mts",
+        "config.discovery.conform.config.mjs",
+        "config.discovery.conform.config.js",
+        "config.discovery.conform.config.jsonc",
+        "config.discovery.conform.config.json"
+      ],
+      "intentionalDifferenceReferences": [
+        "adapter.code.bedrock",
+        "artifact.config.eslint.base"
+      ]
+    },
+    "exits.json": {
+      "p01References": ["command.check", "command.fix"],
+      "intentionalDifferenceReferences": []
+    },
+    "knip-base.json": {
+      "p01References": ["artifact.config.knip.base"],
+      "intentionalDifferenceReferences": []
+    },
+    "prettier-astro.json": {
+      "p01References": ["artifact.config.prettier.astro"],
+      "intentionalDifferenceReferences": []
+    },
+    "prettier-base.json": {
+      "p01References": ["artifact.config.prettier.base"],
+      "intentionalDifferenceReferences": []
+    },
+    "tool-ordering.json": {
+      "p01References": [
+        "adapter.docs.canon",
+        "adapter.code.bedrock",
+        "adapter.code.eslint",
+        "adapter.code.knip",
+        "adapter.code.prettier",
+        "adapter.code.typecheck"
+      ],
+      "intentionalDifferenceReferences": ["adapter.code.bedrock"]
+    },
+    "typescript-base.json": {
+      "p01References": ["artifact.config.tsconfig.base"],
+      "intentionalDifferenceReferences": []
+    }
+  },
+  "requiredP01References": [
+    "adapter.code.bedrock",
+    "adapter.code.eslint",
+    "adapter.code.knip",
+    "adapter.code.prettier",
+    "adapter.code.typecheck",
+    "adapter.docs.canon",
+    "artifact.config.eslint.astro",
+    "artifact.config.eslint.base",
+    "artifact.config.knip.base",
+    "artifact.config.prettier.astro",
+    "artifact.config.prettier.base",
+    "artifact.config.tsconfig.base",
+    "command.check",
+    "command.fix",
+    "config.discovery.conform.config.js",
+    "config.discovery.conform.config.json",
+    "config.discovery.conform.config.jsonc",
+    "config.discovery.conform.config.mjs",
+    "config.discovery.conform.config.mts",
+    "config.discovery.conform.config.ts",
+    "config.key.code",
+    "config.key.code.bedrock",
+    "config.key.code.eslint",
+    "config.key.code.knip",
+    "config.key.code.prettier",
+    "config.key.code.tsconfig",
+    "config.key.code.typecheck",
+    "config.loader.jsonc",
+    "config.loader.typescript-default-export",
+    "default.config.default.bedrockEmptyArray",
+    "default.config.default.bedrockFalse",
+    "default.config.default.bedrockWhenTrue",
+    "default.config.default.docsOnlyCode",
+    "default.config.default.docsOnlySource",
+    "default.config.default.eslint",
+    "default.config.default.knip",
+    "default.config.default.noCodeBlock",
+    "default.config.default.prettier",
+    "default.config.default.tsconfig",
+    "default.config.default.typecheck"
+  ],
+  "requiredIntentionalDifferenceReferences": [
+    "adapter.code.bedrock",
+    "artifact.config.eslint.base",
+    "config.key.code.bedrock",
+    "default.config.default.bedrockEmptyArray",
+    "default.config.default.bedrockFalse",
+    "default.config.default.bedrockWhenTrue"
+  ],
+  "provenance": {
+    "dependencyVersions": {
+      "eslint": "10.10.0",
+      "eslint-plugin-astro": "3.1.0",
+      "eslint-plugin-depend": "1.5.0",
+      "eslint-plugin-jsx-a11y": "6.10.2",
+      "eslint-plugin-perfectionist": "5.11.0",
+      "eslint-plugin-security": "4.0.1",
+      "eslint-plugin-unicorn": "74.0.0",
+      "globals": "17.12.0",
+      "knip": "6.34.0",
+      "prettier": "3.9.6",
+      "prettier-plugin-astro": "0.14.1",
+      "typescript": "5.9.3",
+      "typescript-eslint": "8.69.0"
+    },
+    "sourceSha256": {
+      "configs/eslint.astro.js": "62771086ea4d318c955da1020f5005f6208621d9b1ffdb76e32617677a4638ad",
+      "configs/eslint.base.js": "9c9143f48e6ae2b5f3268a70f9ef9d79dd2c556f3cf86f325410dd03dd8ebb27",
+      "configs/knip.base.json": "4d5e345f8f7113283267946b02cd68e17d96cff3b314798f3551ae5c16cf0a98",
+      "configs/prettier.astro.json": "f24722133c270340dc1d7bcbc09d60e4a5d64d77939838dfea7852e4fe5f0a43",
+      "configs/prettier.base.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+      "configs/tsconfig.base.json": "7a09a0a532fec6593edfe62bed1ce60f8027e5bb37e1dd305aa9e2de446907c2",
+      "src/cli/main.ts": "db454df8d5900574c52196c1fffed52dd62d39f622035e6d490cc50205058313",
+      "src/code/run.ts": "f75582b2ed264948dd71c4f1a0b1b309ea96c430876c18957efcabfddcbb8abc",
+      "src/config/resolve.ts": "a901e9244c62d66159d78887ab6f36ab83112d9f6d61445db2b40ed410f41455",
+      "src/config/types.ts": "ddce9e29f9aeb75207ab5632987fd78e44851e90eb4afdd68122bde865f5814d",
+      "src/docs/run.ts": "f1712f582c54946ed3a0c2399698638513e03e81d10032d750ee3ef90c2966b1"
+    }
+  }
+}

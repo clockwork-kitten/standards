@@ -22,6 +22,6 @@
   "prettier": "@clockwork-kitten/conform/configs/prettier.base.json",
   "devDependencies": {
     "@clockwork-kitten/conform": "workspace:*",
-    "lefthook": "^2.1.12"
+    "lefthook": "^2.2.2"
   }
 }

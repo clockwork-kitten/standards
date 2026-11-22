@@ -1,0 +1,107 @@
+{
+  "intentionalDifferenceReferences": [
+    "config.key.code.bedrock",
+    "default.config.default.bedrockFalse",
+    "default.config.default.bedrockEmptyArray",
+    "default.config.default.bedrockWhenTrue"
+  ],
+  "normalized": {
+    "bareCodeBlock": {
+      "bedrock": false,
+      "eslint": true,
+      "knip": true,
+      "prettier": true,
+      "tsconfig": "tsconfig.json",
+      "typecheck": true
+    },
+    "bedrockEmptyArray": {
+      "bedrock": false,
+      "eslint": true,
+      "knip": true,
+      "prettier": true,
+      "tsconfig": "tsconfig.json",
+      "typecheck": true
+    },
+    "bedrockTrue": {
+      "bedrock": ["src"],
+      "eslint": true,
+      "knip": true,
+      "prettier": true,
+      "tsconfig": "tsconfig.json",
+      "typecheck": true
+    },
+    "customCodeBlock": {
+      "bedrock": ["src", "scripts"],
+      "eslint": false,
+      "knip": false,
+      "prettier": false,
+      "tsconfig": "packages/app/tsconfig.json",
+      "typecheck": false
+    },
+    "discoveryPrecedence": [
+      "conform.config.ts",
+      "conform.config.mts",
+      "conform.config.mjs",
+      "conform.config.js",
+      "conform.config.jsonc",
+      "conform.config.json"
+    ],
+    "loadedConfigForms": {
+      "jsonc": {
+        "bedrock": false,
+        "eslint": true,
+        "knip": true,
+        "prettier": true,
+        "tsconfig": "jsonc-fixture.json",
+        "typecheck": true
+      },
+      "typescriptDefaultExport": {
+        "bedrock": false,
+        "eslint": true,
+        "knip": true,
+        "prettier": true,
+        "tsconfig": "typescript-fixture.json",
+        "typecheck": true
+      }
+    },
+    "noCodeBlock": null,
+    "noConfig": {
+      "code": null,
+      "source": "no config file found"
+    }
+  },
+  "p01Inventory": {
+    "legacyHeadSha": "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5",
+    "path": "packages/conform/inventory/legacy-conform.json"
+  },
+  "p01References": [
+    "config.discovery.conform.config.ts",
+    "config.discovery.conform.config.mts",
+    "config.discovery.conform.config.mjs",
+    "config.discovery.conform.config.js",
+    "config.discovery.conform.config.jsonc",
+    "config.discovery.conform.config.json",
+    "config.loader.typescript-default-export",
+    "config.loader.jsonc",
+    "config.key.code",
+    "config.key.code.bedrock",
+    "config.key.code.eslint",
+    "config.key.code.knip",
+    "config.key.code.prettier",
+    "config.key.code.tsconfig",
+    "config.key.code.typecheck",
+    "default.config.default.docsOnlyCode",
+    "default.config.default.docsOnlySource",
+    "default.config.default.noCodeBlock",
+    "default.config.default.tsconfig",
+    "default.config.default.bedrockFalse",
+    "default.config.default.bedrockEmptyArray",
+    "default.config.default.bedrockWhenTrue",
+    "default.config.default.eslint",
+    "default.config.default.knip",
+    "default.config.default.prettier",
+    "default.config.default.typecheck"
+  ],
+  "schemaVersion": "1.0.0",
+  "surface": "configuration-resolution"
+}

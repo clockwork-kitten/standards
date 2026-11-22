@@ -1,0 +1,127 @@
+{
+  "intentionalDifferenceReferences": [
+    "adapter.code.bedrock",
+    "artifact.config.eslint.base"
+  ],
+  "normalized": {
+    "candidates": [
+      {
+        "candidateKind": "executing",
+        "observedInputs": ["module-import", "plugin-code"],
+        "p01Reference": "artifact.config.eslint.base"
+      },
+      {
+        "candidateKind": "executing",
+        "observedInputs": ["module-import", "plugin-code"],
+        "p01Reference": "artifact.config.eslint.astro"
+      },
+      {
+        "candidateKind": "static",
+        "observedInputs": ["strict-json"],
+        "p01Reference": "artifact.config.prettier.base"
+      },
+      {
+        "candidateKind": "executing",
+        "observedInputs": ["strict-json", "plugin-code"],
+        "p01Reference": "artifact.config.prettier.astro"
+      },
+      {
+        "candidateKind": "static",
+        "observedInputs": ["strict-json"],
+        "p01Reference": "artifact.config.tsconfig.base"
+      },
+      {
+        "candidateKind": "static",
+        "observedInputs": ["strict-json"],
+        "p01Reference": "artifact.config.knip.base"
+      },
+      {
+        "candidateKind": "executing",
+        "observedInputs": ["module-import"],
+        "p01Reference": "config.discovery.conform.config.ts"
+      },
+      {
+        "candidateKind": "executing",
+        "observedInputs": ["module-import"],
+        "p01Reference": "config.discovery.conform.config.mts"
+      },
+      {
+        "candidateKind": "executing",
+        "observedInputs": ["module-import"],
+        "p01Reference": "config.discovery.conform.config.mjs"
+      },
+      {
+        "candidateKind": "executing",
+        "observedInputs": ["module-import"],
+        "p01Reference": "config.discovery.conform.config.js"
+      },
+      {
+        "candidateKind": "static",
+        "observedInputs": ["data-config"],
+        "p01Reference": "config.discovery.conform.config.jsonc"
+      },
+      {
+        "candidateKind": "static",
+        "observedInputs": ["data-config"],
+        "p01Reference": "config.discovery.conform.config.json"
+      },
+      {
+        "candidateKind": "executing",
+        "observedInputs": ["subprocess"],
+        "p01Reference": "adapter.code.bedrock"
+      },
+      {
+        "candidateKind": "executing",
+        "observedInputs": ["subprocess"],
+        "p01Reference": "adapter.code.eslint"
+      },
+      {
+        "candidateKind": "executing",
+        "observedInputs": ["subprocess"],
+        "p01Reference": "adapter.code.knip"
+      },
+      {
+        "candidateKind": "executing",
+        "observedInputs": ["subprocess"],
+        "p01Reference": "adapter.code.prettier"
+      },
+      {
+        "candidateKind": "executing",
+        "observedInputs": ["subprocess"],
+        "p01Reference": "adapter.code.typecheck"
+      },
+      {
+        "candidateKind": "executing",
+        "observedInputs": ["subprocess"],
+        "p01Reference": "adapter.docs.canon"
+      }
+    ],
+    "classification": "candidate"
+  },
+  "p01Inventory": {
+    "legacyHeadSha": "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5",
+    "path": "packages/conform/inventory/legacy-conform.json"
+  },
+  "p01References": [
+    "artifact.config.eslint.base",
+    "artifact.config.eslint.astro",
+    "artifact.config.prettier.base",
+    "artifact.config.prettier.astro",
+    "artifact.config.knip.base",
+    "artifact.config.tsconfig.base",
+    "adapter.code.bedrock",
+    "adapter.code.eslint",
+    "adapter.code.knip",
+    "adapter.code.prettier",
+    "adapter.code.typecheck",
+    "adapter.docs.canon",
+    "config.discovery.conform.config.ts",
+    "config.discovery.conform.config.mts",
+    "config.discovery.conform.config.mjs",
+    "config.discovery.conform.config.js",
+    "config.discovery.conform.config.jsonc",
+    "config.discovery.conform.config.json"
+  ],
+  "schemaVersion": "1.0.0",
+  "surface": "static-executing-candidates"
+}
