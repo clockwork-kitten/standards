@@ -32,13 +32,20 @@ Bundles and locks record exact registry package versions, HTTPS registry URLs,
 SRI values, component manifest hashes, schema majors, capabilities, and their
 supported environment. The first bundle supports Node.js 24 and 26 on Linux
 and macOS. Both npm `package-lock.json` and `bun.lock` installations are
-recognized, but verdicts always execute under Node. Bundle result readers
+recognized, but verdicts always execute under Node. The mandatory bundle
+profiles are `static` and `full`; bundle capabilities are the exact union of
+the declared component and verdict-tool capabilities. Bundle result readers
 support the current and immediately previous result-schema major for at least
 one Conform minor and 90 days.
 
 `EngineResult` is the canonical partial result. `ConformResult` preserves those
 validated partials unchanged, adds Conform-owned contract findings, and exposes
 the canonical classifications `pass`, `fail`, and `pass-review-required`.
+Result environments record what was observed rather than claiming support, so
+Windows, unsupported Node majors, and Bun verdict execution can still produce
+canonical `unsupported` results classified `fail`. Bundle and lock environment
+declarations remain restricted to the supported Node 24/26, Linux/macOS,
+npm/Bun-lock installation, and Node-runtime matrix.
 Findings carry stable owner, lifecycle, severity, location, bounded/redacted
 evidence, remediation, fix, fingerprint, disposition, matched-record, and state
 fields.
@@ -48,8 +55,12 @@ Scheme bytes. Effective-policy hashes exclude derived outputs and results;
 fingerprints exclude line/column and tool prose; context hashes exclude the
 `contextHash` field itself. Absolute paths, timestamps, hostnames, and
 installation-layout details are never hash inputs. The committed canonical JSON
-vectors are portable across Node.js 24, Node.js 26, and the Bun development
-runtime.
+vectors record RFC 8785 and reference-implementation provenance. A
+runtime-neutral harness executes them in Node.js 24 and 26 CI and in the Bun
+development suite. Artifact vectors independently vary timestamps, hostnames,
+absolute paths, installation layouts, location coordinates, and tool prose to
+prove those fields cannot affect effective-policy, policy, context, or
+fingerprint hashes.
 
 Derived context contains policy and bundle identifiers, rule states, glossary,
 exceptions, architecture references, commands, profiles, top invariants, and
@@ -70,6 +81,15 @@ bun run --cwd packages/crux test
 `types/index.d.ts` differs, so schema changes cannot land with stale types.
 Schema validation uses Ajv only as development tooling; the published package
 has no runtime dependencies.
+
+Development-only reconciliation verifies a lock against its named bundle
+without adding an executable package export. It rejects missing, extra, or
+mismatched components and tools; package names and exact versions; registry
+sources and SRIs; manifest hashes; schema majors; capabilities; policy package;
+and supported environment selection. Result reconciliation derives counts and
+classification, checks finding dispositions and references, requires relevant
+base metadata, validates stable ordering, and proves aggregate results preserve
+validated engine partials.
 
 ## Support boundary
 

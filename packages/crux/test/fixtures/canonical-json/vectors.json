@@ -1,38 +1,198 @@
 {
-  "fixtureRevision": 1,
+  "fixtureRevision": 2,
   "algorithm": "RFC 8785",
   "hash": "SHA-256",
   "targetRuntimes": ["node-24", "node-26", "bun-development"],
-  "vectors": [
+  "provenance": [
     {
-      "name": "recursive property ordering and unicode",
+      "name": "RFC 8785 JSON Canonicalization Scheme",
+      "revision": "RFC 8785, June 2020",
+      "url": "https://www.rfc-editor.org/rfc/rfc8785"
+    },
+    {
+      "name": "cyberphone/json-canonicalization reference vectors",
+      "revision": "master testdata snapshot reviewed 2026-11-22",
+      "url": "https://github.com/cyberphone/json-canonicalization/tree/master/testdata"
+    }
+  ],
+  "rfcVectors": [
+    {
+      "name": "RFC 8785 section 3.2.2 canonical sample",
       "input": {
-        "z": 3,
-        "nested": {
-          "é": "café",
-          "a": true
+        "numbers": [333333333.33333329, 1e30, 4.5, 0.002, 1e-27],
+        "string": "€$\u000f\nA'B\"\\\\\"/",
+        "literals": [null, true, false]
+      },
+      "canonical": "{\"literals\":[null,true,false],\"numbers\":[333333333.3333333,1e+30,4.5,0.002,1e-27],\"string\":\"€$\\u000f\\nA'B\\\"\\\\\\\\\\\"/\"}",
+      "sha256": "2d5e01a318d0f0879ab568c4be289c8b1f64ef8921a53c6277d5e069978baacb"
+    },
+    {
+      "name": "RFC 8785 section 3.2.3 UTF-16 property sorting",
+      "input": {
+        "€": "Euro Sign",
+        "\r": "Carriage Return",
+        "דּ": "Hebrew Letter Dalet With Dagesh",
+        "1": "One",
+        "😀": "Emoji: Grinning Face",
+        "": "Control",
+        "ö": "Latin Small Letter O With Diaeresis"
+      },
+      "canonical": "{\"\\r\":\"Carriage Return\",\"1\":\"One\",\"\":\"Control\",\"ö\":\"Latin Small Letter O With Diaeresis\",\"€\":\"Euro Sign\",\"😀\":\"Emoji: Grinning Face\",\"דּ\":\"Hebrew Letter Dalet With Dagesh\"}",
+      "sha256": "5e321556d22018a9656991a9e94f77ec175fa193e52a2429d312f8419ec8b08c"
+    }
+  ],
+  "artifactVectors": [
+    {
+      "name": "effective policy excludes host time and installation metadata",
+      "artifact": "effective-policy",
+      "excludedFields": [
+        "absolutePath",
+        "generatedAt",
+        "hostname",
+        "installationLayout"
+      ],
+      "input": {
+        "effectivePolicyInputs": [
+          {
+            "contentHash": "3333333333333333333333333333333333333333333333333333333333333333",
+            "inputId": ".conform/policy.jsonc",
+            "kind": "repository-policy"
+          }
+        ],
+        "absolutePath": "/Users/first/repository/.conform/policy.jsonc",
+        "generatedAt": "2026-11-22T00:00:00Z",
+        "hostname": "builder-01",
+        "installationLayout": "node_modules/@clockwork-kitten/crux"
+      },
+      "excludedVariant": {
+        "effectivePolicyInputs": [
+          {
+            "contentHash": "3333333333333333333333333333333333333333333333333333333333333333",
+            "inputId": ".conform/policy.jsonc",
+            "kind": "repository-policy"
+          }
+        ],
+        "absolutePath": "C:/second/repository/.conform/policy.jsonc",
+        "generatedAt": "2030-01-01T00:00:00Z",
+        "hostname": "builder-99",
+        "installationLayout": ".pnpm/@clockwork-kitten+crux"
+      },
+      "canonical": "{\"effectivePolicyInputs\":[{\"contentHash\":\"3333333333333333333333333333333333333333333333333333333333333333\",\"inputId\":\".conform/policy.jsonc\",\"kind\":\"repository-policy\"}]}",
+      "sha256": "74a328a8338ba7126bb259bfc7bbad4298a4eb69d5b42674c9cc765a48281651"
+    },
+    {
+      "name": "policy excludes derivation environment metadata",
+      "artifact": "policy",
+      "excludedFields": ["absolutePath", "generatedAt", "hostname"],
+      "input": {
+        "policyId": "studio",
+        "policyVersion": "1.0.0",
+        "rules": ["crux/docs/format"],
+        "absolutePath": "/tmp/policy.json",
+        "generatedAt": "2026-11-22T00:00:00Z",
+        "hostname": "builder-01"
+      },
+      "excludedVariant": {
+        "policyId": "studio",
+        "policyVersion": "1.0.0",
+        "rules": ["crux/docs/format"],
+        "absolutePath": "D:/policy.json",
+        "generatedAt": "2030-01-01T00:00:00Z",
+        "hostname": "builder-99"
+      },
+      "canonical": "{\"policyId\":\"studio\",\"policyVersion\":\"1.0.0\",\"rules\":[\"crux/docs/format\"]}",
+      "sha256": "b9a424aedbd3dfbc76ad19c7292e2511568b4f4ba8de99bf2fd79912ac576a11"
+    },
+    {
+      "name": "context excludes its hash and environment-specific metadata",
+      "artifact": "context",
+      "excludedFields": [
+        "absolutePath",
+        "contextHash",
+        "generatedAt",
+        "hostname",
+        "installationLayout"
+      ],
+      "input": {
+        "bundleId": "conform-1.0.0",
+        "policy": {
+          "effectivePolicyHash": "4444444444444444444444444444444444444444444444444444444444444444",
+          "policyId": "studio",
+          "policyVersion": "1.0.0"
         },
-        "a": 1
+        "rules": {
+          "active": [],
+          "disabled": [],
+          "notEnforced": []
+        },
+        "canonicalResultPath": ".conform/results/conform.json",
+        "contextHash": "5555555555555555555555555555555555555555555555555555555555555555",
+        "absolutePath": "/Users/first/repository",
+        "generatedAt": "2026-11-22T00:00:00Z",
+        "hostname": "builder-01",
+        "installationLayout": "node_modules/layout"
       },
-      "canonical": "{\"a\":1,\"nested\":{\"a\":true,\"é\":\"café\"},\"z\":3}",
-      "sha256": "6182a9285080a03c9a1bc095d8b670607a97bd181b9ee5a515a17887018ab10f"
+      "excludedVariant": {
+        "bundleId": "conform-1.0.0",
+        "policy": {
+          "effectivePolicyHash": "4444444444444444444444444444444444444444444444444444444444444444",
+          "policyId": "studio",
+          "policyVersion": "1.0.0"
+        },
+        "rules": {
+          "active": [],
+          "disabled": [],
+          "notEnforced": []
+        },
+        "canonicalResultPath": ".conform/results/conform.json",
+        "contextHash": "9999999999999999999999999999999999999999999999999999999999999999",
+        "absolutePath": "C:/second/repository",
+        "generatedAt": "2030-01-01T00:00:00Z",
+        "hostname": "builder-99",
+        "installationLayout": ".bun/install/cache"
+      },
+      "canonical": "{\"bundleId\":\"conform-1.0.0\",\"canonicalResultPath\":\".conform/results/conform.json\",\"policy\":{\"effectivePolicyHash\":\"4444444444444444444444444444444444444444444444444444444444444444\",\"policyId\":\"studio\",\"policyVersion\":\"1.0.0\"},\"rules\":{\"active\":[],\"disabled\":[],\"notEnforced\":[]}}",
+      "sha256": "33e31e1b338515c06f86f6f3f6ca1ada7032c710c6589de81822a86e0ecbef55"
     },
     {
-      "name": "ecmascript number serialization",
-      "input": [333333333.33333329, 1e30, 4.5, 0.002, 1e-27],
-      "canonical": "[333333333.3333333,1e+30,4.5,0.002,1e-27]",
-      "sha256": "7c6bc86d861387d823ae596b79ca0b26567dddc22a77acb1f4e06d441f555adf"
-    },
-    {
-      "name": "array order and primitive values",
+      "name": "fingerprint excludes location prose host and time metadata",
+      "artifact": "fingerprint",
+      "excludedFields": [
+        "absolutePath",
+        "column",
+        "generatedAt",
+        "hostname",
+        "line",
+        "toolMessage"
+      ],
       "input": {
-        "true": true,
-        "null": null,
-        "false": false,
-        "array": [3, 2, 1]
+        "ruleId": "crux/docs/format",
+        "path": "docs/guide.md",
+        "structuralAnchor": "heading:introduction",
+        "evidenceIdentity": "heading-depth",
+        "occurrenceOrdinal": 1,
+        "line": 17,
+        "column": 3,
+        "toolMessage": "Heading level skipped",
+        "absolutePath": "/Users/first/repository/docs/guide.md",
+        "generatedAt": "2026-11-22T00:00:00Z",
+        "hostname": "builder-01"
       },
-      "canonical": "{\"array\":[3,2,1],\"false\":false,\"null\":null,\"true\":true}",
-      "sha256": "40dc5c26e2bc66aa4fae46fa55803273ba487c3a73e870e70ed9b0520ffb51bf"
+      "excludedVariant": {
+        "ruleId": "crux/docs/format",
+        "path": "docs/guide.md",
+        "structuralAnchor": "heading:introduction",
+        "evidenceIdentity": "heading-depth",
+        "occurrenceOrdinal": 1,
+        "line": 99,
+        "column": 8,
+        "toolMessage": "Different tool prose",
+        "absolutePath": "C:/second/repository/docs/guide.md",
+        "generatedAt": "2030-01-01T00:00:00Z",
+        "hostname": "builder-99"
+      },
+      "canonical": "{\"evidenceIdentity\":\"heading-depth\",\"occurrenceOrdinal\":1,\"path\":\"docs/guide.md\",\"ruleId\":\"crux/docs/format\",\"structuralAnchor\":\"heading:introduction\"}",
+      "sha256": "318e48703ca588f16c9daa4abfda4d39f6eccbbeedb88b795b18d22dd7804c88"
     }
   ]
 }

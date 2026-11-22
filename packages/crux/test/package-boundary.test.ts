@@ -70,6 +70,8 @@ describe("inert package boundary", () => {
     expect(output).toContain("schemas/context.schema.json");
     expect(output).toContain("types/generated/engine-result.d.ts");
     expect(output).not.toContain("scripts/generate-types.ts");
+    expect(output).not.toContain("scripts/verify-canonical-vectors.mjs");
     expect(output).not.toContain("test/contracts.test.ts");
+    expect(output).not.toContain("test/support/contract-validation.ts");
   });
 });

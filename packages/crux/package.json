@@ -24,6 +24,7 @@
   "scripts": {
     "check:generated": "bun ./scripts/generate-types.ts --check",
     "generate:types": "bun ./scripts/generate-types.ts",
+    "test:canonical": "node ./scripts/verify-canonical-vectors.mjs",
     "test": "bun test ./test && bun run check:generated",
     "typecheck": "tsc --noEmit"
   },

@@ -1,65 +1,34 @@
-import { CryptoHasher } from "bun";
 import { describe, expect, test } from "bun:test";
-import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
-const VECTOR_PATH = fileURLToPath(
-  new URL("fixtures/canonical-json/vectors.json", import.meta.url),
+const PACKAGE_ROOT = fileURLToPath(new URL("..", import.meta.url));
+const HARNESS_PATH = fileURLToPath(
+  new URL("../scripts/verify-canonical-vectors.mjs", import.meta.url),
 );
 
-type JsonValue =
-  boolean | JsonValue[] | null | number | string | { [key: string]: JsonValue };
-
-type VectorFixture = {
-  algorithm: "RFC 8785";
-  fixtureRevision: number;
-  hash: "SHA-256";
-  targetRuntimes: string[];
-  vectors: {
-    canonical: string;
-    input: JsonValue;
-    name: string;
-    sha256: string;
-  }[];
-};
-
-function canonicalize(value: JsonValue): string {
-  if (Array.isArray(value)) {
-    return `[${value.map(canonicalize).join(",")}]`;
-  }
-  if (typeof value === "object" && value !== null) {
-    return `{${Object.keys(value)
-      .toSorted()
-      .map(
-        (key) =>
-          `${JSON.stringify(key)}:${canonicalize(value[key] as JsonValue)}`,
-      )
-      .join(",")}}`;
-  }
-  return JSON.stringify(value);
+async function runHarness(executable: string): Promise<string> {
+  const process = Bun.spawn([executable, HARNESS_PATH], {
+    cwd: PACKAGE_ROOT,
+    stderr: "pipe",
+    stdout: "pipe",
+  });
+  const [exitCode, stdout, stderr] = await Promise.all([
+    process.exited,
+    new Response(process.stdout).text(),
+    new Response(process.stderr).text(),
+  ]);
+  expect(exitCode, `${stdout}\n${stderr}`).toBe(0);
+  return stdout;
 }
 
 describe("RFC 8785 canonical JSON vectors", () => {
-  test("produce stable canonical bytes and SHA-256 hashes", async () => {
-    const fixture = JSON.parse(
-      await readFile(VECTOR_PATH, "utf8"),
-    ) as VectorFixture;
-
-    expect(fixture.fixtureRevision).toBe(1);
-    expect(fixture.algorithm).toBe("RFC 8785");
-    expect(fixture.hash).toBe("SHA-256");
-    expect(fixture.targetRuntimes).toEqual([
-      "node-24",
-      "node-26",
-      "bun-development",
+  test("pass the runtime-neutral harness under Node and Bun development", async () => {
+    const [nodeOutput, bunOutput] = await Promise.all([
+      runHarness("node"),
+      runHarness("bun"),
     ]);
-    for (const vector of fixture.vectors) {
-      const canonical = canonicalize(vector.input);
-      expect(canonical, vector.name).toBe(vector.canonical);
-      expect(
-        new CryptoHasher("sha256").update(canonical).digest("hex"),
-        vector.name,
-      ).toBe(vector.sha256);
-    }
+
+    expect(nodeOutput).toContain("RFC 8785 vectors with node");
+    expect(bunOutput).toContain("RFC 8785 vectors with bun");
   });
 });
