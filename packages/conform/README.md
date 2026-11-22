@@ -102,3 +102,16 @@ export default defineConfig({
 bun run test       # vitest with coverage (80% gate)
 bun run typecheck  # tsc --noEmit
 ```
+
+## Legacy pre-split inventory (T0 diagnostic artifact)
+
+This package now ships a machine-readable inventory of the pre-split Conform surface in
+`packages/conform/inventory/`:
+
+- `legacy-conform.json` — commands, flags, exports, defaults, adapters, configs, workflows,
+  consumers, and open/stale adoption PR evidence.
+- `legacy-conform.schema.json` — schema for the inventory format.
+- `completeness.json` — reproducible evidence manifest (tree/CLI/export/fixture/search/version probes).
+
+The inventory is **diagnostic only** for migration planning. It is not a compatibility layer and does
+not introduce command aliases, rule-ID aliases, suppression aliases, or any compatibility window.

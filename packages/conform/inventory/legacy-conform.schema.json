@@ -1,0 +1,489 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clockwork-kitten.dev/standards/conform/inventory/legacy-conform.schema.json",
+  "title": "Legacy pre-split Conform inventory",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "diagnosticOnly",
+    "provenance",
+    "commands",
+    "flags",
+    "exports",
+    "defaults",
+    "toolAdapters",
+    "configSurfaces",
+    "configArtifacts",
+    "workflows",
+    "consumers",
+    "openOrStaleAdoptionPrs"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "const": "./legacy-conform.schema.json" },
+    "schemaVersion": { "type": "string", "pattern": "^1\\.0\\.0$" },
+    "diagnosticOnly": { "const": true },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "repository",
+        "defaultBranch",
+        "legacyHeadSha",
+        "legacyReleaseTag",
+        "legacyReleaseSha",
+        "packageName",
+        "packageVersion",
+        "npmPublication"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "repository": { "type": "string", "minLength": 1 },
+        "defaultBranch": { "type": "string", "minLength": 1 },
+        "legacyHeadSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "legacyReleaseTag": { "type": "string", "minLength": 1 },
+        "legacyReleaseSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "packageName": { "type": "string", "minLength": 1 },
+        "packageVersion": { "type": "string", "minLength": 1 },
+        "npmPublication": {
+          "type": "object",
+          "required": ["status", "checkedAt", "detail"],
+          "additionalProperties": false,
+          "properties": {
+            "status": { "enum": ["unpublished", "published"] },
+            "checkedAt": { "type": "string", "format": "date-time" },
+            "detail": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/commandItem" }
+    },
+    "flags": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/flagItem" }
+    },
+    "exports": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/exportItem" }
+    },
+    "defaults": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/defaultItem" }
+    },
+    "toolAdapters": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/toolAdapterItem" }
+    },
+    "configSurfaces": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/configSurfaceItem" }
+    },
+    "configArtifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/configArtifactItem" }
+    },
+    "workflows": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/workflowItem" }
+    },
+    "consumers": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/consumerItem" }
+    },
+    "openOrStaleAdoptionPrs": {
+      "type": "object",
+      "required": ["staleDefinition", "queries", "pullRequests", "migration"],
+      "additionalProperties": false,
+      "properties": {
+        "staleDefinition": {
+          "type": "object",
+          "required": ["asOf", "staleAfterDays", "status", "threshold"],
+          "additionalProperties": false,
+          "properties": {
+            "asOf": { "type": "string", "format": "date-time" },
+            "staleAfterDays": { "type": "integer", "minimum": 1 },
+            "status": { "type": "string", "minLength": 1 },
+            "threshold": { "type": "string", "format": "date-time" }
+          }
+        },
+        "queries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "query",
+              "executedAt",
+              "searchUrl",
+              "totalCount",
+              "resultUrls"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "query": { "type": "string", "minLength": 1 },
+              "executedAt": { "type": "string", "format": "date-time" },
+              "searchUrl": { "type": "string", "format": "uri" },
+              "totalCount": { "type": "integer", "minimum": 0 },
+              "resultUrls": {
+                "type": "array",
+                "items": { "type": "string", "format": "uri" }
+              }
+            }
+          }
+        },
+        "pullRequests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "repository",
+              "number",
+              "url",
+              "title",
+              "state",
+              "updatedAt",
+              "stale",
+              "relevance",
+              "disposition",
+              "notes"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "repository": { "type": "string", "minLength": 1 },
+              "number": { "type": "integer", "minimum": 1 },
+              "url": { "type": "string", "format": "uri" },
+              "title": { "type": "string", "minLength": 1 },
+              "state": { "type": "string", "minLength": 1 },
+              "updatedAt": { "type": "string", "format": "date-time" },
+              "stale": { "type": "boolean" },
+              "relevance": { "type": "string", "minLength": 1 },
+              "disposition": { "$ref": "#/$defs/migration" },
+              "notes": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "migration": { "$ref": "#/$defs/migration" }
+      }
+    }
+  },
+  "$defs": {
+    "sourceArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "migration": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "target", "canonicalId", "rationale"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "destination" },
+            "target": { "type": "string", "minLength": 1 },
+            "canonicalId": { "type": ["string", "null"] },
+            "rationale": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["kind", "target", "difference", "rationale"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "intentional-difference" },
+            "target": { "type": "string", "minLength": 1 },
+            "difference": { "type": "string", "minLength": 1 },
+            "rationale": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["kind", "rationale"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "dropped" },
+            "rationale": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    },
+    "commandItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "command",
+        "exitCodes",
+        "source",
+        "diagnosticOnly",
+        "migration"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "command": { "enum": ["check", "fix"] },
+        "exitCodes": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "integer" }
+        },
+        "source": { "$ref": "#/$defs/sourceArray" },
+        "diagnosticOnly": { "const": true },
+        "migration": { "$ref": "#/$defs/migration" }
+      }
+    },
+    "flagItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "command",
+        "flag",
+        "source",
+        "diagnosticOnly",
+        "migration"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "command": { "enum": ["check", "fix"] },
+        "flag": { "type": "string", "pattern": "^--?[a-z-]+=?" },
+        "forms": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "source": { "$ref": "#/$defs/sourceArray" },
+        "diagnosticOnly": { "const": true },
+        "migration": { "$ref": "#/$defs/migration" }
+      }
+    },
+    "exportItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "surface",
+        "public",
+        "source",
+        "diagnosticOnly",
+        "migration"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "surface": { "type": "string", "minLength": 1 },
+        "public": { "type": "boolean" },
+        "target": { "type": "string", "minLength": 1 },
+        "source": { "$ref": "#/$defs/sourceArray" },
+        "diagnosticOnly": { "const": true },
+        "migration": { "$ref": "#/$defs/migration" }
+      }
+    },
+    "defaultItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "value",
+        "source",
+        "diagnosticOnly",
+        "migration"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "value": {},
+        "source": { "$ref": "#/$defs/sourceArray" },
+        "diagnosticOnly": { "const": true },
+        "migration": { "$ref": "#/$defs/migration" }
+      }
+    },
+    "toolAdapterItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "tool",
+        "bin",
+        "args",
+        "source",
+        "diagnosticOnly",
+        "migration"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "tool": { "type": "string", "minLength": 1 },
+        "bin": {
+          "type": "object",
+          "required": ["package", "name"],
+          "additionalProperties": false,
+          "properties": {
+            "package": { "type": "string", "minLength": 1 },
+            "name": { "type": "string", "minLength": 1 }
+          }
+        },
+        "args": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": false,
+          "properties": {
+            "check": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "fix": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "checkTemplate": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "fixTemplate": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "source": { "$ref": "#/$defs/sourceArray" },
+        "diagnosticOnly": { "const": true },
+        "migration": { "$ref": "#/$defs/migration" }
+      }
+    },
+    "configSurfaceItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "kind",
+        "source",
+        "diagnosticOnly",
+        "migration"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "kind": { "type": "string", "minLength": 1 },
+        "source": { "$ref": "#/$defs/sourceArray" },
+        "diagnosticOnly": { "const": true },
+        "migration": { "$ref": "#/$defs/migration" }
+      }
+    },
+    "configArtifactItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "path",
+        "contentSummary",
+        "effectiveHash",
+        "dependencyVersions",
+        "itemDispositions",
+        "source",
+        "diagnosticOnly",
+        "migration"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "contentSummary": { "type": "object" },
+        "effectiveHash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "dependencyVersions": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        },
+        "itemDispositions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["key", "migration"],
+            "additionalProperties": false,
+            "properties": {
+              "key": { "type": "string", "minLength": 1 },
+              "migration": { "$ref": "#/$defs/migration" }
+            }
+          }
+        },
+        "source": { "$ref": "#/$defs/sourceArray" },
+        "diagnosticOnly": { "const": true },
+        "migration": { "$ref": "#/$defs/migration" }
+      }
+    },
+    "workflowItem": {
+      "type": "object",
+      "required": ["id", "name", "source", "diagnosticOnly", "migration"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "inputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "commands": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "source": { "$ref": "#/$defs/sourceArray" },
+        "diagnosticOnly": { "const": true },
+        "migration": { "$ref": "#/$defs/migration" }
+      },
+      "anyOf": [{ "required": ["inputs"] }, { "required": ["commands"] }]
+    },
+    "consumerItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "mode",
+        "evidence",
+        "source",
+        "diagnosticOnly",
+        "migration"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "mode": { "type": "string", "minLength": 1 },
+        "followUpIssue": { "type": "string", "format": "uri" },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "source": { "$ref": "#/$defs/sourceArray" },
+        "diagnosticOnly": { "const": true },
+        "migration": { "$ref": "#/$defs/migration" }
+      }
+    }
+  }
+}

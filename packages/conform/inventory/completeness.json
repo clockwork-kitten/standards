@@ -1,0 +1,185 @@
+{
+  "schemaVersion": "1.0.0",
+  "inventoryPath": "packages/conform/inventory/legacy-conform.json",
+  "inventorySchemaPath": "packages/conform/inventory/legacy-conform.schema.json",
+  "repository": {
+    "name": "clockwork-kitten/standards",
+    "defaultBranch": "main",
+    "headSha": "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5",
+    "releaseTag": "v0.6.0",
+    "releaseSha": "d55c547c0323528fd0a16e129f3bb7b15dc64cf5"
+  },
+  "treeEvidence": [
+    {
+      "path": "packages/conform/src",
+      "notes": "Source of CLI, config resolution, docs runner, and code runner surfaces."
+    },
+    {
+      "path": "packages/conform/configs",
+      "notes": "Source of exported tool-adapter config artifacts."
+    },
+    {
+      "path": ".github/workflows/markdown-conformance.yml",
+      "notes": "Reusable workflow inputs and defaults."
+    },
+    {
+      "path": "lefthook/base.yml",
+      "notes": "Authoring-time conform hook commands."
+    }
+  ],
+  "cliEvidence": [
+    {
+      "command": "bun packages/conform/src/cli/main.ts check --help",
+      "stdout": "",
+      "stderr": [
+        "usage: conform check [globs...] [--config <path>] [--no-references] [--no-code] [--reference-ignore <substr>]",
+        "usage: conform fix [globs...] [--config <path>] [--no-code] [--no-llms]"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": "bun packages/conform/src/cli/main.ts fix --help",
+      "stdout": "",
+      "stderr": [
+        "usage: conform check [globs...] [--config <path>] [--no-references] [--no-code] [--reference-ignore <substr>]",
+        "usage: conform fix [globs...] [--config <path>] [--no-code] [--no-llms]"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": "bun packages/conform/src/cli/main.ts --help",
+      "stdout": "",
+      "stderr": [
+        "unknown subcommand: --help",
+        "usage: conform check [globs...] [--config <path>] [--no-references] [--no-code] [--reference-ignore <substr>]",
+        "usage: conform fix [globs...] [--config <path>] [--no-code] [--no-llms]"
+      ],
+      "exitCode": 2
+    }
+  ],
+  "exportEvidence": {
+    "packageExports": [
+      ".",
+      "./configs/eslint.base",
+      "./configs/eslint.astro",
+      "./configs/prettier.base.json",
+      "./configs/prettier.astro.json",
+      "./configs/knip.base.json",
+      "./configs/tsconfig.base.json"
+    ],
+    "rootNamedExportCount": 25,
+    "internalSourceExports": [
+      "DEFAULT_GLOBS",
+      "CheckArgs",
+      "parseCheckArgs",
+      "runCheck",
+      "FixArgs",
+      "main",
+      "parseFixArgs",
+      "runFix"
+    ]
+  },
+  "fixtures": [
+    {
+      "path": "packages/conform/src/code/__fixtures__/astro/Bad.astro",
+      "revision": "HEAD"
+    },
+    {
+      "path": "packages/conform/src/code/__fixtures__/astro/Clean.astro",
+      "revision": "HEAD"
+    }
+  ],
+  "consumerAndSearchEvidence": {
+    "coverage": "Organization-wide GitHub issue/PR search over indexed default branches.",
+    "staleDefinition": {
+      "asOf": "2026-11-22T06:04:00.000Z",
+      "staleAfterDays": 30,
+      "threshold": "2026-10-23T06:04:00.000Z"
+    },
+    "queries": [
+      {
+        "name": "org-open-migration-prs",
+        "query": "org:clockwork-kitten is:pr is:open (conform OR \"markdown-conformance\" OR canon) in:title,body",
+        "executedAt": "2026-11-22T06:03:00.000Z",
+        "searchUrl": "https://github.com/search?q=org%3Aclockwork-kitten+is%3Apr+is%3Aopen+%28conform+OR+%22markdown-conformance%22+OR+canon%29+in%3Atitle%2Cbody&type=pullrequests",
+        "totalCount": 3,
+        "resultUrls": [
+          "https://github.com/clockwork-kitten/standards/pull/28",
+          "https://github.com/clockwork-kitten/canon/pull/7",
+          "https://github.com/clockwork-kitten/canon/pull/6"
+        ]
+      },
+      {
+        "name": "org-stale-open-migration-prs",
+        "query": "org:clockwork-kitten is:pr is:open (conform OR \"markdown-conformance\" OR canon) in:title,body updated:<2026-10-23",
+        "executedAt": "2026-11-22T06:04:00.000Z",
+        "searchUrl": "https://github.com/search?q=org%3Aclockwork-kitten+is%3Apr+is%3Aopen+%28conform+OR+%22markdown-conformance%22+OR+canon%29+in%3Atitle%2Cbody+updated%3A%3C2026-10-23&type=pullrequests",
+        "totalCount": 1,
+        "resultUrls": ["https://github.com/clockwork-kitten/canon/pull/6"]
+      }
+    ],
+    "knownAuthorityEvidence": [
+      {
+        "repository": "clockwork-kitten/canon",
+        "number": 6,
+        "url": "https://github.com/clockwork-kitten/canon/pull/6",
+        "title": "feat(drain): wire drain to protected main via GitHub App token",
+        "state": "open",
+        "updatedAt": "2026-09-22T16:20:36Z",
+        "stale": true,
+        "relevance": "authority-known-canon-6",
+        "disposition": {
+          "kind": "intentional-difference",
+          "target": "Migration sequencing evidence only",
+          "difference": "Canon PR #6 is tracked as authority-known stale/open evidence and is not a prerequisite or independent migration authority for this Conform inventory cut.",
+          "rationale": "Brief #87 explicitly states Canon PR #6 may be superseded and is not a prerequisite to this repo-local inventory."
+        },
+        "notes": "Included as required authority-known evidence; no cross-repo action is taken in this issue."
+      },
+      {
+        "repository": "clockwork-kitten/ops",
+        "number": 4,
+        "url": "https://github.com/clockwork-kitten/ops/pull/4",
+        "title": "ci: adopt shared standards markdown-conformance workflow",
+        "state": "merged",
+        "updatedAt": "2026-09-05T14:58:25Z",
+        "stale": false,
+        "relevance": "authority-known-home-adoption",
+        "disposition": {
+          "kind": "destination",
+          "target": "Historical home-adoption evidence record",
+          "canonicalId": null,
+          "rationale": "Home-adoption evidence is retained as historical migration context; active cutovers remain tracked in dedicated follow-up issues."
+        },
+        "notes": "Required authority-known home-adoption PR evidence; closed historical context only."
+      }
+    ],
+    "notes": "Search coverage is limited to indexed default branches and searchable issue/PR metadata.",
+    "consumerCutoverIssues": [
+      {
+        "repository": "clockwork-kitten/ops",
+        "url": "https://github.com/clockwork-kitten/ops/issues/12"
+      },
+      {
+        "repository": "clockwork-kitten/incubator",
+        "url": "https://github.com/clockwork-kitten/incubator/issues/2"
+      }
+    ]
+  },
+  "versionEvidence": {
+    "npmCheckCommand": "npm view @clockwork-kitten/conform version",
+    "npmCheckResult": "E404 Not Found",
+    "notes": "Legacy package identity is release tag + git SHA; npm package is currently unpublished."
+  },
+  "counts": {
+    "commands": 2,
+    "flags": 16,
+    "exports": 40,
+    "defaults": 18,
+    "toolAdapters": 6,
+    "configSurfaces": 15,
+    "configArtifacts": 6,
+    "workflows": 2,
+    "consumers": 3
+  }
+}
