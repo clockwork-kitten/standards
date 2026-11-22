@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clockwork-kitten.dev/standards/conform/inventory/legacy-conform.schema.json",
+  "title": "Legacy pre-split Conform inventory",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "diagnosticOnly",
+    "provenance",
+    "commands",
+    "flags",
+    "exports",
+    "defaults",
+    "toolAdapters",
+    "configSurfaces",
+    "configArtifacts",
+    "workflows",
+    "consumers",
+    "openOrStaleAdoptionPrs"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "const": "./legacy-conform.schema.json" },
+    "schemaVersion": { "type": "string", "pattern": "^1\\.0\\.0$" },
+    "diagnosticOnly": { "const": true },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "repository",
+        "defaultBranch",
+        "legacyHeadSha",
+        "legacyReleaseTag",
+        "legacyReleaseSha",
+        "packageName",
+        "packageVersion",
+        "npmPublication"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "repository": { "type": "string", "minLength": 1 },
+        "defaultBranch": { "type": "string", "minLength": 1 },
+        "legacyHeadSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "legacyReleaseTag": { "type": "string", "minLength": 1 },
+        "legacyReleaseSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "packageName": { "type": "string", "minLength": 1 },
+        "packageVersion": { "type": "string", "minLength": 1 },
+        "npmPublication": {
+          "type": "object",
+          "required": ["status", "checkedAt", "detail"],
+          "additionalProperties": false,
+          "properties": {
+            "status": { "enum": ["unpublished", "published"] },
+            "checkedAt": { "type": "string", "format": "date-time" },
+            "detail": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "commands": { "$ref": "#/$defs/inventoryItems" },
+    "flags": { "$ref": "#/$defs/inventoryItems" },
+    "exports": { "$ref": "#/$defs/inventoryItems" },
+    "defaults": { "$ref": "#/$defs/inventoryItems" },
+    "toolAdapters": { "$ref": "#/$defs/inventoryItems" },
+    "configSurfaces": { "$ref": "#/$defs/inventoryItems" },
+    "configArtifacts": { "$ref": "#/$defs/inventoryItems" },
+    "workflows": { "$ref": "#/$defs/inventoryItems" },
+    "consumers": { "$ref": "#/$defs/inventoryItems" },
+    "openOrStaleAdoptionPrs": {
+      "type": "object",
+      "required": ["queries", "pullRequests", "migration"],
+      "additionalProperties": false,
+      "properties": {
+        "queries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "query", "executedAt"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "query": { "type": "string", "minLength": 1 },
+              "executedAt": { "type": "string", "format": "date-time" }
+            }
+          }
+        },
+        "pullRequests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["url", "title", "notes"],
+            "additionalProperties": false,
+            "properties": {
+              "url": { "type": "string", "format": "uri" },
+              "title": { "type": "string", "minLength": 1 },
+              "notes": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "migration": { "$ref": "#/$defs/migration" }
+      }
+    }
+  },
+  "$defs": {
+    "inventoryItems": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/inventoryItem" }
+    },
+    "inventoryItem": {
+      "type": "object",
+      "required": ["id", "name", "source", "diagnosticOnly", "migration"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "source": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "diagnosticOnly": { "const": true },
+        "migration": { "$ref": "#/$defs/migration" }
+      },
+      "additionalProperties": true
+    },
+    "migration": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "target", "canonicalId", "rationale"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "destination" },
+            "target": { "type": "string", "minLength": 1 },
+            "canonicalId": { "type": ["string", "null"] },
+            "rationale": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["kind", "target", "difference", "rationale"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "intentional-difference" },
+            "target": { "type": "string", "minLength": 1 },
+            "difference": { "type": "string", "minLength": 1 },
+            "rationale": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["kind", "rationale"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "const": "dropped" },
+            "rationale": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    }
+  }
+}

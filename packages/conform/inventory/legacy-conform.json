@@ -1,0 +1,1557 @@
+{
+  "$schema": "./legacy-conform.schema.json",
+  "schemaVersion": "1.0.0",
+  "diagnosticOnly": true,
+  "provenance": {
+    "repository": "clockwork-kitten/standards",
+    "defaultBranch": "main",
+    "legacyHeadSha": "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5",
+    "legacyReleaseTag": "v0.6.0",
+    "legacyReleaseSha": "d55c547c0323528fd0a16e129f3bb7b15dc64cf5",
+    "packageName": "@clockwork-kitten/conform",
+    "packageVersion": "0.0.0",
+    "npmPublication": {
+      "status": "unpublished",
+      "checkedAt": "2026-11-22T04:53:09.573Z",
+      "detail": "npm view @clockwork-kitten/conform version returned E404."
+    }
+  },
+  "commands": [
+    {
+      "id": "command.check",
+      "name": "conform check",
+      "command": "check",
+      "exitCodes": { "pass": 0, "failingFinding": 1, "invocationError": 2 },
+      "source": ["packages/conform/src/cli/main.ts#L10-L145"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform orchestrator CLI",
+        "canonicalId": null,
+        "rationale": "Check remains an explicit orchestrator command; no alias window is introduced."
+      }
+    },
+    {
+      "id": "command.fix",
+      "name": "conform fix",
+      "command": "fix",
+      "exitCodes": { "successOrResidue": 0, "invocationError": 2 },
+      "source": ["packages/conform/src/cli/main.ts#L147-L249"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform orchestrator CLI",
+        "canonicalId": null,
+        "rationale": "Fix remains an authoring-time command in the future orchestrator."
+      }
+    }
+  ],
+  "flags": [
+    {
+      "id": "flag.check.config",
+      "name": "--config / -c / --config=",
+      "command": "check",
+      "flag": "--config",
+      "forms": ["--config <path>", "-c <path>", "--config=<path>"],
+      "source": ["packages/conform/src/cli/main.ts#L44-L55"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config selection",
+        "canonicalId": null,
+        "rationale": "Explicit config path selection stays in orchestrator scope."
+      }
+    },
+    {
+      "id": "flag.check.short-config",
+      "name": "-c",
+      "command": "check",
+      "flag": "-c",
+      "source": ["packages/conform/src/cli/main.ts#L44-L55"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "intentional-difference",
+        "target": "Conform CLI",
+        "difference": "Short flags will be retained only if the post-split command contract explicitly keeps them.",
+        "rationale": "No short-flag alias commitment is made in this diagnostic tranche."
+      }
+    },
+    {
+      "id": "flag.check.config-equals",
+      "name": "--config=",
+      "command": "check",
+      "flag": "--config=",
+      "source": ["packages/conform/src/cli/main.ts#L53-L55"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config selection",
+        "canonicalId": null,
+        "rationale": "Inline assignment form is part of the current parser surface."
+      }
+    },
+    {
+      "id": "flag.check.no-references",
+      "name": "--no-references",
+      "command": "check",
+      "flag": "--no-references",
+      "source": ["packages/conform/src/cli/main.ts#L55-L57"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Canon reference-check behavior via Conform",
+        "canonicalId": null,
+        "rationale": "This is docs-track delegation behavior and maps to Canon-owned semantics."
+      }
+    },
+    {
+      "id": "flag.check.no-code",
+      "name": "--no-code",
+      "command": "check",
+      "flag": "--no-code",
+      "source": ["packages/conform/src/cli/main.ts#L57-L59"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform orchestrator code-track toggle",
+        "canonicalId": null,
+        "rationale": "This is an orchestrator-only switch and remains Conform-owned."
+      }
+    },
+    {
+      "id": "flag.check.reference-ignore",
+      "name": "--reference-ignore / --reference-ignore=",
+      "command": "check",
+      "flag": "--reference-ignore",
+      "forms": [
+        "--reference-ignore <substring>",
+        "--reference-ignore=<substring>"
+      ],
+      "source": ["packages/conform/src/cli/main.ts#L59-L67"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Canon reference-ignore behavior via Conform",
+        "canonicalId": null,
+        "rationale": "This is pass-through docs behavior owned by Canon and orchestrated by Conform."
+      }
+    },
+    {
+      "id": "flag.check.reference-ignore-equals",
+      "name": "--reference-ignore=",
+      "command": "check",
+      "flag": "--reference-ignore=",
+      "source": ["packages/conform/src/cli/main.ts#L65-L67"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Canon reference-ignore behavior via Conform",
+        "canonicalId": null,
+        "rationale": "Inline assignment form exists in legacy parser behavior."
+      }
+    },
+    {
+      "id": "flag.check.help",
+      "name": "--help / -h",
+      "command": "check",
+      "flag": "--help",
+      "forms": ["--help", "-h"],
+      "source": ["packages/conform/src/cli/main.ts#L86-L90"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "intentional-difference",
+        "target": "Conform CLI help",
+        "difference": "Legacy command help prints both usage lines to stderr.",
+        "rationale": "The split CLI may change help rendering as an intentional UX cleanup."
+      }
+    },
+    {
+      "id": "flag.check.short-help",
+      "name": "-h",
+      "command": "check",
+      "flag": "-h",
+      "source": ["packages/conform/src/cli/main.ts#L86-L90"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "intentional-difference",
+        "target": "Conform CLI help",
+        "difference": "Short help is legacy parser behavior, not a promised compatibility alias.",
+        "rationale": "This inventory is diagnostic and does not guarantee future aliases."
+      }
+    },
+    {
+      "id": "flag.fix.config",
+      "name": "--config / -c / --config=",
+      "command": "fix",
+      "flag": "--config",
+      "forms": ["--config <path>", "-c <path>", "--config=<path>"],
+      "source": ["packages/conform/src/cli/main.ts#L189-L197"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config selection",
+        "canonicalId": null,
+        "rationale": "Explicit config path selection remains orchestrator behavior."
+      }
+    },
+    {
+      "id": "flag.fix.short-config",
+      "name": "-c",
+      "command": "fix",
+      "flag": "-c",
+      "source": ["packages/conform/src/cli/main.ts#L189-L197"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "intentional-difference",
+        "target": "Conform CLI",
+        "difference": "No promise of carrying short-form aliases beyond this legacy surface.",
+        "rationale": "Compatibility aliases are explicitly out of scope."
+      }
+    },
+    {
+      "id": "flag.fix.config-equals",
+      "name": "--config=",
+      "command": "fix",
+      "flag": "--config=",
+      "source": ["packages/conform/src/cli/main.ts#L196-L197"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config selection",
+        "canonicalId": null,
+        "rationale": "Inline assignment form is present in current parser behavior."
+      }
+    },
+    {
+      "id": "flag.fix.no-llms",
+      "name": "--no-llms",
+      "command": "fix",
+      "flag": "--no-llms",
+      "source": ["packages/conform/src/cli/main.ts#L197-L199"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Canon llms generation behavior via Conform",
+        "canonicalId": null,
+        "rationale": "This docs-track toggle is Canon-owned behavior delegated by Conform."
+      }
+    },
+    {
+      "id": "flag.fix.no-code",
+      "name": "--no-code",
+      "command": "fix",
+      "flag": "--no-code",
+      "source": ["packages/conform/src/cli/main.ts#L199-L201"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform orchestrator code-track toggle",
+        "canonicalId": null,
+        "rationale": "Code fixer gating remains orchestrator-owned."
+      }
+    },
+    {
+      "id": "flag.fix.help",
+      "name": "--help / -h",
+      "command": "fix",
+      "flag": "--help",
+      "forms": ["--help", "-h"],
+      "source": ["packages/conform/src/cli/main.ts#L223-L227"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "intentional-difference",
+        "target": "Conform CLI help",
+        "difference": "Legacy help prints both usage lines to stderr.",
+        "rationale": "Help output shape may intentionally change without alias windows."
+      }
+    },
+    {
+      "id": "flag.fix.short-help",
+      "name": "-h",
+      "command": "fix",
+      "flag": "-h",
+      "source": ["packages/conform/src/cli/main.ts#L223-L227"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "intentional-difference",
+        "target": "Conform CLI help",
+        "difference": "Short help support is recorded only as legacy behavior.",
+        "rationale": "No compatibility alias promises in this tranche."
+      }
+    }
+  ],
+  "exports": [
+    {
+      "id": "export.package.root",
+      "name": ".",
+      "surface": "package-subpath",
+      "public": true,
+      "target": "./src/index.ts",
+      "source": ["packages/conform/package.json#exports"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform public package API",
+        "canonicalId": null,
+        "rationale": "Root export remains package API authority."
+      }
+    },
+    {
+      "id": "export.package.config-eslint-base",
+      "name": "./configs/eslint.base",
+      "surface": "package-subpath",
+      "public": true,
+      "target": "./configs/eslint.base.js",
+      "source": ["packages/conform/package.json#exports"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible ESLint config distribution",
+        "canonicalId": null,
+        "rationale": "Code tool config ownership maps to Crucible."
+      }
+    },
+    {
+      "id": "export.package.config-eslint-astro",
+      "name": "./configs/eslint.astro",
+      "surface": "package-subpath",
+      "public": true,
+      "target": "./configs/eslint.astro.js",
+      "source": ["packages/conform/package.json#exports"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible ESLint Astro overlay distribution",
+        "canonicalId": null,
+        "rationale": "Astro lint config remains code-tool configuration, not Conform logic."
+      }
+    },
+    {
+      "id": "export.package.config-prettier-base",
+      "name": "./configs/prettier.base.json",
+      "surface": "package-subpath",
+      "public": true,
+      "target": "./configs/prettier.base.json",
+      "source": ["packages/conform/package.json#exports"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible Prettier config distribution",
+        "canonicalId": null,
+        "rationale": "Prettier config ownership belongs to the code engine track."
+      }
+    },
+    {
+      "id": "export.package.config-prettier-astro",
+      "name": "./configs/prettier.astro.json",
+      "surface": "package-subpath",
+      "public": true,
+      "target": "./configs/prettier.astro.json",
+      "source": ["packages/conform/package.json#exports"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible Prettier Astro overlay distribution",
+        "canonicalId": null,
+        "rationale": "Astro formatting config is code tooling, not Conform orchestration."
+      }
+    },
+    {
+      "id": "export.package.config-knip-base",
+      "name": "./configs/knip.base.json",
+      "surface": "package-subpath",
+      "public": true,
+      "target": "./configs/knip.base.json",
+      "source": ["packages/conform/package.json#exports"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible knip config distribution",
+        "canonicalId": null,
+        "rationale": "Static dead-code config ownership is code-engine scope."
+      }
+    },
+    {
+      "id": "export.package.config-tsconfig-base",
+      "name": "./configs/tsconfig.base.json",
+      "surface": "package-subpath",
+      "public": true,
+      "target": "./configs/tsconfig.base.json",
+      "source": ["packages/conform/package.json#exports"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible TypeScript base config distribution",
+        "canonicalId": null,
+        "rationale": "TypeScript config defaults are part of the code-tool surface."
+      }
+    },
+    {
+      "id": "export.root.CodeTool",
+      "name": "CodeTool",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L8-L16"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible code runner API",
+        "canonicalId": null,
+        "rationale": "Code tool typing maps to the code engine."
+      }
+    },
+    {
+      "id": "export.root.CodeToolResult",
+      "name": "CodeToolResult",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L8-L16"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible code runner API",
+        "canonicalId": null,
+        "rationale": "Tool result typing belongs with code execution."
+      }
+    },
+    {
+      "id": "export.root.enabledTools",
+      "name": "enabledTools",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L8-L16"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible code runner API",
+        "canonicalId": null,
+        "rationale": "Code tool ordering logic belongs to code ownership."
+      }
+    },
+    {
+      "id": "export.root.resolveBin",
+      "name": "resolveBin",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L8-L16"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible adapter plumbing",
+        "canonicalId": null,
+        "rationale": "Tool-bin resolution is a code adapter implementation concern."
+      }
+    },
+    {
+      "id": "export.root.RunCodeOptions",
+      "name": "RunCodeOptions",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L8-L16"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible code runner API",
+        "canonicalId": null,
+        "rationale": "Code runner options are code-engine contract."
+      }
+    },
+    {
+      "id": "export.root.runCodeTrack",
+      "name": "runCodeTrack",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L8-L16"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible code runner API",
+        "canonicalId": null,
+        "rationale": "Code execution moves under Crucible ownership."
+      }
+    },
+    {
+      "id": "export.root.RunProcess",
+      "name": "RunProcess",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L8-L16"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible adapter plumbing",
+        "canonicalId": null,
+        "rationale": "Subprocess abstraction is adapter internals for code checks."
+      }
+    },
+    {
+      "id": "export.root.runProcess",
+      "name": "runProcess",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L8-L16"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible adapter plumbing",
+        "canonicalId": null,
+        "rationale": "Default process launcher belongs in code runner implementation."
+      }
+    },
+    {
+      "id": "export.root.toolArgs",
+      "name": "toolArgs",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L8-L16"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible code runner API",
+        "canonicalId": null,
+        "rationale": "Per-tool argv mapping is code behavior."
+      }
+    },
+    {
+      "id": "export.root.CONFIG_FILENAMES",
+      "name": "CONFIG_FILENAMES",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L17-L28"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config resolution",
+        "canonicalId": null,
+        "rationale": "Config discovery precedence belongs to orchestrator setup."
+      }
+    },
+    {
+      "id": "export.root.ConfigError",
+      "name": "ConfigError",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L17-L28"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config resolution",
+        "canonicalId": null,
+        "rationale": "Config load failures remain orchestrator concerns."
+      }
+    },
+    {
+      "id": "export.root.DEFAULT_BEDROCK_FILES",
+      "name": "DEFAULT_BEDROCK_FILES",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L17-L28"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "intentional-difference",
+        "target": "Crucible bedrock migration plan",
+        "difference": "Bedrock defaults are tracked but not automatically carried forward.",
+        "rationale": "Rule-level bedrock disposition is unresolved and must stay explicit."
+      }
+    },
+    {
+      "id": "export.root.DEFAULT_TSCONFIG",
+      "name": "DEFAULT_TSCONFIG",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L17-L28"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform/Crucible code-track defaults",
+        "canonicalId": null,
+        "rationale": "Typecheck default path is part of code-track orchestration."
+      }
+    },
+    {
+      "id": "export.root.discoverConfigPath",
+      "name": "discoverConfigPath",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L17-L28"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config resolution",
+        "canonicalId": null,
+        "rationale": "Config path discovery is orchestrator behavior."
+      }
+    },
+    {
+      "id": "export.root.loadConfigFile",
+      "name": "loadConfigFile",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L17-L28"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config resolution",
+        "canonicalId": null,
+        "rationale": "Config parsing/import behavior remains orchestrator-owned."
+      }
+    },
+    {
+      "id": "export.root.resolveCodeConfig",
+      "name": "resolveCodeConfig",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L17-L28"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform orchestration + Crucible defaults",
+        "canonicalId": null,
+        "rationale": "Code defaults are resolved before delegating execution."
+      }
+    },
+    {
+      "id": "export.root.resolveConfig",
+      "name": "resolveConfig",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L17-L28"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config resolution",
+        "canonicalId": null,
+        "rationale": "Top-level config resolution remains orchestrator behavior."
+      }
+    },
+    {
+      "id": "export.root.ResolvedCodeConfig",
+      "name": "ResolvedCodeConfig",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L17-L28"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform/Crucible integration types",
+        "canonicalId": null,
+        "rationale": "Resolved code settings define interop between orchestrator and code track."
+      }
+    },
+    {
+      "id": "export.root.ResolvedConfig",
+      "name": "ResolvedConfig",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L17-L28"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config API",
+        "canonicalId": null,
+        "rationale": "Resolved config metadata is orchestrator API surface."
+      }
+    },
+    {
+      "id": "export.root.CodeConfig",
+      "name": "CodeConfig",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L29-L33"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config schema",
+        "canonicalId": null,
+        "rationale": "Authored config shape remains part of the orchestrator contract."
+      }
+    },
+    {
+      "id": "export.root.ConformConfig",
+      "name": "ConformConfig",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L29-L33"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config schema",
+        "canonicalId": null,
+        "rationale": "The root config type remains a public orchestrator interface."
+      }
+    },
+    {
+      "id": "export.root.defineConfig",
+      "name": "defineConfig",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L29-L33"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config authoring helper",
+        "canonicalId": null,
+        "rationale": "Helper API remains in Conform-facing config authoring."
+      }
+    },
+    {
+      "id": "export.root.DocsMode",
+      "name": "DocsMode",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L34-L40"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform→Canon docs adapter API",
+        "canonicalId": null,
+        "rationale": "Docs mode typing describes pass-through behavior to Canon."
+      }
+    },
+    {
+      "id": "export.root.RunDocsOptions",
+      "name": "RunDocsOptions",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L34-L40"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform→Canon docs adapter API",
+        "canonicalId": null,
+        "rationale": "Docs runner options stay in the orchestrator layer."
+      }
+    },
+    {
+      "id": "export.root.runDocsTrack",
+      "name": "runDocsTrack",
+      "surface": "root-named-export",
+      "public": true,
+      "source": ["packages/conform/src/index.ts#L34-L40"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform→Canon docs adapter API",
+        "canonicalId": null,
+        "rationale": "Docs execution remains Canon-owned behavior invoked by Conform."
+      }
+    },
+    {
+      "id": "export.internal.DEFAULT_GLOBS",
+      "name": "DEFAULT_GLOBS",
+      "surface": "source-export",
+      "public": false,
+      "source": ["packages/conform/src/cli/main.ts#L10-L11"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform CLI implementation",
+        "canonicalId": null,
+        "rationale": "CLI defaults are implementation details, not package export map entries."
+      }
+    },
+    {
+      "id": "export.internal.CheckArgs",
+      "name": "CheckArgs",
+      "surface": "source-export",
+      "public": false,
+      "source": ["packages/conform/src/cli/main.ts#L15-L27"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform CLI implementation",
+        "canonicalId": null,
+        "rationale": "CLI argument typing remains internal unless explicitly re-exported."
+      }
+    },
+    {
+      "id": "export.internal.parseCheckArgs",
+      "name": "parseCheckArgs",
+      "surface": "source-export",
+      "public": false,
+      "source": ["packages/conform/src/cli/main.ts#L36-L81"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform CLI implementation",
+        "canonicalId": null,
+        "rationale": "Parser function is test seam/internal API and not in exports map."
+      }
+    },
+    {
+      "id": "export.internal.runCheck",
+      "name": "runCheck",
+      "surface": "source-export",
+      "public": false,
+      "source": ["packages/conform/src/cli/main.ts#L84-L145"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform CLI implementation",
+        "canonicalId": null,
+        "rationale": "Runner is internal implementation API not listed in package exports map."
+      }
+    },
+    {
+      "id": "export.internal.FixArgs",
+      "name": "FixArgs",
+      "surface": "source-export",
+      "public": false,
+      "source": ["packages/conform/src/cli/main.ts#L150-L158"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform CLI implementation",
+        "canonicalId": null,
+        "rationale": "Fix argument typing is internal unless promoted in exports map."
+      }
+    },
+    {
+      "id": "export.internal.main",
+      "name": "main",
+      "surface": "source-export",
+      "public": false,
+      "source": ["packages/conform/src/cli/main.ts#L164-L177"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform CLI entrypoint",
+        "canonicalId": null,
+        "rationale": "Entrypoint function remains source-level export only."
+      }
+    },
+    {
+      "id": "export.internal.parseFixArgs",
+      "name": "parseFixArgs",
+      "surface": "source-export",
+      "public": false,
+      "source": ["packages/conform/src/cli/main.ts#L186-L216"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform CLI implementation",
+        "canonicalId": null,
+        "rationale": "Parser function is test seam/internal API and not in exports map."
+      }
+    },
+    {
+      "id": "export.internal.runFix",
+      "name": "runFix",
+      "surface": "source-export",
+      "public": false,
+      "source": ["packages/conform/src/cli/main.ts#L219-L249"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform CLI implementation",
+        "canonicalId": null,
+        "rationale": "Fix runner is implementation detail and not public package API."
+      }
+    }
+  ],
+  "defaults": [
+    {
+      "id": "default.cli.check.globs",
+      "name": "cli.check.globs",
+      "value": ["**/*.md"],
+      "source": [
+        "packages/conform/src/cli/main.ts#L10-L11",
+        "packages/conform/src/cli/main.ts#L74-L79"
+      ],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform CLI defaults",
+        "canonicalId": null,
+        "rationale": "Default markdown glob remains orchestrator-level behavior."
+      }
+    },
+    {
+      "id": "default.cli.fix.globs",
+      "name": "cli.fix.globs",
+      "value": ["**/*.md"],
+      "source": [
+        "packages/conform/src/cli/main.ts#L10-L11",
+        "packages/conform/src/cli/main.ts#L211-L215"
+      ],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform CLI defaults",
+        "canonicalId": null,
+        "rationale": "Fix default glob follows the same CLI default constant."
+      }
+    },
+    {
+      "id": "default.cli.check.references",
+      "name": "cli.check.references",
+      "value": true,
+      "source": ["packages/conform/src/cli/main.ts#L41-L57"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Canon docs-check default via Conform",
+        "canonicalId": null,
+        "rationale": "Reference checks default on unless disabled."
+      }
+    },
+    {
+      "id": "default.cli.check.code",
+      "name": "cli.check.code",
+      "value": true,
+      "source": ["packages/conform/src/cli/main.ts#L42-L59"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform code-track default",
+        "canonicalId": null,
+        "rationale": "Code track defaults to enabled when config declares code."
+      }
+    },
+    {
+      "id": "default.cli.check.referenceIgnore",
+      "name": "cli.check.referenceIgnore",
+      "value": [],
+      "source": ["packages/conform/src/cli/main.ts#L43-L67"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Canon reference-ignore forwarding via Conform",
+        "canonicalId": null,
+        "rationale": "Reference ignore list is empty by default."
+      }
+    },
+    {
+      "id": "default.cli.fix.llms",
+      "name": "cli.fix.llms",
+      "value": true,
+      "source": ["packages/conform/src/cli/main.ts#L190-L199"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Canon llms generation default via Conform",
+        "canonicalId": null,
+        "rationale": "llms regeneration defaults to on in fix mode."
+      }
+    },
+    {
+      "id": "default.cli.fix.code",
+      "name": "cli.fix.code",
+      "value": true,
+      "source": ["packages/conform/src/cli/main.ts#L191-L201"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform code-fix default",
+        "canonicalId": null,
+        "rationale": "Code fixers default to enabled when code track exists."
+      }
+    },
+    {
+      "id": "default.config.default.tsconfig",
+      "name": "config.default.tsconfig",
+      "value": "tsconfig.json",
+      "source": [
+        "packages/conform/src/config/resolve.ts#L42-L44",
+        "packages/conform/src/config/resolve.ts#L113-L118"
+      ],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform/Crucible typecheck default",
+        "canonicalId": null,
+        "rationale": "Typecheck default path remains in code-track defaults."
+      }
+    },
+    {
+      "id": "default.config.default.bedrockWhenTrue",
+      "name": "config.default.bedrockWhenTrue",
+      "value": ["src"],
+      "source": [
+        "packages/conform/src/config/resolve.ts#L45-L46",
+        "packages/conform/src/config/resolve.ts#L162-L167"
+      ],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "intentional-difference",
+        "target": "Crucible bedrock migration",
+        "difference": "Bedrock enablement and defaults require explicit rule-level disposition before migration.",
+        "rationale": "No wholesale bedrock carry-forward is allowed in this tranche."
+      }
+    }
+  ],
+  "toolAdapters": [
+    {
+      "id": "adapter.code.bedrock",
+      "name": "code adapter bedrock",
+      "tool": "bedrock",
+      "bin": { "package": "bedrock", "name": "bedrock" },
+      "args": { "check": ["src", "--report"], "fix": ["src", "--fix"] },
+      "source": [
+        "packages/conform/src/code/run.ts#L39-L47",
+        "packages/conform/src/code/run.ts#L142-L149"
+      ],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "intentional-difference",
+        "target": "Crucible code adapters",
+        "difference": "Bedrock is tracked but unresolved pending rule-level mapping and dependency packaging decisions.",
+        "rationale": "Do not create compatibility aliases or silent bedrock carryover."
+      }
+    },
+    {
+      "id": "adapter.code.eslint",
+      "name": "code adapter eslint",
+      "tool": "eslint",
+      "bin": { "package": "eslint", "name": "eslint" },
+      "args": { "check": ["."], "fix": ["--fix", "."] },
+      "source": [
+        "packages/conform/src/code/run.ts#L39-L47",
+        "packages/conform/src/code/run.ts#L150-L152"
+      ],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible code adapters",
+        "canonicalId": null,
+        "rationale": "ESLint adapter behavior maps directly to code engine ownership."
+      }
+    },
+    {
+      "id": "adapter.code.knip",
+      "name": "code adapter knip",
+      "tool": "knip",
+      "bin": { "package": "knip", "name": "knip-bun" },
+      "args": { "check": [] },
+      "source": [
+        "packages/conform/src/code/run.ts#L39-L47",
+        "packages/conform/src/code/run.ts#L153-L155"
+      ],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible code adapters",
+        "canonicalId": null,
+        "rationale": "Knip gate adapter is part of code engine ownership."
+      }
+    },
+    {
+      "id": "adapter.code.prettier",
+      "name": "code adapter prettier",
+      "tool": "prettier",
+      "bin": { "package": "prettier", "name": "prettier" },
+      "args": { "check": ["--check", "."], "fix": ["--write", "."] },
+      "source": [
+        "packages/conform/src/code/run.ts#L39-L47",
+        "packages/conform/src/code/run.ts#L156-L158"
+      ],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible code adapters",
+        "canonicalId": null,
+        "rationale": "Prettier adapter behavior maps to code engine ownership."
+      }
+    },
+    {
+      "id": "adapter.code.typecheck",
+      "name": "code adapter typecheck",
+      "tool": "typecheck",
+      "bin": { "package": "typescript", "name": "tsc" },
+      "args": { "check": ["--noEmit", "--project", "tsconfig.json"] },
+      "source": [
+        "packages/conform/src/code/run.ts#L39-L47",
+        "packages/conform/src/code/run.ts#L159-L161"
+      ],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible code adapters",
+        "canonicalId": null,
+        "rationale": "TypeScript gate adapter maps to code engine ownership."
+      }
+    },
+    {
+      "id": "adapter.docs.canon",
+      "name": "docs adapter canon",
+      "tool": "canon",
+      "bin": { "package": "@clockwork-kitten/canon", "name": "canon" },
+      "args": {
+        "checkTemplate": [
+          "check",
+          "<globs...>",
+          "[--no-references]",
+          "[--reference-ignore <substring>]"
+        ],
+        "fixTemplate": ["fix", "<globs...>", "[--no-llms]"]
+      },
+      "source": ["packages/conform/src/docs/run.ts#L30-L59"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform→Canon docs orchestration",
+        "canonicalId": null,
+        "rationale": "Docs conformance is Canon-owned and invoked by Conform."
+      }
+    }
+  ],
+  "configSurfaces": [
+    {
+      "id": "config.discovery.conform.config.ts",
+      "name": "conform.config.ts",
+      "kind": "discovery-filename",
+      "source": ["packages/conform/src/config/resolve.ts#L13-L21"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config discovery",
+        "canonicalId": null,
+        "rationale": "Discovery precedence is orchestrator behavior."
+      }
+    },
+    {
+      "id": "config.discovery.conform.config.mts",
+      "name": "conform.config.mts",
+      "kind": "discovery-filename",
+      "source": ["packages/conform/src/config/resolve.ts#L13-L21"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config discovery",
+        "canonicalId": null,
+        "rationale": "Discovery precedence is orchestrator behavior."
+      }
+    },
+    {
+      "id": "config.discovery.conform.config.mjs",
+      "name": "conform.config.mjs",
+      "kind": "discovery-filename",
+      "source": ["packages/conform/src/config/resolve.ts#L13-L21"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config discovery",
+        "canonicalId": null,
+        "rationale": "Discovery precedence is orchestrator behavior."
+      }
+    },
+    {
+      "id": "config.discovery.conform.config.js",
+      "name": "conform.config.js",
+      "kind": "discovery-filename",
+      "source": ["packages/conform/src/config/resolve.ts#L13-L21"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config discovery",
+        "canonicalId": null,
+        "rationale": "Discovery precedence is orchestrator behavior."
+      }
+    },
+    {
+      "id": "config.discovery.conform.config.jsonc",
+      "name": "conform.config.jsonc",
+      "kind": "discovery-filename",
+      "source": ["packages/conform/src/config/resolve.ts#L13-L21"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config discovery",
+        "canonicalId": null,
+        "rationale": "Discovery precedence is orchestrator behavior."
+      }
+    },
+    {
+      "id": "config.discovery.conform.config.json",
+      "name": "conform.config.json",
+      "kind": "discovery-filename",
+      "source": ["packages/conform/src/config/resolve.ts#L13-L21"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config discovery",
+        "canonicalId": null,
+        "rationale": "Discovery precedence is orchestrator behavior."
+      }
+    },
+    {
+      "id": "config.key.code",
+      "name": "code",
+      "kind": "config-key",
+      "source": ["packages/conform/src/config/types.ts#L40-L42"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config schema",
+        "canonicalId": null,
+        "rationale": "Root code block remains config entrypoint for code track."
+      }
+    },
+    {
+      "id": "config.key.code.bedrock",
+      "name": "code.bedrock",
+      "kind": "config-key",
+      "source": ["packages/conform/src/config/types.ts#L10-L15"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "intentional-difference",
+        "target": "Crucible bedrock migration",
+        "difference": "Bedrock key is inventoried and must be explicitly dispositioned before reuse.",
+        "rationale": "No implicit compatibility layer is allowed."
+      }
+    },
+    {
+      "id": "config.key.code.eslint",
+      "name": "code.eslint",
+      "kind": "config-key",
+      "source": ["packages/conform/src/config/types.ts#L16-L20"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible tool toggles",
+        "canonicalId": null,
+        "rationale": "ESLint tool enablement maps to code engine settings."
+      }
+    },
+    {
+      "id": "config.key.code.knip",
+      "name": "code.knip",
+      "kind": "config-key",
+      "source": ["packages/conform/src/config/types.ts#L21-L25"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible tool toggles",
+        "canonicalId": null,
+        "rationale": "Knip tool enablement maps to code engine settings."
+      }
+    },
+    {
+      "id": "config.key.code.prettier",
+      "name": "code.prettier",
+      "kind": "config-key",
+      "source": ["packages/conform/src/config/types.ts#L26-L30"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible tool toggles",
+        "canonicalId": null,
+        "rationale": "Prettier tool enablement maps to code engine settings."
+      }
+    },
+    {
+      "id": "config.key.code.tsconfig",
+      "name": "code.tsconfig",
+      "kind": "config-key",
+      "source": ["packages/conform/src/config/types.ts#L31-L35"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible typecheck settings",
+        "canonicalId": null,
+        "rationale": "TypeScript project path configuration maps to code engine settings."
+      }
+    },
+    {
+      "id": "config.key.code.typecheck",
+      "name": "code.typecheck",
+      "kind": "config-key",
+      "source": ["packages/conform/src/config/types.ts#L36-L40"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible tool toggles",
+        "canonicalId": null,
+        "rationale": "Typecheck toggle maps to code engine settings."
+      }
+    },
+    {
+      "id": "config.loader.typescript-default-export",
+      "name": "default export module config",
+      "kind": "config-loader-form",
+      "source": ["packages/conform/src/config/resolve.ts#L86-L99"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config loading",
+        "canonicalId": null,
+        "rationale": "Executable module config loading remains orchestrator implementation behavior."
+      }
+    },
+    {
+      "id": "config.loader.jsonc",
+      "name": "json/jsonc object config",
+      "kind": "config-loader-form",
+      "source": ["packages/conform/src/config/resolve.ts#L60-L84"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform config loading",
+        "canonicalId": null,
+        "rationale": "JSONC and JSON parsing behavior remains config loader behavior."
+      }
+    }
+  ],
+  "configArtifacts": [
+    {
+      "id": "artifact.config.eslint.base",
+      "name": "configs/eslint.base.js",
+      "path": "packages/conform/configs/eslint.base.js",
+      "contentSummary": {
+        "ignores": [
+          "**/.canon/**",
+          "**/dist/**",
+          "**/build/**",
+          "**/coverage/**",
+          "**/*.d.ts"
+        ],
+        "explicitRules": [
+          "eqeqeq",
+          "no-var",
+          "prefer-arrow-callback",
+          "prefer-const",
+          "security/detect-non-literal-fs-filename",
+          "security/detect-object-injection",
+          "unicorn/filename-case",
+          "unicorn/import-style",
+          "unicorn/name-replacements",
+          "unicorn/no-exports-in-scripts",
+          "unicorn/no-nested-ternary",
+          "unicorn/no-top-level-assignment-in-function",
+          "unicorn/prefer-switch",
+          "unicorn/prevent-abbreviations",
+          "unicorn/require-array-sort-compare",
+          "unicorn/single-line-block-comment-style"
+        ]
+      },
+      "source": ["packages/conform/configs/eslint.base.js"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "intentional-difference",
+        "target": "Crucible rule ownership",
+        "difference": "Interim bedrock-duplicated rules (eqeqeq/no-var/prefer-arrow-callback/prefer-const) require explicit owner resolution.",
+        "rationale": "Avoid duplicate authority across Bedrock and ESLint-based enforcement."
+      }
+    },
+    {
+      "id": "artifact.config.eslint.astro",
+      "name": "configs/eslint.astro.js",
+      "path": "packages/conform/configs/eslint.astro.js",
+      "contentSummary": {
+        "extends": [
+          "astro.configs.flat/recommended",
+          "astro.configs.flat/jsx-a11y-recommended"
+        ]
+      },
+      "source": ["packages/conform/configs/eslint.astro.js"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible Astro config overlay",
+        "canonicalId": null,
+        "rationale": "Astro lint overlay remains a code-tool config surface."
+      }
+    },
+    {
+      "id": "artifact.config.prettier.base",
+      "name": "configs/prettier.base.json",
+      "path": "packages/conform/configs/prettier.base.json",
+      "contentSummary": {},
+      "source": ["packages/conform/configs/prettier.base.json"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible Prettier config overlay",
+        "canonicalId": null,
+        "rationale": "Empty base config is still a shipped config contract."
+      }
+    },
+    {
+      "id": "artifact.config.prettier.astro",
+      "name": "configs/prettier.astro.json",
+      "path": "packages/conform/configs/prettier.astro.json",
+      "contentSummary": {
+        "plugins": ["prettier-plugin-astro"],
+        "overrides": [{ "files": "*.astro", "parser": "astro" }]
+      },
+      "source": ["packages/conform/configs/prettier.astro.json"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible Prettier config overlay",
+        "canonicalId": null,
+        "rationale": "Astro formatting plugin configuration remains a code-tool config surface."
+      }
+    },
+    {
+      "id": "artifact.config.knip.base",
+      "name": "configs/knip.base.json",
+      "path": "packages/conform/configs/knip.base.json",
+      "contentSummary": { "ignoreBinaries": [], "ignoreDependencies": [] },
+      "source": ["packages/conform/configs/knip.base.json"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible knip config overlay",
+        "canonicalId": null,
+        "rationale": "Knip base remains part of code-tool config distribution."
+      }
+    },
+    {
+      "id": "artifact.config.tsconfig.base",
+      "name": "configs/tsconfig.base.json",
+      "path": "packages/conform/configs/tsconfig.base.json",
+      "contentSummary": {
+        "compilerOptionsKeys": [
+          "strict",
+          "noUnusedLocals",
+          "noUnusedParameters",
+          "noUncheckedIndexedAccess",
+          "noImplicitOverride",
+          "noFallthroughCasesInSwitch",
+          "isolatedModules",
+          "verbatimModuleSyntax",
+          "forceConsistentCasingInFileNames",
+          "esModuleInterop",
+          "skipLibCheck",
+          "resolveJsonModule"
+        ]
+      },
+      "source": ["packages/conform/configs/tsconfig.base.json"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible TypeScript config overlay",
+        "canonicalId": null,
+        "rationale": "TypeScript compiler baseline remains code-tool config distribution."
+      }
+    }
+  ],
+  "workflows": [
+    {
+      "id": "workflow.markdown-conformance",
+      "name": ".github/workflows/markdown-conformance.yml",
+      "inputs": [
+        "canon-ref",
+        "config",
+        "llms-check",
+        "paths",
+        "reference-check",
+        "reference-ignore"
+      ],
+      "source": [
+        ".github/workflows/markdown-conformance.yml#on.workflow_call.inputs"
+      ],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Canon reusable workflow ownership",
+        "canonicalId": null,
+        "rationale": "Workflow now orchestrates Canon directly; record as legacy Conform-adjacent surface."
+      }
+    },
+    {
+      "id": "workflow.lefthook.base",
+      "name": "lefthook/base.yml",
+      "commands": [
+        "bunx conform fix --no-llms {staged_files}",
+        "bunx conform check {staged_files}"
+      ],
+      "source": ["lefthook/base.yml#pre-commit.commands"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform authoring-time integration",
+        "canonicalId": null,
+        "rationale": "Hook is a local trigger for Conform and remains orchestrator contract behavior."
+      }
+    }
+  ],
+  "consumers": [
+    {
+      "id": "consumer.standards",
+      "name": "clockwork-kitten/standards",
+      "mode": "producer-and-dogfood",
+      "evidence": [
+        "package.json (workspace dependency and scripts)",
+        "conform.config.ts",
+        "eslint.config.js",
+        "knip.ts",
+        "lefthook/base.yml"
+      ],
+      "source": [
+        "package.json",
+        "conform.config.ts",
+        "eslint.config.js",
+        "knip.ts",
+        "lefthook/base.yml"
+      ],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Internal dogfood validation",
+        "canonicalId": null,
+        "rationale": "Standards repo remains producer and primary dogfood consumer."
+      }
+    },
+    {
+      "id": "consumer.ops",
+      "name": "clockwork-kitten/ops",
+      "mode": "reusable-workflow-consumer",
+      "followUpIssue": "https://github.com/clockwork-kitten/standards/issues/27",
+      "evidence": [
+        "uses standards/.github/workflows/markdown-conformance.yml@v0.6 in .github/workflows/docs.yml"
+      ],
+      "source": [
+        "https://github.com/clockwork-kitten/ops/blob/main/.github/workflows/docs.yml"
+      ],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Separate consumer cutover issue required",
+        "canonicalId": null,
+        "rationale": "Cross-repo cutover is out of scope for this inventory issue."
+      }
+    },
+    {
+      "id": "consumer.incubator",
+      "name": "clockwork-kitten/incubator",
+      "mode": "legacy-reusable-workflow-consumer",
+      "followUpIssue": "https://github.com/clockwork-kitten/standards/issues/27",
+      "evidence": [
+        "uses standards/.github/workflows/markdown-conformance.yml@v0.4.0 in .github/workflows/conformance.yml"
+      ],
+      "source": [
+        "https://github.com/clockwork-kitten/incubator/blob/main/.github/workflows/conformance.yml"
+      ],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Separate consumer cutover issue required",
+        "canonicalId": null,
+        "rationale": "Cross-repo cutover is out of scope for this inventory issue."
+      }
+    }
+  ],
+  "openOrStaleAdoptionPrs": {
+    "queries": [
+      {
+        "name": "open-prs-markdown-conformance",
+        "query": "org:clockwork-kitten is:pr is:open markdown-conformance in:title,body",
+        "executedAt": "2026-11-22T04:57:43.000Z"
+      },
+      {
+        "name": "open-prs-conform-in-standards-ops-incubator",
+        "query": "org:clockwork-kitten is:pr is:open conform in:title,body repo:clockwork-kitten/ops repo:clockwork-kitten/incubator repo:clockwork-kitten/standards",
+        "executedAt": "2026-11-22T04:57:43.000Z"
+      }
+    ],
+    "pullRequests": [],
+    "migration": {
+      "kind": "destination",
+      "target": "Migration tracking in follow-up cutover issues",
+      "canonicalId": null,
+      "rationale": "No open/stale adoption PRs were found for the targeted consumers at collection time."
+    }
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "1.0.0",
+  "inventoryPath": "packages/conform/inventory/legacy-conform.json",
+  "inventorySchemaPath": "packages/conform/inventory/legacy-conform.schema.json",
+  "repository": {
+    "name": "clockwork-kitten/standards",
+    "defaultBranch": "main",
+    "headSha": "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5",
+    "releaseTag": "v0.6.0",
+    "releaseSha": "d55c547c0323528fd0a16e129f3bb7b15dc64cf5"
+  },
+  "treeEvidence": [
+    {
+      "path": "packages/conform/src",
+      "notes": "Source of CLI, config resolution, docs runner, and code runner surfaces."
+    },
+    {
+      "path": "packages/conform/configs",
+      "notes": "Source of exported tool-adapter config artifacts."
+    },
+    {
+      "path": ".github/workflows/markdown-conformance.yml",
+      "notes": "Reusable workflow inputs and defaults."
+    },
+    {
+      "path": "lefthook/base.yml",
+      "notes": "Authoring-time conform hook commands."
+    }
+  ],
+  "cliEvidence": [
+    {
+      "command": "bun packages/conform/src/cli/main.ts check --help",
+      "stdout": "",
+      "stderr": [
+        "usage: conform check [globs...] [--config <path>] [--no-references] [--no-code] [--reference-ignore <substr>]",
+        "usage: conform fix [globs...] [--config <path>] [--no-code] [--no-llms]"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": "bun packages/conform/src/cli/main.ts fix --help",
+      "stdout": "",
+      "stderr": [
+        "usage: conform check [globs...] [--config <path>] [--no-references] [--no-code] [--reference-ignore <substr>]",
+        "usage: conform fix [globs...] [--config <path>] [--no-code] [--no-llms]"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": "bun packages/conform/src/cli/main.ts --help",
+      "stdout": "",
+      "stderr": [
+        "unknown subcommand: --help",
+        "usage: conform check [globs...] [--config <path>] [--no-references] [--no-code] [--reference-ignore <substr>]",
+        "usage: conform fix [globs...] [--config <path>] [--no-code] [--no-llms]"
+      ],
+      "exitCode": 2
+    }
+  ],
+  "exportEvidence": {
+    "packageExports": [
+      ".",
+      "./configs/eslint.base",
+      "./configs/eslint.astro",
+      "./configs/prettier.base.json",
+      "./configs/prettier.astro.json",
+      "./configs/knip.base.json",
+      "./configs/tsconfig.base.json"
+    ],
+    "rootNamedExportCount": 28,
+    "internalSourceExports": [
+      "DEFAULT_GLOBS",
+      "CheckArgs",
+      "parseCheckArgs",
+      "runCheck",
+      "FixArgs",
+      "main",
+      "parseFixArgs",
+      "runFix"
+    ]
+  },
+  "fixtures": [
+    {
+      "path": "packages/conform/src/code/__fixtures__/astro/Bad.astro",
+      "revision": "HEAD"
+    },
+    {
+      "path": "packages/conform/src/code/__fixtures__/astro/Clean.astro",
+      "revision": "HEAD"
+    }
+  ],
+  "consumerAndSearchEvidence": {
+    "coverage": "GitHub code search over indexed default branches.",
+    "consumerCutoverTracker": "https://github.com/clockwork-kitten/standards/issues/27",
+    "queries": [
+      {
+        "query": "org:clockwork-kitten \"@clockwork-kitten/conform\"",
+        "executedAt": "2026-11-22T04:56:08.000Z",
+        "resultHighlights": [
+          "clockwork-kitten/standards package.json",
+          "clockwork-kitten/standards conform.config.ts",
+          "clockwork-kitten/ops canon.config.ts"
+        ]
+      },
+      {
+        "query": "org:clockwork-kitten \"markdown-conformance.yml@\"",
+        "executedAt": "2026-11-22T04:56:08.000Z",
+        "resultHighlights": [
+          "clockwork-kitten/ops .github/workflows/docs.yml",
+          "clockwork-kitten/incubator .github/workflows/conformance.yml"
+        ]
+      },
+      {
+        "query": "org:clockwork-kitten is:pr is:open markdown-conformance in:title,body",
+        "executedAt": "2026-11-22T04:57:43.000Z",
+        "resultHighlights": []
+      },
+      {
+        "query": "org:clockwork-kitten is:pr is:open conform in:title,body repo:clockwork-kitten/ops repo:clockwork-kitten/incubator repo:clockwork-kitten/standards",
+        "executedAt": "2026-11-22T04:57:43.000Z",
+        "resultHighlights": []
+      }
+    ]
+  },
+  "versionEvidence": {
+    "npmCheckCommand": "npm view @clockwork-kitten/conform version",
+    "npmCheckResult": "E404 Not Found",
+    "notes": "Legacy package identity is release tag + git SHA; npm package is currently unpublished."
+  },
+  "counts": {
+    "commands": 2,
+    "flags": 18,
+    "exports": 43,
+    "defaults": 9,
+    "toolAdapters": 6,
+    "configSurfaces": 16,
+    "configArtifacts": 6,
+    "workflows": 2,
+    "consumers": 3
+  }
+}
