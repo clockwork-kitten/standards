@@ -21,7 +21,11 @@
       "id": "command.check",
       "name": "conform check",
       "command": "check",
-      "exitCodes": { "pass": 0, "failingFinding": 1, "invocationError": 2 },
+      "exitCodes": {
+        "pass": 0,
+        "failingFinding": 1,
+        "invocationError": 2
+      },
       "source": ["packages/conform/src/cli/main.ts#L10-L145"],
       "diagnosticOnly": true,
       "migration": {
@@ -35,7 +39,10 @@
       "id": "command.fix",
       "name": "conform fix",
       "command": "fix",
-      "exitCodes": { "successOrResidue": 0, "invocationError": 2 },
+      "exitCodes": {
+        "successOrResidue": 0,
+        "invocationError": 2
+      },
       "source": ["packages/conform/src/cli/main.ts#L147-L249"],
       "diagnosticOnly": true,
       "migration": {
@@ -879,7 +886,7 @@
         "kind": "destination",
         "target": "Conform CLI defaults",
         "canonicalId": null,
-        "rationale": "Fix default glob follows the same CLI default constant."
+        "rationale": "Fix default glob remains orchestrator-level behavior."
       }
     },
     {
@@ -892,7 +899,7 @@
         "kind": "destination",
         "target": "Canon docs-check default via Conform",
         "canonicalId": null,
-        "rationale": "Reference checks default on unless disabled."
+        "rationale": "Reference checks default to enabled unless explicitly disabled."
       }
     },
     {
@@ -918,7 +925,7 @@
         "kind": "destination",
         "target": "Canon reference-ignore forwarding via Conform",
         "canonicalId": null,
-        "rationale": "Reference ignore list is empty by default."
+        "rationale": "Reference ignore list defaults to empty."
       }
     },
     {
@@ -931,7 +938,7 @@
         "kind": "destination",
         "target": "Canon llms generation default via Conform",
         "canonicalId": null,
-        "rationale": "llms regeneration defaults to on in fix mode."
+        "rationale": "llms regeneration defaults to enabled in fix mode."
       }
     },
     {
@@ -945,6 +952,45 @@
         "target": "Conform code-fix default",
         "canonicalId": null,
         "rationale": "Code fixers default to enabled when code track exists."
+      }
+    },
+    {
+      "id": "default.config.default.docsOnlyCode",
+      "name": "config.default.docsOnlyCode",
+      "value": null,
+      "source": ["packages/conform/src/config/resolve.ts#L127-L141"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform docs-only mode",
+        "canonicalId": null,
+        "rationale": "No conform config file resolves to docs-only execution with no code track."
+      }
+    },
+    {
+      "id": "default.config.default.docsOnlySource",
+      "name": "config.default.docsOnlySource",
+      "value": "no config file found",
+      "source": ["packages/conform/src/config/resolve.ts#L137-L141"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform docs-only mode",
+        "canonicalId": null,
+        "rationale": "No conform config file reports the stable docs-only source string."
+      }
+    },
+    {
+      "id": "default.config.default.noCodeBlock",
+      "name": "config.default.noCodeBlock",
+      "value": null,
+      "source": ["packages/conform/src/config/resolve.ts#L107-L112"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Conform docs-only mode",
+        "canonicalId": null,
+        "rationale": "Config objects without a code block resolve to docs-only execution."
       }
     },
     {
@@ -964,19 +1010,97 @@
       }
     },
     {
+      "id": "default.config.default.bedrockFalse",
+      "name": "config.default.bedrockFalse",
+      "value": false,
+      "source": ["packages/conform/src/config/resolve.ts#L162-L167"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "intentional-difference",
+        "target": "Crucible bedrock migration",
+        "difference": "bedrock: false explicitly disables Bedrock adapter execution.",
+        "rationale": "Bedrock behavior remains intentionally unresolved until rule-level mapping is complete."
+      }
+    },
+    {
+      "id": "default.config.default.bedrockEmptyArray",
+      "name": "config.default.bedrockEmptyArray",
+      "value": false,
+      "source": ["packages/conform/src/config/resolve.ts#L162-L165"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "intentional-difference",
+        "target": "Crucible bedrock migration",
+        "difference": "bedrock: [] normalizes to false (disabled), not an empty invocation.",
+        "rationale": "Legacy empty-array normalization must be explicitly dispositioned before migration."
+      }
+    },
+    {
       "id": "default.config.default.bedrockWhenTrue",
       "name": "config.default.bedrockWhenTrue",
       "value": ["src"],
       "source": [
         "packages/conform/src/config/resolve.ts#L45-L46",
-        "packages/conform/src/config/resolve.ts#L162-L167"
+        "packages/conform/src/config/resolve.ts#L166-L167"
       ],
       "diagnosticOnly": true,
       "migration": {
         "kind": "intentional-difference",
         "target": "Crucible bedrock migration",
-        "difference": "Bedrock enablement and defaults require explicit rule-level disposition before migration.",
-        "rationale": "No wholesale bedrock carry-forward is allowed in this tranche."
+        "difference": "bedrock: true normalizes to [\"src\"] in legacy behavior.",
+        "rationale": "Bedrock enablement defaults require explicit migration disposition before reuse."
+      }
+    },
+    {
+      "id": "default.config.default.eslint",
+      "name": "config.default.eslint",
+      "value": true,
+      "source": ["packages/conform/src/config/resolve.ts#L114-L116"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible tool toggles",
+        "canonicalId": null,
+        "rationale": "ESLint defaults to enabled in resolved code config."
+      }
+    },
+    {
+      "id": "default.config.default.knip",
+      "name": "config.default.knip",
+      "value": true,
+      "source": ["packages/conform/src/config/resolve.ts#L115-L116"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible tool toggles",
+        "canonicalId": null,
+        "rationale": "Knip defaults to enabled in resolved code config."
+      }
+    },
+    {
+      "id": "default.config.default.prettier",
+      "name": "config.default.prettier",
+      "value": true,
+      "source": ["packages/conform/src/config/resolve.ts#L116-L117"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible tool toggles",
+        "canonicalId": null,
+        "rationale": "Prettier defaults to enabled in resolved code config."
+      }
+    },
+    {
+      "id": "default.config.default.typecheck",
+      "name": "config.default.typecheck",
+      "value": true,
+      "source": ["packages/conform/src/config/resolve.ts#L118-L120"],
+      "diagnosticOnly": true,
+      "migration": {
+        "kind": "destination",
+        "target": "Crucible tool toggles",
+        "canonicalId": null,
+        "rationale": "Typecheck defaults to enabled in resolved code config."
       }
     }
   ],
@@ -985,8 +1109,14 @@
       "id": "adapter.code.bedrock",
       "name": "code adapter bedrock",
       "tool": "bedrock",
-      "bin": { "package": "bedrock", "name": "bedrock" },
-      "args": { "check": ["src", "--report"], "fix": ["src", "--fix"] },
+      "bin": {
+        "package": "bedrock",
+        "name": "bedrock"
+      },
+      "args": {
+        "check": ["src", "--report"],
+        "fix": ["src", "--fix"]
+      },
       "source": [
         "packages/conform/src/code/run.ts#L39-L47",
         "packages/conform/src/code/run.ts#L142-L149"
@@ -1003,8 +1133,14 @@
       "id": "adapter.code.eslint",
       "name": "code adapter eslint",
       "tool": "eslint",
-      "bin": { "package": "eslint", "name": "eslint" },
-      "args": { "check": ["."], "fix": ["--fix", "."] },
+      "bin": {
+        "package": "eslint",
+        "name": "eslint"
+      },
+      "args": {
+        "check": ["."],
+        "fix": ["--fix", "."]
+      },
       "source": [
         "packages/conform/src/code/run.ts#L39-L47",
         "packages/conform/src/code/run.ts#L150-L152"
@@ -1021,8 +1157,13 @@
       "id": "adapter.code.knip",
       "name": "code adapter knip",
       "tool": "knip",
-      "bin": { "package": "knip", "name": "knip-bun" },
-      "args": { "check": [] },
+      "bin": {
+        "package": "knip",
+        "name": "knip-bun"
+      },
+      "args": {
+        "check": []
+      },
       "source": [
         "packages/conform/src/code/run.ts#L39-L47",
         "packages/conform/src/code/run.ts#L153-L155"
@@ -1039,8 +1180,14 @@
       "id": "adapter.code.prettier",
       "name": "code adapter prettier",
       "tool": "prettier",
-      "bin": { "package": "prettier", "name": "prettier" },
-      "args": { "check": ["--check", "."], "fix": ["--write", "."] },
+      "bin": {
+        "package": "prettier",
+        "name": "prettier"
+      },
+      "args": {
+        "check": ["--check", "."],
+        "fix": ["--write", "."]
+      },
       "source": [
         "packages/conform/src/code/run.ts#L39-L47",
         "packages/conform/src/code/run.ts#L156-L158"
@@ -1057,8 +1204,13 @@
       "id": "adapter.code.typecheck",
       "name": "code adapter typecheck",
       "tool": "typecheck",
-      "bin": { "package": "typescript", "name": "tsc" },
-      "args": { "check": ["--noEmit", "--project", "tsconfig.json"] },
+      "bin": {
+        "package": "typescript",
+        "name": "tsc"
+      },
+      "args": {
+        "check": ["--noEmit", "--project", "tsconfig.json"]
+      },
       "source": [
         "packages/conform/src/code/run.ts#L39-L47",
         "packages/conform/src/code/run.ts#L159-L161"
@@ -1075,7 +1227,10 @@
       "id": "adapter.docs.canon",
       "name": "docs adapter canon",
       "tool": "canon",
-      "bin": { "package": "@clockwork-kitten/canon", "name": "canon" },
+      "bin": {
+        "package": "@clockwork-kitten/canon",
+        "name": "canon"
+      },
       "args": {
         "checkTemplate": [
           "check",
@@ -1298,6 +1453,31 @@
       "name": "configs/eslint.base.js",
       "path": "packages/conform/configs/eslint.base.js",
       "contentSummary": {
+        "explicitRules": {
+          "constructor-super": "off",
+          "getter-return": "off",
+          "no-class-assign": "off",
+          "no-const-assign": "off",
+          "no-dupe-args": "off",
+          "no-dupe-class-members": "off",
+          "no-dupe-keys": "off",
+          "no-func-assign": "off",
+          "no-import-assign": "off",
+          "no-new-native-nonconstructor": "off",
+          "no-new-symbol": "off",
+          "no-obj-calls": "off",
+          "no-redeclare": "off",
+          "no-setter-return": "off",
+          "no-this-before-super": "off",
+          "no-undef": "off",
+          "no-unreachable": "off",
+          "no-unsafe-negation": "off",
+          "no-var": "error",
+          "no-with": "off",
+          "prefer-const": "error",
+          "prefer-rest-params": "error",
+          "prefer-spread": "error"
+        },
         "ignores": [
           "**/.canon/**",
           "**/dist/**",
@@ -1305,24 +1485,7 @@
           "**/coverage/**",
           "**/*.d.ts"
         ],
-        "explicitRules": [
-          "eqeqeq",
-          "no-var",
-          "prefer-arrow-callback",
-          "prefer-const",
-          "security/detect-non-literal-fs-filename",
-          "security/detect-object-injection",
-          "unicorn/filename-case",
-          "unicorn/import-style",
-          "unicorn/name-replacements",
-          "unicorn/no-exports-in-scripts",
-          "unicorn/no-nested-ternary",
-          "unicorn/no-top-level-assignment-in-function",
-          "unicorn/prefer-switch",
-          "unicorn/prevent-abbreviations",
-          "unicorn/require-array-sort-compare",
-          "unicorn/single-line-block-comment-style"
-        ]
+        "presets": ["tseslint.configs.recommended"]
       },
       "source": ["packages/conform/configs/eslint.base.js"],
       "diagnosticOnly": true,
@@ -1331,17 +1494,133 @@
         "target": "Crucible rule ownership",
         "difference": "Interim bedrock-duplicated rules (eqeqeq/no-var/prefer-arrow-callback/prefer-const) require explicit owner resolution.",
         "rationale": "Avoid duplicate authority across Bedrock and ESLint-based enforcement."
-      }
+      },
+      "dependencyVersions": {
+        "eslint-plugin-depend": "1.5.0",
+        "eslint-plugin-perfectionist": "5.11.0",
+        "eslint-plugin-security": "4.0.1",
+        "eslint-plugin-unicorn": "74.0.0",
+        "globals": "17.12.0",
+        "typescript-eslint": "8.69.0"
+      },
+      "effectiveHash": "5b1f1cce18ff9d787799fe753f0b95035a361304f78f8b894983f70fb34dfb13",
+      "itemDispositions": [
+        {
+          "key": "preset:typescript-eslint.configs.recommended",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint baseline presets",
+            "canonicalId": null,
+            "rationale": "Recommended TypeScript ESLint preset remains Crucible-owned lint baseline behavior."
+          }
+        },
+        {
+          "key": "preset:unicorn.configs.recommended",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint baseline presets",
+            "canonicalId": null,
+            "rationale": "Unicorn recommended preset remains Crucible-owned lint baseline behavior."
+          }
+        },
+        {
+          "key": "preset:security.configs.recommended",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint baseline presets",
+            "canonicalId": null,
+            "rationale": "Security preset remains Crucible-owned lint baseline behavior."
+          }
+        },
+        {
+          "key": "preset:depend.configs[\"flat/recommended\"]",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint baseline presets",
+            "canonicalId": null,
+            "rationale": "Dependency hygiene preset remains Crucible-owned lint baseline behavior."
+          }
+        },
+        {
+          "key": "preset:perfectionist.configs[\"recommended-natural\"]",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint baseline presets",
+            "canonicalId": null,
+            "rationale": "Deterministic ordering preset remains Crucible-owned lint baseline behavior."
+          }
+        },
+        {
+          "key": "rule:eqeqeq",
+          "migration": {
+            "kind": "intentional-difference",
+            "target": "Crucible lint-vs-bedrock ownership split",
+            "difference": "eqeqeq duplicates Bedrock semantic normalization and requires explicit owner resolution before migration.",
+            "rationale": "Avoid duplicate rule authority between Bedrock and ESLint."
+          }
+        },
+        {
+          "key": "rule:no-var",
+          "migration": {
+            "kind": "intentional-difference",
+            "target": "Crucible lint-vs-bedrock ownership split",
+            "difference": "no-var duplicates Bedrock semantic normalization and requires explicit owner resolution before migration.",
+            "rationale": "Avoid duplicate rule authority between Bedrock and ESLint."
+          }
+        },
+        {
+          "key": "rule:prefer-arrow-callback",
+          "migration": {
+            "kind": "intentional-difference",
+            "target": "Crucible lint-vs-bedrock ownership split",
+            "difference": "prefer-arrow-callback duplicates Bedrock semantic normalization and requires explicit owner resolution before migration.",
+            "rationale": "Avoid duplicate rule authority between Bedrock and ESLint."
+          }
+        },
+        {
+          "key": "rule:prefer-const",
+          "migration": {
+            "kind": "intentional-difference",
+            "target": "Crucible lint-vs-bedrock ownership split",
+            "difference": "prefer-const duplicates Bedrock semantic normalization and requires explicit owner resolution before migration.",
+            "rationale": "Avoid duplicate rule authority between Bedrock and ESLint."
+          }
+        },
+        {
+          "key": "rule:security/detect-non-literal-fs-filename",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint local overrides",
+            "canonicalId": null,
+            "rationale": "Security false-positive override remains Crucible-owned lint behavior."
+          }
+        },
+        {
+          "key": "rule:security/detect-object-injection",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint local overrides",
+            "canonicalId": null,
+            "rationale": "Security false-positive override remains Crucible-owned lint behavior."
+          }
+        },
+        {
+          "key": "rule:unicorn/filename-case",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible ESLint local overrides",
+            "canonicalId": null,
+            "rationale": "Filename convention remains Crucible-owned lint behavior."
+          }
+        }
+      ]
     },
     {
       "id": "artifact.config.eslint.astro",
       "name": "configs/eslint.astro.js",
       "path": "packages/conform/configs/eslint.astro.js",
       "contentSummary": {
-        "extends": [
-          "astro.configs.flat/recommended",
-          "astro.configs.flat/jsx-a11y-recommended"
-        ]
+        "presets": ["flat/recommended", "flat/jsx-a11y-recommended"]
       },
       "source": ["packages/conform/configs/eslint.astro.js"],
       "diagnosticOnly": true,
@@ -1350,7 +1629,31 @@
         "target": "Crucible Astro config overlay",
         "canonicalId": null,
         "rationale": "Astro lint overlay remains a code-tool config surface."
-      }
+      },
+      "dependencyVersions": {
+        "eslint-plugin-astro": "3.1.0"
+      },
+      "effectiveHash": "91750021ca6d4966567f777067a28ceb1ff0e769a466b68b4d065c6e191da098",
+      "itemDispositions": [
+        {
+          "key": "preset:flat/recommended",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible Astro ESLint overlay",
+            "canonicalId": null,
+            "rationale": "Astro ESLint preset forwarding remains Crucible-owned lint overlay behavior."
+          }
+        },
+        {
+          "key": "preset:flat/jsx-a11y-recommended",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible Astro ESLint overlay",
+            "canonicalId": null,
+            "rationale": "Astro ESLint preset forwarding remains Crucible-owned lint overlay behavior."
+          }
+        }
+      ]
     },
     {
       "id": "artifact.config.prettier.base",
@@ -1364,7 +1667,22 @@
         "target": "Crucible Prettier config overlay",
         "canonicalId": null,
         "rationale": "Empty base config is still a shipped config contract."
-      }
+      },
+      "dependencyVersions": {
+        "prettier": "3.9.6"
+      },
+      "effectiveHash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "itemDispositions": [
+        {
+          "key": "config:empty-object",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible Prettier baseline",
+            "canonicalId": null,
+            "rationale": "Empty base config remains explicit Crucible-owned baseline contract."
+          }
+        }
+      ]
     },
     {
       "id": "artifact.config.prettier.astro",
@@ -1372,7 +1690,14 @@
       "path": "packages/conform/configs/prettier.astro.json",
       "contentSummary": {
         "plugins": ["prettier-plugin-astro"],
-        "overrides": [{ "files": "*.astro", "parser": "astro" }]
+        "overrides": [
+          {
+            "files": "*.astro",
+            "options": {
+              "parser": "astro"
+            }
+          }
+        ]
       },
       "source": ["packages/conform/configs/prettier.astro.json"],
       "diagnosticOnly": true,
@@ -1381,13 +1706,42 @@
         "target": "Crucible Prettier config overlay",
         "canonicalId": null,
         "rationale": "Astro formatting plugin configuration remains a code-tool config surface."
-      }
+      },
+      "dependencyVersions": {
+        "prettier": "3.9.6",
+        "prettier-plugin-astro": "0.14.1"
+      },
+      "effectiveHash": "6a07ba6e4d58cfd80385916571a361de295407c62a353d2d0d45fcb0d0438272",
+      "itemDispositions": [
+        {
+          "key": "plugins:prettier-plugin-astro",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible Prettier Astro overlay",
+            "canonicalId": null,
+            "rationale": "Astro formatter plugin wiring remains Crucible-owned formatting behavior."
+          }
+        },
+        {
+          "key": "overrides:*.astro->astro",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible Prettier Astro overlay",
+            "canonicalId": null,
+            "rationale": "Astro parser override remains Crucible-owned formatting behavior."
+          }
+        }
+      ]
     },
     {
       "id": "artifact.config.knip.base",
       "name": "configs/knip.base.json",
       "path": "packages/conform/configs/knip.base.json",
-      "contentSummary": { "ignoreBinaries": [], "ignoreDependencies": [] },
+      "contentSummary": {
+        "$schema": "https://unpkg.com/knip@6/schema.json",
+        "ignoreBinaries": [],
+        "ignoreDependencies": []
+      },
       "source": ["packages/conform/configs/knip.base.json"],
       "diagnosticOnly": true,
       "migration": {
@@ -1395,27 +1749,54 @@
         "target": "Crucible knip config overlay",
         "canonicalId": null,
         "rationale": "Knip base remains part of code-tool config distribution."
-      }
+      },
+      "dependencyVersions": {
+        "knip": "6.34.0"
+      },
+      "effectiveHash": "634225723e9dfa397ac405506c004d54b28afedd6bf1b4aff0271239bcd69639",
+      "itemDispositions": [
+        {
+          "key": "ignoreBinaries",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible Knip baseline",
+            "canonicalId": null,
+            "rationale": "Knip ignore binary defaults remain Crucible-owned dead-code behavior."
+          }
+        },
+        {
+          "key": "ignoreDependencies",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible Knip baseline",
+            "canonicalId": null,
+            "rationale": "Knip ignore dependency defaults remain Crucible-owned dead-code behavior."
+          }
+        }
+      ]
     },
     {
       "id": "artifact.config.tsconfig.base",
       "name": "configs/tsconfig.base.json",
       "path": "packages/conform/configs/tsconfig.base.json",
       "contentSummary": {
-        "compilerOptionsKeys": [
-          "strict",
-          "noUnusedLocals",
-          "noUnusedParameters",
-          "noUncheckedIndexedAccess",
-          "noImplicitOverride",
-          "noFallthroughCasesInSwitch",
-          "isolatedModules",
-          "verbatimModuleSyntax",
-          "forceConsistentCasingInFileNames",
-          "esModuleInterop",
-          "skipLibCheck",
-          "resolveJsonModule"
-        ]
+        "$schema": "https://json.schemastore.org/tsconfig",
+        "display": "@clockwork-kitten studio base",
+        "_comment": "Strict, framework-agnostic base. Consumers extend this and supply target/module/moduleResolution/lib/types to match their runtime (Bun engine, SvelteKit UI, Astro site, Hono backend).",
+        "compilerOptions": {
+          "strict": true,
+          "noUnusedLocals": true,
+          "noUnusedParameters": true,
+          "noUncheckedIndexedAccess": true,
+          "noImplicitOverride": true,
+          "noFallthroughCasesInSwitch": true,
+          "isolatedModules": true,
+          "verbatimModuleSyntax": true,
+          "forceConsistentCasingInFileNames": true,
+          "esModuleInterop": true,
+          "skipLibCheck": true,
+          "resolveJsonModule": true
+        }
       },
       "source": ["packages/conform/configs/tsconfig.base.json"],
       "diagnosticOnly": true,
@@ -1424,7 +1805,121 @@
         "target": "Crucible TypeScript config overlay",
         "canonicalId": null,
         "rationale": "TypeScript compiler baseline remains code-tool config distribution."
-      }
+      },
+      "dependencyVersions": {
+        "typescript": "5.9.3"
+      },
+      "effectiveHash": "326a94f47431c7f0099756efc65223e3d7d2c5de11e7770ad15daa0ebb910b4a",
+      "itemDispositions": [
+        {
+          "key": "compilerOptions.strict",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible TypeScript baseline",
+            "canonicalId": null,
+            "rationale": "TypeScript strictness baseline remains Crucible-owned typecheck behavior."
+          }
+        },
+        {
+          "key": "compilerOptions.noUnusedLocals",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible TypeScript baseline",
+            "canonicalId": null,
+            "rationale": "TypeScript strictness baseline remains Crucible-owned typecheck behavior."
+          }
+        },
+        {
+          "key": "compilerOptions.noUnusedParameters",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible TypeScript baseline",
+            "canonicalId": null,
+            "rationale": "TypeScript strictness baseline remains Crucible-owned typecheck behavior."
+          }
+        },
+        {
+          "key": "compilerOptions.noUncheckedIndexedAccess",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible TypeScript baseline",
+            "canonicalId": null,
+            "rationale": "TypeScript strictness baseline remains Crucible-owned typecheck behavior."
+          }
+        },
+        {
+          "key": "compilerOptions.noImplicitOverride",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible TypeScript baseline",
+            "canonicalId": null,
+            "rationale": "TypeScript strictness baseline remains Crucible-owned typecheck behavior."
+          }
+        },
+        {
+          "key": "compilerOptions.noFallthroughCasesInSwitch",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible TypeScript baseline",
+            "canonicalId": null,
+            "rationale": "TypeScript strictness baseline remains Crucible-owned typecheck behavior."
+          }
+        },
+        {
+          "key": "compilerOptions.isolatedModules",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible TypeScript baseline",
+            "canonicalId": null,
+            "rationale": "TypeScript strictness baseline remains Crucible-owned typecheck behavior."
+          }
+        },
+        {
+          "key": "compilerOptions.verbatimModuleSyntax",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible TypeScript baseline",
+            "canonicalId": null,
+            "rationale": "TypeScript strictness baseline remains Crucible-owned typecheck behavior."
+          }
+        },
+        {
+          "key": "compilerOptions.forceConsistentCasingInFileNames",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible TypeScript baseline",
+            "canonicalId": null,
+            "rationale": "TypeScript strictness baseline remains Crucible-owned typecheck behavior."
+          }
+        },
+        {
+          "key": "compilerOptions.esModuleInterop",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible TypeScript baseline",
+            "canonicalId": null,
+            "rationale": "TypeScript strictness baseline remains Crucible-owned typecheck behavior."
+          }
+        },
+        {
+          "key": "compilerOptions.skipLibCheck",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible TypeScript baseline",
+            "canonicalId": null,
+            "rationale": "TypeScript strictness baseline remains Crucible-owned typecheck behavior."
+          }
+        },
+        {
+          "key": "compilerOptions.resolveJsonModule",
+          "migration": {
+            "kind": "destination",
+            "target": "Crucible TypeScript baseline",
+            "canonicalId": null,
+            "rationale": "TypeScript strictness baseline remains Crucible-owned typecheck behavior."
+          }
+        }
+      ]
     }
   ],
   "workflows": [
@@ -1534,24 +2029,75 @@
     }
   ],
   "openOrStaleAdoptionPrs": {
+    "staleDefinition": {
+      "asOf": "2026-11-22T06:04:00.000Z",
+      "staleAfterDays": 30,
+      "status": "open-with-no-updates-since-threshold",
+      "threshold": "2026-10-23T06:04:00.000Z"
+    },
     "queries": [
       {
-        "name": "open-prs-markdown-conformance",
-        "query": "org:clockwork-kitten is:pr is:open markdown-conformance in:title,body",
-        "executedAt": "2026-11-22T04:57:43.000Z"
+        "name": "org-open-migration-prs",
+        "query": "org:clockwork-kitten is:pr is:open (conform OR \"markdown-conformance\" OR canon) in:title,body",
+        "executedAt": "2026-11-22T06:03:00.000Z",
+        "searchUrl": "https://github.com/search?q=org%3Aclockwork-kitten+is%3Apr+is%3Aopen+%28conform+OR+%22markdown-conformance%22+OR+canon%29+in%3Atitle%2Cbody&type=pullrequests",
+        "totalCount": 3,
+        "resultUrls": [
+          "https://github.com/clockwork-kitten/standards/pull/28",
+          "https://github.com/clockwork-kitten/canon/pull/7",
+          "https://github.com/clockwork-kitten/canon/pull/6"
+        ]
       },
       {
-        "name": "open-prs-conform-in-standards-ops-incubator",
-        "query": "org:clockwork-kitten is:pr is:open conform in:title,body repo:clockwork-kitten/ops repo:clockwork-kitten/incubator repo:clockwork-kitten/standards",
-        "executedAt": "2026-11-22T04:57:43.000Z"
+        "name": "org-stale-open-migration-prs",
+        "query": "org:clockwork-kitten is:pr is:open (conform OR \"markdown-conformance\" OR canon) in:title,body updated:<2026-10-23",
+        "executedAt": "2026-11-22T06:04:00.000Z",
+        "searchUrl": "https://github.com/search?q=org%3Aclockwork-kitten+is%3Apr+is%3Aopen+%28conform+OR+%22markdown-conformance%22+OR+canon%29+in%3Atitle%2Cbody+updated%3A%3C2026-10-23&type=pullrequests",
+        "totalCount": 1,
+        "resultUrls": ["https://github.com/clockwork-kitten/canon/pull/6"]
       }
     ],
-    "pullRequests": [],
+    "pullRequests": [
+      {
+        "repository": "clockwork-kitten/canon",
+        "number": 6,
+        "url": "https://github.com/clockwork-kitten/canon/pull/6",
+        "title": "feat(drain): wire drain to protected main via GitHub App token",
+        "state": "open",
+        "updatedAt": "2026-09-22T16:20:36Z",
+        "stale": true,
+        "relevance": "authority-known-canon-6",
+        "disposition": {
+          "kind": "intentional-difference",
+          "target": "Migration sequencing evidence only",
+          "difference": "Canon PR #6 is tracked as authority-known stale/open evidence and is not a prerequisite or independent migration authority for this Conform inventory cut.",
+          "rationale": "Brief #87 explicitly states Canon PR #6 may be superseded and is not a prerequisite to this repo-local inventory."
+        },
+        "notes": "Included as required authority-known evidence; no cross-repo action is taken in this issue."
+      },
+      {
+        "repository": "clockwork-kitten/ops",
+        "number": 4,
+        "url": "https://github.com/clockwork-kitten/ops/pull/4",
+        "title": "ci: adopt shared standards markdown-conformance workflow",
+        "state": "merged",
+        "updatedAt": "2026-09-05T14:58:25Z",
+        "stale": false,
+        "relevance": "authority-known-home-adoption",
+        "disposition": {
+          "kind": "destination",
+          "target": "Historical home-adoption evidence record",
+          "canonicalId": null,
+          "rationale": "Home-adoption evidence is retained as historical migration context; active cutovers remain tracked in dedicated follow-up issues."
+        },
+        "notes": "Required authority-known home-adoption PR evidence; closed historical context only."
+      }
+    ],
     "migration": {
       "kind": "destination",
       "target": "Migration tracking in follow-up cutover issues",
       "canonicalId": null,
-      "rationale": "No open/stale adoption PRs were found for the targeted consumers at collection time."
+      "rationale": "Open/stale adoption evidence is now organization-wide, reproducible, and explicitly dispositioned for authority-known PRs."
     }
   }
 }
