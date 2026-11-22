@@ -1,0 +1,38 @@
+{
+  "fixtureRevision": 1,
+  "algorithm": "RFC 8785",
+  "hash": "SHA-256",
+  "targetRuntimes": ["node-24", "node-26", "bun-development"],
+  "vectors": [
+    {
+      "name": "recursive property ordering and unicode",
+      "input": {
+        "z": 3,
+        "nested": {
+          "é": "café",
+          "a": true
+        },
+        "a": 1
+      },
+      "canonical": "{\"a\":1,\"nested\":{\"a\":true,\"é\":\"café\"},\"z\":3}",
+      "sha256": "6182a9285080a03c9a1bc095d8b670607a97bd181b9ee5a515a17887018ab10f"
+    },
+    {
+      "name": "ecmascript number serialization",
+      "input": [333333333.33333329, 1e30, 4.5, 0.002, 1e-27],
+      "canonical": "[333333333.3333333,1e+30,4.5,0.002,1e-27]",
+      "sha256": "7c6bc86d861387d823ae596b79ca0b26567dddc22a77acb1f4e06d441f555adf"
+    },
+    {
+      "name": "array order and primitive values",
+      "input": {
+        "true": true,
+        "null": null,
+        "false": false,
+        "array": [3, 2, 1]
+      },
+      "canonical": "{\"array\":[3,2,1],\"false\":false,\"null\":null,\"true\":true}",
+      "sha256": "40dc5c26e2bc66aa4fae46fa55803273ba487c3a73e870e70ed9b0520ffb51bf"
+    }
+  ]
+}

@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/context/1",
+  "description": "Deterministic derived repository context; contextHash is SHA-256 over RFC 8785 canonical bytes excluding contextHash.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "contextHash",
+    "bundleId",
+    "policy",
+    "rules",
+    "glossary",
+    "exceptions",
+    "architectureReferences",
+    "commands",
+    "profiles",
+    "topInvariants",
+    "canonicalResultPath"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "contextHash": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/sha256"
+    },
+    "bundleId": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/bundleId"
+    },
+    "policy": {
+      "type": "object",
+      "required": ["policyId", "policyVersion", "effectivePolicyHash"],
+      "properties": {
+        "policyId": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+        },
+        "policyVersion": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+        },
+        "effectivePolicyHash": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/sha256"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "rules": {
+      "type": "object",
+      "required": ["active", "disabled", "notEnforced"],
+      "properties": {
+        "active": {
+          "$ref": "#/$defs/contextRules"
+        },
+        "disabled": {
+          "$ref": "#/$defs/contextRules"
+        },
+        "notEnforced": {
+          "$ref": "#/$defs/contextRules"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "glossary": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["term", "definition"],
+        "properties": {
+          "term": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "definition": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "unevaluatedProperties": false
+      }
+    },
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["exceptionId", "ruleId", "scope", "rationale"],
+        "properties": {
+          "exceptionId": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+          },
+          "ruleId": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/ruleId"
+          },
+          "scope": {
+            "type": "array",
+            "items": {
+              "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/repositoryPath"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "unevaluatedProperties": false
+      }
+    },
+    "architectureReferences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "path"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "path": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/repositoryPath"
+          }
+        },
+        "unevaluatedProperties": false
+      },
+      "uniqueItems": true
+    },
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "command"],
+        "properties": {
+          "name": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+          },
+          "command": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          }
+        },
+        "unevaluatedProperties": false
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+      },
+      "uniqueItems": true
+    },
+    "topInvariants": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/contextRule"
+      },
+      "maxItems": 10,
+      "uniqueItems": true
+    },
+    "canonicalResultPath": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/repositoryPath"
+    },
+    "extensions": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/extensions"
+    }
+  },
+  "$defs": {
+    "contextRule": {
+      "type": "object",
+      "required": ["ruleId", "title", "summary", "owner", "lifecycle"],
+      "properties": {
+        "ruleId": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/ruleId"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "owner": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/engine"
+        },
+        "lifecycle": {
+          "enum": ["proposed", "warn", "error", "deprecated", "removed"]
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "contextRules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/contextRule"
+      },
+      "uniqueItems": true
+    }
+  },
+  "unevaluatedProperties": false
+}

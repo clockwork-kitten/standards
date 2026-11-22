@@ -13,6 +13,11 @@ const SCHEMA_FILES = [
   "profile.schema.json",
   "policy.schema.json",
   "engine-manifest.schema.json",
+  "bundle.schema.json",
+  "lock.schema.json",
+  "engine-result.schema.json",
+  "conform-result.schema.json",
+  "context.schema.json",
 ] as const;
 const MANIFEST_SCHEMA_FIXTURE_DIRECTORY = fileURLToPath(
   new URL("fixtures/manifest-schema", import.meta.url),

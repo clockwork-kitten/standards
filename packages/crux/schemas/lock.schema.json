@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/lock/1",
+  "description": "Sole resolved-policy authority written by Conform and readable by every engine.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "bundleId",
+    "policyPackage",
+    "components",
+    "schemaMajors",
+    "environment",
+    "capabilities",
+    "effectivePolicyInputs",
+    "effectivePolicyHash",
+    "repository"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "bundleId": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/bundleId"
+    },
+    "policyPackage": {
+      "allOf": [
+        {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/packageRecord"
+        },
+        {
+          "type": "object",
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "@clockwork-kitten/crux"
+            }
+          }
+        }
+      ]
+    },
+    "components": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/components"
+    },
+    "schemaMajors": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/schemaMajors"
+    },
+    "environment": {
+      "type": "object",
+      "required": [
+        "nodeMajor",
+        "operatingSystem",
+        "packageManagerLock",
+        "verdictRuntime"
+      ],
+      "properties": {
+        "nodeMajor": {
+          "enum": [24, 26]
+        },
+        "operatingSystem": {
+          "enum": ["linux", "darwin"]
+        },
+        "packageManagerLock": {
+          "enum": ["package-lock.json", "bun.lock"]
+        },
+        "verdictRuntime": {
+          "const": "node"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "capabilities": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/capabilities"
+    },
+    "effectivePolicyInputs": {
+      "type": "array",
+      "description": "Normalized, repository-relative inputs sorted by inputId before canonical hashing.",
+      "items": {
+        "type": "object",
+        "required": ["inputId", "kind", "contentHash"],
+        "properties": {
+          "inputId": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))[A-Za-z0-9._/-]+$",
+            "maxLength": 512
+          },
+          "kind": {
+            "enum": [
+              "base-policy",
+              "repository-policy",
+              "repository-override",
+              "exception-ledger",
+              "repository-config"
+            ]
+          },
+          "contentHash": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/sha256"
+          }
+        },
+        "unevaluatedProperties": false
+      },
+      "uniqueItems": true
+    },
+    "effectivePolicyHash": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/sha256"
+    },
+    "repository": {
+      "type": "object",
+      "required": ["profile", "declaredShape"],
+      "properties": {
+        "profile": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+        },
+        "declaredShape": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "extensions": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/extensions"
+    }
+  },
+  "unevaluatedProperties": false
+}

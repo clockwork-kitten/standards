@@ -16,6 +16,11 @@ const SCHEMAS = [
   ["profile.schema.json", "ExecutionProfile"],
   ["policy.schema.json", "Policy"],
   ["engine-manifest.schema.json", "EngineManifest"],
+  ["bundle.schema.json", "CompatibilityBundle"],
+  ["lock.schema.json", "PolicyLock"],
+  ["engine-result.schema.json", "EngineResult"],
+  ["conform-result.schema.json", "ConformResult"],
+  ["context.schema.json", "DerivedContext"],
 ] as const;
 
 const BANNER = `/**

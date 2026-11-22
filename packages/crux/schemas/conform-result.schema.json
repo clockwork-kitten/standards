@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/conform-result/1",
+  "description": "Canonical aggregate result preserving validated engine partials and adding Conform-owned contract findings.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "bundleId",
+    "runId",
+    "conform",
+    "repository",
+    "environment",
+    "command",
+    "profile",
+    "scope",
+    "policyPackage",
+    "effectivePolicyHash",
+    "completionState",
+    "engineResults",
+    "contractFindings",
+    "findings",
+    "counts",
+    "classification"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "bundleId": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/bundleId"
+    },
+    "runId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "conform": {
+      "allOf": [
+        {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/engineIdentity"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "conform"
+            },
+            "package": {
+              "const": "@clockwork-kitten/conform"
+            }
+          }
+        }
+      ]
+    },
+    "repository": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/repositoryRevision"
+    },
+    "environment": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/environment"
+    },
+    "command": {
+      "enum": ["check", "fix", "report", "policy-operation"]
+    },
+    "profile": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+    },
+    "scope": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/scope"
+    },
+    "policyPackage": {
+      "allOf": [
+        {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/packageRecord"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "@clockwork-kitten/crux"
+            }
+          }
+        }
+      ]
+    },
+    "effectivePolicyHash": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/sha256"
+    },
+    "completionState": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/completionState"
+    },
+    "engineResults": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1"
+      }
+    },
+    "contractFindings": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/finding"
+      }
+    },
+    "findings": {
+      "description": "All findings in the normative stable sort order; embedded engine results remain unchanged.",
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/finding"
+      }
+    },
+    "counts": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/counts"
+    },
+    "classification": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/engine-result/1#/$defs/classification"
+    },
+    "extensions": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/extensions"
+    }
+  },
+  "unevaluatedProperties": false
+}

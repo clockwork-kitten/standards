@@ -38,8 +38,38 @@ describe("inert package boundary", () => {
         "./schemas/profile.schema.json",
         "./schemas/suppression.schema.json",
         "./schemas/engine-manifest.schema.json",
+        "./schemas/bundle.schema.json",
+        "./schemas/lock.schema.json",
+        "./schemas/engine-result.schema.json",
+        "./schemas/conform-result.schema.json",
+        "./schemas/context.schema.json",
         "./types/index.d.ts",
       ]),
     );
+  });
+
+  test("packs schemas and declarations without development tooling", async () => {
+    const packageRoot = fileURLToPath(new URL("..", import.meta.url));
+    const process = Bun.spawn(["bun", "pm", "pack", "--dry-run"], {
+      cwd: packageRoot,
+      stderr: "pipe",
+      stdout: "pipe",
+    });
+    const [exitCode, stdout, stderr] = await Promise.all([
+      process.exited,
+      new Response(process.stdout).text(),
+      new Response(process.stderr).text(),
+    ]);
+    const output = `${stdout}\n${stderr}`;
+
+    expect(exitCode, output).toBe(0);
+    expect(output).toContain("schemas/bundle.schema.json");
+    expect(output).toContain("schemas/lock.schema.json");
+    expect(output).toContain("schemas/engine-result.schema.json");
+    expect(output).toContain("schemas/conform-result.schema.json");
+    expect(output).toContain("schemas/context.schema.json");
+    expect(output).toContain("types/generated/engine-result.d.ts");
+    expect(output).not.toContain("scripts/generate-types.ts");
+    expect(output).not.toContain("test/contracts.test.ts");
   });
 });

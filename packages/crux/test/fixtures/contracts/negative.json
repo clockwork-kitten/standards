@@ -1,0 +1,108 @@
+{
+  "fixtureRevision": 1,
+  "cases": [
+    {
+      "name": "bundle rejects version ranges",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/bundle/1",
+      "from": "bundle",
+      "patch": {
+        "path": ["components", "canon", "package", "version"],
+        "value": "^1.0.0"
+      }
+    },
+    {
+      "name": "lock rejects absolute policy input paths",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/lock/1",
+      "from": "lock",
+      "patch": {
+        "path": ["effectivePolicyInputs", 0, "inputId"],
+        "value": "/Users/example/repository/.conform/policy.jsonc"
+      }
+    },
+    {
+      "name": "lock rejects hostnames",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/lock/1",
+      "from": "lock",
+      "patch": {
+        "path": ["hostname"],
+        "value": "builder-01"
+      }
+    },
+    {
+      "name": "lock rejects installation layout",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/lock/1",
+      "from": "lock",
+      "patch": {
+        "path": ["installationPath"],
+        "value": "node_modules/@clockwork-kitten/crux"
+      }
+    },
+    {
+      "name": "result rejects Bun as the verdict runtime",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/engine-result/1",
+      "from": "engineResult",
+      "patch": {
+        "path": ["environment", "verdictRuntime"],
+        "value": "bun"
+      }
+    },
+    {
+      "name": "result rejects noncanonical classifications",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/engine-result/1",
+      "from": "engineResult",
+      "patch": {
+        "path": ["classification"],
+        "value": "warning"
+      }
+    },
+    {
+      "name": "context rejects timestamps",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/context/1",
+      "from": "context",
+      "patch": {
+        "path": ["generatedAt"],
+        "value": "2026-11-22T00:00:00Z"
+      }
+    },
+    {
+      "name": "context rejects environment data",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/context/1",
+      "from": "context",
+      "patch": {
+        "path": ["environment"],
+        "value": {
+          "nodeMajor": 24
+        }
+      }
+    },
+    {
+      "name": "context rejects baseline contents",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/context/1",
+      "from": "context",
+      "patch": {
+        "path": ["baseline"],
+        "value": []
+      }
+    },
+    {
+      "name": "context rejects result data",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/context/1",
+      "from": "context",
+      "patch": {
+        "path": ["result"],
+        "value": {
+          "classification": "pass"
+        }
+      }
+    },
+    {
+      "name": "context rejects secrets",
+      "schemaId": "https://schemas.clockwork-kitten.dev/crux/context/1",
+      "from": "context",
+      "patch": {
+        "path": ["apiToken"],
+        "value": "fixture-secret"
+      }
+    }
+  ]
+}

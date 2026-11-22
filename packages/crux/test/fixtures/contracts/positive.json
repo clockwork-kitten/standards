@@ -1,0 +1,304 @@
+{
+  "fixtureRevision": 1,
+  "bundle": {
+    "schemaVersion": "1.0.0",
+    "bundleId": "conform-1.0.0",
+    "components": {
+      "crux": {
+        "componentId": "crux",
+        "role": "policy",
+        "package": {
+          "name": "@clockwork-kitten/crux",
+          "version": "1.0.0",
+          "registryUrl": "https://registry.npmjs.org/@clockwork-kitten/crux",
+          "integrity": "sha512-YQ=="
+        },
+        "capabilities": ["policy-contracts"],
+        "verdictProducing": false,
+        "manifestHash": null
+      },
+      "canon": {
+        "componentId": "canon",
+        "role": "engine",
+        "package": {
+          "name": "@clockwork-kitten/canon",
+          "version": "1.0.0",
+          "registryUrl": "https://registry.npmjs.org/@clockwork-kitten/canon",
+          "integrity": "sha512-YQ=="
+        },
+        "capabilities": ["markdown-parser"],
+        "verdictProducing": true,
+        "manifestHash": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "crucible": {
+        "componentId": "crucible",
+        "role": "engine",
+        "package": {
+          "name": "@clockwork-kitten/crucible",
+          "version": "1.0.0",
+          "registryUrl": "https://registry.npmjs.org/@clockwork-kitten/crucible",
+          "integrity": "sha512-YQ=="
+        },
+        "capabilities": ["typescript-parser"],
+        "verdictProducing": true,
+        "manifestHash": "1111111111111111111111111111111111111111111111111111111111111111"
+      },
+      "conform": {
+        "componentId": "conform",
+        "role": "orchestrator",
+        "package": {
+          "name": "@clockwork-kitten/conform",
+          "version": "1.0.0",
+          "registryUrl": "https://registry.npmjs.org/@clockwork-kitten/conform",
+          "integrity": "sha512-YQ=="
+        },
+        "capabilities": ["aggregate-results"],
+        "verdictProducing": true,
+        "manifestHash": "2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      "tools": [
+        {
+          "componentId": "typescript",
+          "role": "tool",
+          "package": {
+            "name": "typescript",
+            "version": "5.7.3",
+            "registryUrl": "https://registry.npmjs.org/typescript",
+            "integrity": "sha512-YQ=="
+          },
+          "capabilities": ["typecheck"],
+          "verdictProducing": true,
+          "manifestHash": null
+        }
+      ]
+    },
+    "schemaMajors": {
+      "lock": 1,
+      "policy": 1,
+      "result": 1
+    },
+    "environment": {
+      "nodeMajors": [24, 26],
+      "operatingSystems": ["darwin", "linux"],
+      "packageManagerLocks": ["bun.lock", "package-lock.json"],
+      "verdictRuntime": "node"
+    },
+    "capabilities": ["aggregate-results", "markdown-parser", "typecheck"],
+    "resultMajorSupport": {
+      "current": 2,
+      "previous": {
+        "major": 1,
+        "minimumConformMinorReleases": 1,
+        "minimumDays": 90
+      }
+    }
+  },
+  "lock": {
+    "schemaVersion": "1.0.0",
+    "bundleId": "conform-1.0.0",
+    "policyPackage": {
+      "name": "@clockwork-kitten/crux",
+      "version": "1.0.0",
+      "registryUrl": "https://registry.npmjs.org/@clockwork-kitten/crux",
+      "integrity": "sha512-YQ=="
+    },
+    "components": {
+      "crux": {
+        "componentId": "crux",
+        "role": "policy",
+        "package": {
+          "name": "@clockwork-kitten/crux",
+          "version": "1.0.0",
+          "registryUrl": "https://registry.npmjs.org/@clockwork-kitten/crux",
+          "integrity": "sha512-YQ=="
+        },
+        "capabilities": ["policy-contracts"],
+        "verdictProducing": false,
+        "manifestHash": null
+      },
+      "canon": {
+        "componentId": "canon",
+        "role": "engine",
+        "package": {
+          "name": "@clockwork-kitten/canon",
+          "version": "1.0.0",
+          "registryUrl": "https://registry.npmjs.org/@clockwork-kitten/canon",
+          "integrity": "sha512-YQ=="
+        },
+        "capabilities": ["markdown-parser"],
+        "verdictProducing": true,
+        "manifestHash": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "crucible": {
+        "componentId": "crucible",
+        "role": "engine",
+        "package": {
+          "name": "@clockwork-kitten/crucible",
+          "version": "1.0.0",
+          "registryUrl": "https://registry.npmjs.org/@clockwork-kitten/crucible",
+          "integrity": "sha512-YQ=="
+        },
+        "capabilities": ["typescript-parser"],
+        "verdictProducing": true,
+        "manifestHash": "1111111111111111111111111111111111111111111111111111111111111111"
+      },
+      "conform": {
+        "componentId": "conform",
+        "role": "orchestrator",
+        "package": {
+          "name": "@clockwork-kitten/conform",
+          "version": "1.0.0",
+          "registryUrl": "https://registry.npmjs.org/@clockwork-kitten/conform",
+          "integrity": "sha512-YQ=="
+        },
+        "capabilities": ["aggregate-results"],
+        "verdictProducing": true,
+        "manifestHash": "2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      "tools": []
+    },
+    "schemaMajors": {
+      "lock": 1,
+      "policy": 1,
+      "result": 1
+    },
+    "environment": {
+      "nodeMajor": 24,
+      "operatingSystem": "linux",
+      "packageManagerLock": "package-lock.json",
+      "verdictRuntime": "node"
+    },
+    "capabilities": ["aggregate-results", "markdown-parser"],
+    "effectivePolicyInputs": [
+      {
+        "inputId": ".conform/policy.jsonc",
+        "kind": "repository-policy",
+        "contentHash": "3333333333333333333333333333333333333333333333333333333333333333"
+      }
+    ],
+    "effectivePolicyHash": "4444444444444444444444444444444444444444444444444444444444444444",
+    "repository": {
+      "profile": "ci",
+      "declaredShape": "typescript-package"
+    }
+  },
+  "engineResult": {
+    "schemaVersion": "1.0.0",
+    "bundleId": "conform-1.0.0",
+    "runId": "run-001",
+    "engine": {
+      "name": "canon",
+      "version": "1.0.0",
+      "package": "@clockwork-kitten/canon",
+      "integrity": "sha512-YQ==",
+      "manifestHash": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "repository": {
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "environment": {
+      "nodeMajor": 24,
+      "operatingSystem": "linux",
+      "packageManagerLock": "package-lock.json",
+      "verdictRuntime": "node"
+    },
+    "command": "check",
+    "profile": "ci",
+    "scope": {
+      "kind": "repository",
+      "paths": []
+    },
+    "policyPackage": {
+      "name": "@clockwork-kitten/crux",
+      "version": "1.0.0",
+      "registryUrl": "https://registry.npmjs.org/@clockwork-kitten/crux",
+      "integrity": "sha512-YQ=="
+    },
+    "effectivePolicyHash": "4444444444444444444444444444444444444444444444444444444444444444",
+    "completionState": "complete",
+    "findings": [],
+    "counts": {
+      "total": 0,
+      "failing": 0,
+      "reviewRequired": 0,
+      "info": 0,
+      "warning": 0,
+      "error": 0
+    },
+    "classification": "pass"
+  },
+  "conformResult": {
+    "schemaVersion": "1.0.0",
+    "bundleId": "conform-1.0.0",
+    "runId": "run-001",
+    "conform": {
+      "name": "conform",
+      "version": "1.0.0",
+      "package": "@clockwork-kitten/conform",
+      "integrity": "sha512-YQ==",
+      "manifestHash": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "repository": {
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "environment": {
+      "nodeMajor": 24,
+      "operatingSystem": "linux",
+      "packageManagerLock": "package-lock.json",
+      "verdictRuntime": "node"
+    },
+    "command": "check",
+    "profile": "ci",
+    "scope": {
+      "kind": "repository",
+      "paths": []
+    },
+    "policyPackage": {
+      "name": "@clockwork-kitten/crux",
+      "version": "1.0.0",
+      "registryUrl": "https://registry.npmjs.org/@clockwork-kitten/crux",
+      "integrity": "sha512-YQ=="
+    },
+    "effectivePolicyHash": "4444444444444444444444444444444444444444444444444444444444444444",
+    "completionState": "complete",
+    "engineResults": [],
+    "contractFindings": [],
+    "findings": [],
+    "counts": {
+      "total": 0,
+      "failing": 0,
+      "reviewRequired": 0,
+      "info": 0,
+      "warning": 0,
+      "error": 0
+    },
+    "classification": "pass"
+  },
+  "context": {
+    "schemaVersion": "1.0.0",
+    "contextHash": "5555555555555555555555555555555555555555555555555555555555555555",
+    "bundleId": "conform-1.0.0",
+    "policy": {
+      "policyId": "studio",
+      "policyVersion": "1.0.0",
+      "effectivePolicyHash": "4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    "rules": {
+      "active": [],
+      "disabled": [],
+      "notEnforced": []
+    },
+    "glossary": [],
+    "exceptions": [],
+    "architectureReferences": [],
+    "commands": [
+      {
+        "name": "check",
+        "command": "bun run check"
+      }
+    ],
+    "profiles": ["ci"],
+    "topInvariants": [],
+    "canonicalResultPath": ".conform/result.json"
+  }
+}

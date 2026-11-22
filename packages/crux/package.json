@@ -4,7 +4,12 @@
   "description": "Inert policy schemas and generated TypeScript declarations for the Clockwork Kitten toolchain.",
   "type": "module",
   "exports": {
+    "./schemas/bundle": "./schemas/bundle.schema.json",
+    "./schemas/conform-result": "./schemas/conform-result.schema.json",
+    "./schemas/context": "./schemas/context.schema.json",
     "./schemas/engine-manifest": "./schemas/engine-manifest.schema.json",
+    "./schemas/engine-result": "./schemas/engine-result.schema.json",
+    "./schemas/lock": "./schemas/lock.schema.json",
     "./schemas/policy": "./schemas/policy.schema.json",
     "./schemas/profile": "./schemas/profile.schema.json",
     "./schemas/rule": "./schemas/rule.schema.json",
