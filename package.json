@@ -15,8 +15,8 @@
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "deadcode": "knip",
-    "test": "bun run --cwd packages/conform test",
-    "typecheck": "bun run --cwd packages/conform typecheck",
+    "test": "bun run --cwd packages/conform test && bun run --cwd packages/crux test",
+    "typecheck": "bun run --cwd packages/conform typecheck && bun run --cwd packages/crux typecheck",
     "canon": "bun ./node_modules/@clockwork-kitten/canon/src/cli/main.ts"
   },
   "prettier": "@clockwork-kitten/conform/configs/prettier.base.json",

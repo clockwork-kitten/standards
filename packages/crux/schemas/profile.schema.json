@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/profile/1",
+  "description": "Versioned verdict, evidence, execution, and bounded-fix policy.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "profileId",
+    "ci",
+    "allowedCheckKinds",
+    "evidenceLimits",
+    "agentOutputLimits",
+    "fix"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "profileId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "maxLength": 120
+    },
+    "ci": {
+      "type": "boolean"
+    },
+    "allowedCheckKinds": {
+      "type": "array",
+      "items": {
+        "enum": ["static", "executing"]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "evidenceLimits": {
+      "type": "object",
+      "required": ["perFindingBytes", "totalBytes"],
+      "properties": {
+        "perFindingBytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4096
+        },
+        "totalBytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65536
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "agentOutputLimits": {
+      "type": "object",
+      "required": [
+        "ordinaryFindingCount",
+        "totalBytes",
+        "neverTruncateIntegrity",
+        "neverTruncateProtectedReview"
+      ],
+      "properties": {
+        "ordinaryFindingCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 50
+        },
+        "totalBytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65536
+        },
+        "neverTruncateIntegrity": {
+          "const": true
+        },
+        "neverTruncateProtectedReview": {
+          "const": true
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "fix": {
+      "type": "object",
+      "required": ["maxPasses", "engineOrder", "writableFileClasses"],
+      "properties": {
+        "maxPasses": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "engineOrder": {
+          "type": "array",
+          "items": {
+            "enum": ["canon", "crucible", "conform"]
+          },
+          "uniqueItems": true
+        },
+        "writableFileClasses": {
+          "type": "object",
+          "properties": {
+            "canon": {
+              "type": "array",
+              "items": {
+                "const": "documentation"
+              },
+              "uniqueItems": true
+            },
+            "crucible": {
+              "type": "array",
+              "items": {
+                "enum": ["source", "test", "tool-config"]
+              },
+              "uniqueItems": true
+            },
+            "conform": {
+              "type": "array",
+              "items": {
+                "const": "repository-metadata"
+              },
+              "uniqueItems": true
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$"
+      },
+      "additionalProperties": true
+    }
+  },
+  "unevaluatedProperties": false
+}

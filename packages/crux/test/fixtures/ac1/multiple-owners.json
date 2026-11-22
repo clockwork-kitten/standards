@@ -1,0 +1,17 @@
+{
+  "name": "multiple owners",
+  "fixtureRevision": 1,
+  "previous": [],
+  "current": [
+    {
+      "ruleId": "crux/docs/markdown-format",
+      "owner": ["canon", "crucible"],
+      "fileClass": "documentation",
+      "aspect": "content",
+      "checkKind": "static",
+      "domains": ["documentation.markdown"],
+      "lifecycle": "proposed"
+    }
+  ],
+  "expectedErrors": ["rule crux/docs/markdown-format has multiple owners"]
+}

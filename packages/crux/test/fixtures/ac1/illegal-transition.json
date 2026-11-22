@@ -1,0 +1,29 @@
+{
+  "name": "warn-first lifecycle bypass",
+  "fixtureRevision": 1,
+  "previous": [
+    {
+      "ruleId": "crux/code/strict-types",
+      "owner": "crucible",
+      "fileClass": "source",
+      "aspect": "content",
+      "checkKind": "static",
+      "domains": ["source.typescript"],
+      "lifecycle": "proposed"
+    }
+  ],
+  "current": [
+    {
+      "ruleId": "crux/code/strict-types",
+      "owner": "crucible",
+      "fileClass": "source",
+      "aspect": "content",
+      "checkKind": "static",
+      "domains": ["source.typescript"],
+      "lifecycle": "error"
+    }
+  ],
+  "expectedErrors": [
+    "illegal lifecycle transition for crux/code/strict-types: proposed -> error"
+  ]
+}

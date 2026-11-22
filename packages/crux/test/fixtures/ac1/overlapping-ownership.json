@@ -1,0 +1,28 @@
+{
+  "name": "overlapping ownership tuple",
+  "fixtureRevision": 1,
+  "previous": [],
+  "current": [
+    {
+      "ruleId": "crux/docs/markdown-format",
+      "owner": "canon",
+      "fileClass": "documentation",
+      "aspect": "content",
+      "checkKind": "static",
+      "domains": ["documentation.markdown"],
+      "lifecycle": "proposed"
+    },
+    {
+      "ruleId": "crux/code/markdown-format",
+      "owner": "crucible",
+      "fileClass": "documentation",
+      "aspect": "content",
+      "checkKind": "static",
+      "domains": ["documentation.markdown"],
+      "lifecycle": "proposed"
+    }
+  ],
+  "expectedErrors": [
+    "rules crux/docs/markdown-format and crux/code/markdown-format overlap ownership tuple with different owners"
+  ]
+}

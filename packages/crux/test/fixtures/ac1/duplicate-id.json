@@ -1,0 +1,28 @@
+{
+  "name": "duplicate permanent ID",
+  "fixtureRevision": 1,
+  "previous": [],
+  "current": [
+    {
+      "ruleId": "crux/docs/markdown-format",
+      "owner": "canon",
+      "fileClass": "documentation",
+      "aspect": "content",
+      "checkKind": "static",
+      "domains": ["documentation.markdown"],
+      "lifecycle": "proposed"
+    },
+    {
+      "ruleId": "crux/docs/markdown-format",
+      "owner": "canon",
+      "fileClass": "documentation",
+      "aspect": "references",
+      "checkKind": "static",
+      "domains": ["documentation.references"],
+      "lifecycle": "proposed"
+    }
+  ],
+  "expectedErrors": [
+    "current catalog has duplicate rule ID: crux/docs/markdown-format"
+  ]
+}

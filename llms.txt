@@ -18,3 +18,4 @@
 ## Conform engine
 
 - [@clockwork-kitten/conform](packages/conform/README.md): The studio conformance orchestrator — one CLI that coordinates the documentation track owned by @clockwork-kitten/canon with the code track bundled here (ESLint, Prettier, knip, TypeScript, and optional bedrock).
+- [Crux](packages/crux/README.md): @clockwork-kitten/crux is the inert policy-contract package for the Clockwork Kitten conformance toolchain. Its JSON Schemas are authoritative; the bundled TypeScript declarations are deterministic generated views of those schemas.

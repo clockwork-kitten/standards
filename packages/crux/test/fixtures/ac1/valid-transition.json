@@ -1,0 +1,27 @@
+{
+  "name": "valid warn-first lifecycle transition",
+  "fixtureRevision": 1,
+  "previous": [
+    {
+      "ruleId": "crux/docs/markdown-format",
+      "owner": "canon",
+      "fileClass": "documentation",
+      "aspect": "content",
+      "checkKind": "static",
+      "domains": ["documentation.markdown"],
+      "lifecycle": "proposed"
+    }
+  ],
+  "current": [
+    {
+      "ruleId": "crux/docs/markdown-format",
+      "owner": "canon",
+      "fileClass": "documentation",
+      "aspect": "content",
+      "checkKind": "static",
+      "domains": ["documentation.markdown"],
+      "lifecycle": "warn"
+    }
+  ],
+  "expectedErrors": []
+}
