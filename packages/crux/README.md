@@ -13,13 +13,39 @@ JSON and declaration subpaths:
 - `@clockwork-kitten/crux/schemas/policy`
 - `@clockwork-kitten/crux/schemas/profile`
 - `@clockwork-kitten/crux/schemas/suppression`
+- `@clockwork-kitten/crux/schemas/suppression-registry`
 - `@clockwork-kitten/crux/schemas/engine-manifest`
+- `@clockwork-kitten/crux/schemas/fingerprint`
+- `@clockwork-kitten/crux/schemas/baseline`
+- `@clockwork-kitten/crux/schemas/exception`
+- `@clockwork-kitten/crux/schemas/repository-policy`
+- `@clockwork-kitten/crux/schemas/migration-disposition`
 - `@clockwork-kitten/crux/types`
 
 All schemas use JSON Schema 2020-12 and stable major-version `$id` URIs under
 `https://schemas.clockwork-kitten.dev/crux/`. Critical objects are closed.
 Additive product-specific data is accepted only in an explicitly named
 `extensions` map.
+
+Human-authored repository policy, exceptions, selectors, overrides, baseline
+operation inputs, and migration-diagnostic inputs use JSONC before validation.
+Generated, normalized, lock, manifest, result, migration-disposition, and
+committed baseline artifacts use strict JSON. Parsing JSONC is a consumer
+responsibility; every artifact is validated against the same authoritative
+schema after comments are removed.
+
+Baselines are count-aware: each deterministic fingerprint record carries an
+occurrence count, and a larger observed count is new debt. Integrity, unknown,
+unimplemented, incomplete, unlocked, unsupported, compatibility-failure, and
+engine-failure states cannot enter a baseline. Fingerprint-version changes
+carry explicit owner package, bundle, before/after count, and mapping-hash
+metadata; an absent migration is never an automatic rebaseline.
+
+Exception expiry is data for an explicit as-of report, not ambient-clock
+verdict state. Suppression forms identify one engine owner and a parser with
+the same owner. Migration dispositions are one-way diagnostics: they record a
+replacement or a reason to drop a known legacy input, but never execute command,
+rule, or suppression aliases and never establish a compatibility window.
 
 ## Development
 
@@ -39,10 +65,12 @@ has no runtime dependencies.
 ## Support boundary
 
 Crux defines policy data, identity, lifecycle, ownership, profile, suppression,
+fingerprint, baseline, exception, repository-override, migration-disposition,
 and engine-manifest contracts. It does not scan repositories, execute vectors
-or rules, apply exceptions or baselines, render results, resolve locks, or write
-files. Canon, Crucible, and Conform consume these contracts and remain
-responsible for their executable behavior.
+or rules, apply exceptions or baselines, interpret JSONC, render results,
+resolve locks, translate legacy inputs, or write files. Canon, Crucible, and
+Conform consume these contracts and remain responsible for their executable
+behavior.
 
 Rule IDs are permanent and never reused. Cross-release validation permits only
 the lifecycle transitions encoded by the development validator and rejects

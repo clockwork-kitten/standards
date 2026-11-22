@@ -1,0 +1,18 @@
+{
+  "fixtureRevision": 1,
+  "name": "unknown-disposition",
+  "inventory": [
+    {
+      "kind": "rule",
+      "id": "legacy/no-tabs"
+    }
+  ],
+  "entries": [
+    {
+      "legacy": {
+        "kind": "rule",
+        "id": "legacy/unknown-rule"
+      }
+    }
+  ]
+}

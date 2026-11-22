@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/fingerprint/1",
+  "description": "A deterministic, count-aware finding identity suitable for review and baseline matching.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "fingerprintVersion",
+    "algorithm",
+    "ruleId",
+    "path",
+    "fingerprint",
+    "count",
+    "structuralSummary"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "fingerprintVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "algorithm": {
+      "const": "sha256"
+    },
+    "ruleId": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/ruleId"
+    },
+    "path": {
+      "$ref": "#/$defs/repositoryPath"
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "count": {
+      "description": "The number of deterministic occurrences represented by this identity. A larger observed count is new debt.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "structuralSummary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    }
+  },
+  "$defs": {
+    "repositoryPath": {
+      "description": "A repository-relative POSIX path without dot segments.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*\\\\).+$"
+    }
+  },
+  "unevaluatedProperties": false
+}

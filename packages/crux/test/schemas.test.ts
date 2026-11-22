@@ -10,9 +10,15 @@ const SCHEMA_DIRECTORY = join(PACKAGE_ROOT, "schemas");
 const SCHEMA_FILES = [
   "rule.schema.json",
   "suppression.schema.json",
+  "suppression-registry.schema.json",
   "profile.schema.json",
   "policy.schema.json",
   "engine-manifest.schema.json",
+  "fingerprint.schema.json",
+  "baseline.schema.json",
+  "exception.schema.json",
+  "repository-policy.schema.json",
+  "migration-disposition.schema.json",
 ] as const;
 const MANIFEST_SCHEMA_FIXTURE_DIRECTORY = fileURLToPath(
   new URL("fixtures/manifest-schema", import.meta.url),
@@ -99,7 +105,10 @@ const validRule = {
 const validSuppression = {
   fileClasses: ["documentation"],
   owner: "canon",
-  parser: "canon-markdown",
+  parser: {
+    id: "canon-markdown",
+    owner: "canon",
+  },
   requiresLedgerEntry: true,
   schemaVersion: "1.0.0",
   suppressionId: "markdown-directive",
