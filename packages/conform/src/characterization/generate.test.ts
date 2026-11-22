@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -9,6 +9,7 @@ import {
   findGoldenDrift,
   GOLDEN_FILENAMES,
   stableSerialize,
+  verifyCharacterizationProvenance,
 } from "./generate.ts";
 
 function committedGoldens(): Record<string, unknown> {
@@ -23,12 +24,56 @@ function committedGoldens(): Record<string, unknown> {
 }
 
 describe("pre-split Conform characterization", () => {
-  it("normalizes object keys deterministically without reordering arrays", () => {
+  it("normalizes reversed nested object-key insertion order", () => {
     const left = { a: { c: 3, d: 4 }, z: [{ a: 1, b: 2 }] };
-    const right = { a: { c: 3, d: 4 }, z: [{ a: 1, b: 2 }] };
+    const right = Object.fromEntries([
+      [
+        "z",
+        [
+          Object.fromEntries([
+            ["b", 2],
+            ["a", 1],
+          ]),
+        ],
+      ],
+      [
+        "a",
+        Object.fromEntries([
+          ["d", 4],
+          ["c", 3],
+        ]),
+      ],
+    ]);
 
     expect(stableSerialize(left)).toBe(stableSerialize(right));
     expect(characterizationHash(left)).toBe(characterizationHash(right));
+  });
+
+  it("preserves contractually meaningful array order and reports its drift", () => {
+    const left = { tools: ["eslint", "prettier"] };
+    const right = { tools: ["prettier", "eslint"] };
+
+    expect(stableSerialize(left)).not.toBe(stableSerialize(right));
+    expect(characterizationHash(left)).not.toBe(characterizationHash(right));
+    expect(findGoldenDrift({ ordering: left }, { ordering: right })).toEqual([
+      "ordering",
+    ]);
+  });
+
+  it("fails deterministically when source provenance does not match", () => {
+    expect(() =>
+      verifyCharacterizationProvenance({
+        "src/config/resolve.ts": "0".repeat(64),
+      }),
+    ).toThrowError(
+      /^P02 provenance mismatch for "src\/config\/resolve\.ts": expected 0{64}, received [a-f0-9]{64}$/,
+    );
+  });
+
+  it("commits exactly the machine-readable golden filename set", () => {
+    expect(readdirSync(CHARACTERIZATION_DIR).toSorted()).toEqual([
+      ...GOLDEN_FILENAMES,
+    ]);
   });
 
   it("reproduces every committed golden with no drift", async () => {

@@ -46,6 +46,24 @@
       "conform.config.jsonc",
       "conform.config.json"
     ],
+    "loadedConfigForms": {
+      "jsonc": {
+        "bedrock": false,
+        "eslint": true,
+        "knip": true,
+        "prettier": true,
+        "tsconfig": "jsonc-fixture.json",
+        "typecheck": true
+      },
+      "typescriptDefaultExport": {
+        "bedrock": false,
+        "eslint": true,
+        "knip": true,
+        "prettier": true,
+        "tsconfig": "typescript-fixture.json",
+        "typecheck": true
+      }
+    },
     "noCodeBlock": null,
     "noConfig": {
       "code": null,
@@ -63,6 +81,8 @@
     "config.discovery.conform.config.js",
     "config.discovery.conform.config.jsonc",
     "config.discovery.conform.config.json",
+    "config.loader.typescript-default-export",
+    "config.loader.jsonc",
     "config.key.code",
     "config.key.code.bedrock",
     "config.key.code.eslint",

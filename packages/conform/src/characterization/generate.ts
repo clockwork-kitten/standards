@@ -24,6 +24,11 @@ import {
 } from "../config/resolve.ts";
 
 const PACKAGE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const DENOMINATOR_PATH = join(
+  PACKAGE_ROOT,
+  "characterization",
+  "denominator.json",
+);
 const INVENTORY_PATH = join(PACKAGE_ROOT, "inventory", "legacy-conform.json");
 const requireFromPackage = createRequire(join(PACKAGE_ROOT, "package.json"));
 
@@ -55,6 +60,27 @@ type InventoryRecord = {
 
 type JsonObject = Record<string, unknown>;
 
+type P02Denominator = {
+  goldens: Record<
+    string,
+    {
+      intentionalDifferenceReferences: string[];
+      p01References: string[];
+    }
+  >;
+  p01Inventory: {
+    legacyHeadSha: string;
+    path: "packages/conform/inventory/legacy-conform.json";
+  };
+  provenance: {
+    dependencyVersions: Record<string, string>;
+    sourceSha256: Record<string, string>;
+  };
+  requiredIntentionalDifferenceReferences: string[];
+  requiredP01References: string[];
+  schemaVersion: "1.0.0";
+};
+
 export const CHARACTERIZATION_DIR = join(
   PACKAGE_ROOT,
   "characterization",
@@ -76,11 +102,13 @@ export const GOLDEN_FILENAMES = [
 
 const BASE_CODE_CONFIG = requiredCodeConfig({ code: {} });
 const P01_INVENTORY = readJson(INVENTORY_PATH) as Inventory;
+const P02_DENOMINATOR = readJson(DENOMINATOR_PATH) as P02Denominator;
 
 /** Build every normalized pre-split characterization artifact in memory. */
 export async function buildCharacterizationGoldens(): Promise<
   Record<(typeof GOLDEN_FILENAMES)[number], Golden>
 > {
+  verifyCharacterizationProvenance();
   const goldens = {
     "config-resolution.json": await characterizeConfigResolution(),
     "eslint-astro.json": characterizeEslint("astro", eslintAstro),
@@ -141,6 +169,39 @@ export function stableSerialize(value: unknown): string {
   return `${JSON.stringify(stableNormalize(value), undefined, 2)}\n`;
 }
 
+/** Fail when checkout inputs do not match the source revision declared by P02. */
+export function verifyCharacterizationProvenance(
+  sourceSha256 = P02_DENOMINATOR.provenance.sourceSha256,
+): void {
+  if (
+    P02_DENOMINATOR.p01Inventory.legacyHeadSha !==
+    P01_INVENTORY.provenance.legacyHeadSha
+  ) {
+    throw new Error("P02 provenance does not match the P01 legacy revision");
+  }
+  for (const [path, expectedHash] of Object.entries(sourceSha256).toSorted()) {
+    const actualHash = createHash("sha256")
+      .update(readFileSync(join(PACKAGE_ROOT, path)))
+      .digest("hex");
+    if (actualHash !== expectedHash) {
+      throw new Error(
+        `P02 provenance mismatch for "${path}": expected ${expectedHash}, received ${actualHash}`,
+      );
+    }
+  }
+  const actualVersions = packageVersions(
+    Object.keys(P02_DENOMINATOR.provenance.dependencyVersions),
+  );
+  if (
+    stableSerialize(actualVersions) !==
+    stableSerialize(P02_DENOMINATOR.provenance.dependencyVersions)
+  ) {
+    throw new Error(
+      "P02 dependency provenance does not match installed inputs",
+    );
+  }
+}
+
 function artifact(
   surface: string,
   p01References: string[],
@@ -160,6 +221,26 @@ function artifact(
   };
 }
 
+function assertExactSet(
+  label: string,
+  actual: readonly string[],
+  expected: readonly string[],
+): void {
+  const actualSet = [...new Set(actual)].toSorted();
+  const expectedSet = [...new Set(expected)].toSorted();
+  if (
+    actualSet.length !== actual.length ||
+    expectedSet.length !== expected.length
+  ) {
+    throw new Error(`${label} contains duplicate references`);
+  }
+  if (stableSerialize(actualSet) !== stableSerialize(expectedSet)) {
+    throw new Error(
+      `${label} mismatch: expected ${JSON.stringify(expectedSet)}, received ${JSON.stringify(actualSet)}`,
+    );
+  }
+}
+
 function candidate(
   p01Reference: string,
   candidateKind: "executing" | "static",
@@ -172,6 +253,24 @@ async function characterizeConfigResolution(): Promise<Golden> {
   const scratch = mkdtempSync(join(tmpdir(), "conform-characterization-"));
   try {
     const noConfig = await resolveConfig({ cwd: scratch });
+    writeFileSync(
+      join(scratch, "conform.config.ts"),
+      "export default { code: { tsconfig: 'typescript-fixture.json' } };",
+      "utf8",
+    );
+    writeFileSync(
+      join(scratch, "conform.config.jsonc"),
+      '{\n  // JSONC fixture\n  "code": { "tsconfig": "jsonc-fixture.json", },\n}\n',
+      "utf8",
+    );
+    const typescriptDefaultExport = await resolveConfig({
+      configPath: "conform.config.ts",
+      cwd: scratch,
+    });
+    const jsonc = await resolveConfig({
+      configPath: "conform.config.jsonc",
+      cwd: scratch,
+    });
     const bare = requiredCodeConfig({ code: {} });
     const custom = requiredCodeConfig({
       code: {
@@ -192,6 +291,8 @@ async function characterizeConfigResolution(): Promise<Golden> {
         "config.discovery.conform.config.js",
         "config.discovery.conform.config.jsonc",
         "config.discovery.conform.config.json",
+        "config.loader.typescript-default-export",
+        "config.loader.jsonc",
         "config.key.code",
         "config.key.code.bedrock",
         "config.key.code.eslint",
@@ -217,6 +318,10 @@ async function characterizeConfigResolution(): Promise<Golden> {
         bedrockTrue: resolveCodeConfig({ code: { bedrock: true } }),
         customCodeBlock: custom,
         discoveryPrecedence: CONFIG_FILENAMES,
+        loadedConfigForms: {
+          jsonc: jsonc.code,
+          typescriptDefaultExport: typescriptDefaultExport.code,
+        },
         noCodeBlock: resolveCodeConfig({}) ?? jsonNull(),
         noConfig: {
           code: noConfig.code ?? jsonNull(),
@@ -592,7 +697,31 @@ function validateInventoryReferences(goldens: Record<string, Golden>): void {
     ...P01_INVENTORY.toolAdapters,
   ];
   const recordsById = new Map(records.map((record) => [record.id, record]));
+  assertExactSet(
+    "P02 golden filenames",
+    Object.keys(P02_DENOMINATOR.goldens),
+    GOLDEN_FILENAMES,
+  );
+  assertExactSet(
+    "generated golden filenames",
+    Object.keys(goldens),
+    GOLDEN_FILENAMES,
+  );
   for (const [filename, golden] of Object.entries(goldens)) {
+    const expected = P02_DENOMINATOR.goldens[filename];
+    if (!expected) {
+      throw new Error(`P02 denominator has no entry for "${filename}"`);
+    }
+    assertExactSet(
+      `${filename} P01 references`,
+      golden.p01References,
+      expected.p01References,
+    );
+    assertExactSet(
+      `${filename} intentional-difference references`,
+      golden.intentionalDifferenceReferences ?? [],
+      expected.intentionalDifferenceReferences,
+    );
     for (const reference of golden.p01References) {
       if (!recordsById.has(reference)) {
         throw new Error(
@@ -610,4 +739,24 @@ function validateInventoryReferences(goldens: Record<string, Golden>): void {
       }
     }
   }
+  assertExactSet(
+    "P02 P01 citation coverage",
+    [
+      ...new Set(
+        Object.values(goldens).flatMap((golden) => golden.p01References),
+      ),
+    ],
+    P02_DENOMINATOR.requiredP01References,
+  );
+  assertExactSet(
+    "P02 intentional-difference citation coverage",
+    [
+      ...new Set(
+        Object.values(goldens).flatMap(
+          (golden) => golden.intentionalDifferenceReferences ?? [],
+        ),
+      ),
+    ],
+    P02_DENOMINATOR.requiredIntentionalDifferenceReferences,
+  );
 }

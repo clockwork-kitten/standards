@@ -127,6 +127,9 @@ Each golden cites the applicable record IDs and source revision from
 `inventory/legacy-conform.json`. Intentional differences cite their P01 records without copying the
 migration disposition, so the goldens are drift evidence rather than a duplicate authority.
 Static/executing labels are candidates for extraction planning, not a stable profile contract.
+`characterization/denominator.json` declares the exact P02 golden filenames and P01 citation
+coverage. It also pins the legacy source hashes and dependency versions that generation verifies
+before producing artifacts, so current-checkout behavior cannot be relabeled as legacy evidence.
 
 Regenerate the artifacts after an intentional pre-split behavior change:
 
