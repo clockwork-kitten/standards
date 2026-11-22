@@ -1,0 +1,15 @@
+{
+  "normalized": {
+    "config": {},
+    "dependencyVersions": {
+      "prettier": "3.9.6"
+    }
+  },
+  "p01Inventory": {
+    "legacyHeadSha": "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5",
+    "path": "packages/conform/inventory/legacy-conform.json"
+  },
+  "p01References": ["artifact.config.prettier.base"],
+  "schemaVersion": "1.0.0",
+  "surface": "prettier-base"
+}

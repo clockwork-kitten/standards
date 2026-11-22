@@ -1,0 +1,19 @@
+{
+  "normalized": {
+    "config": {
+      "$schema": "https://unpkg.com/knip@6/schema.json",
+      "ignoreBinaries": [],
+      "ignoreDependencies": []
+    },
+    "dependencyVersions": {
+      "knip": "6.34.0"
+    }
+  },
+  "p01Inventory": {
+    "legacyHeadSha": "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5",
+    "path": "packages/conform/inventory/legacy-conform.json"
+  },
+  "p01References": ["artifact.config.knip.base"],
+  "schemaVersion": "1.0.0",
+  "surface": "knip-base"
+}

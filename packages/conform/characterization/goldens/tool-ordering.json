@@ -1,0 +1,51 @@
+{
+  "intentionalDifferenceReferences": ["adapter.code.bedrock"],
+  "normalized": {
+    "bedrockEnabled": {
+      "check": ["bedrock", "eslint", "prettier", "knip", "typecheck"],
+      "fix": ["bedrock", "eslint", "prettier"]
+    },
+    "default": {
+      "check": ["eslint", "prettier", "knip", "typecheck"],
+      "fix": ["eslint", "prettier"]
+    },
+    "invocationArguments": {
+      "bedrock": {
+        "check": ["src", "--report"],
+        "fix": ["src", "--fix"]
+      },
+      "eslint": {
+        "check": ["."],
+        "fix": ["--fix", "."]
+      },
+      "knip": {
+        "check": []
+      },
+      "prettier": {
+        "check": ["--check", "."],
+        "fix": ["--write", "."]
+      },
+      "typecheck": {
+        "check": ["--noEmit", "--project", "tsconfig.json"]
+      }
+    },
+    "orchestration": {
+      "check": ["docs", "code"],
+      "fix": ["docs", "code"]
+    }
+  },
+  "p01Inventory": {
+    "legacyHeadSha": "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5",
+    "path": "packages/conform/inventory/legacy-conform.json"
+  },
+  "p01References": [
+    "adapter.docs.canon",
+    "adapter.code.bedrock",
+    "adapter.code.eslint",
+    "adapter.code.knip",
+    "adapter.code.prettier",
+    "adapter.code.typecheck"
+  ],
+  "schemaVersion": "1.0.0",
+  "surface": "tool-ordering"
+}

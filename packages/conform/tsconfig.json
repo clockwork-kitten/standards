@@ -6,6 +6,7 @@
     "moduleResolution": "bundler",
     "lib": ["ESNext"],
     "types": ["node"],
+    "allowJs": true,
     "allowImportingTsExtensions": true,
     "noEmit": true
   },

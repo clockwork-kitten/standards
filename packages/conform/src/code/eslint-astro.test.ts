@@ -2,9 +2,7 @@ import { ESLint } from "eslint";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
-// The shipped config is a plain `.js` flat-config module with no type declarations;
-// consumers import it the same way from their `eslint.config.js`.
-// @ts-expect-error - JS config module ships no types
+// Consumers import the shipped plain `.js` config the same way from eslint.config.js.
 import astroConfig from "../../configs/eslint.astro.js";
 
 /**

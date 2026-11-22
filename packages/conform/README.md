@@ -115,3 +115,25 @@ This package now ships a machine-readable inventory of the pre-split Conform sur
 
 The inventory is **diagnostic only** for migration planning. It is not a compatibility layer and does
 not introduce command aliases, rule-ID aliases, suppression aliases, or any compatibility window.
+
+## Pre-split behavior characterization (T0 evidence)
+
+Reproducible normalized goldens for the P01 inventory live in
+`packages/conform/characterization/goldens/`. They cover the shipped ESLint, Prettier, TypeScript,
+and Knip configurations; configuration resolution; docs/code and code-tool ordering; command exits;
+and candidate static/executing classifications.
+
+Each golden cites the applicable record IDs and source revision from
+`inventory/legacy-conform.json`. Intentional differences cite their P01 records without copying the
+migration disposition, so the goldens are drift evidence rather than a duplicate authority.
+Static/executing labels are candidates for extraction planning, not a stable profile contract.
+
+Regenerate the artifacts after an intentional pre-split behavior change:
+
+```sh
+bun run --cwd packages/conform characterize:update
+```
+
+The characterization test rebuilds every golden in memory and fails on normalized drift. This
+evidence remains diagnostic only: it adds no git/path dependency, command or rule alias,
+suppression alias, compatibility mode, or cross-repository implementation.
