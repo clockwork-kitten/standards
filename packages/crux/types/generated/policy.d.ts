@@ -4,17 +4,350 @@
  */
 
 /**
+ * Authoritative metadata and ownership contract for one permanent Crux rule ID.
+ */
+export type HttpsSchemasClockworkKittenDevCruxRule1 = {
+  /**
+   * This interface was referenced by `undefined`'s JSON-Schema
+   * via the `definition` "semver".
+   */
+  schemaVersion: string;
+  /**
+   * This interface was referenced by `undefined`'s JSON-Schema
+   * via the `definition` "ruleId".
+   */
+  ruleId: string;
+  /**
+   * This interface was referenced by `undefined`'s JSON-Schema
+   * via the `definition` "nonEmptyText".
+   */
+  title: string;
+  /**
+   * This interface was referenced by `undefined`'s JSON-Schema
+   * via the `definition` "nonEmptyText".
+   */
+  summary: string;
+  /**
+   * This interface was referenced by `undefined`'s JSON-Schema
+   * via the `definition` "nonEmptyText".
+   */
+  rationale: string;
+  /**
+   * This interface was referenced by `undefined`'s JSON-Schema
+   * via the `definition` "nonEmptyText".
+   */
+  remediation: string;
+  /**
+   * This interface was referenced by `undefined`'s JSON-Schema
+   * via the `definition` "engine".
+   */
+  owner: "canon" | "crucible" | "conform";
+  /**
+   * This interface was referenced by `undefined`'s JSON-Schema
+   * via the `definition` "fileClass".
+   */
+  fileClass:
+    | "documentation"
+    | "source"
+    | "test"
+    | "tool-config"
+    | "repository-metadata"
+    | "generated"
+    | "vendored";
+  /**
+   * This interface was referenced by `undefined`'s JSON-Schema
+   * via the `definition` "kebabId".
+   */
+  aspect: string;
+  checkKind: "static" | "executing";
+  /**
+   * @minItems 1
+   */
+  domains: [string, ...string[]];
+  lifecycle: "proposed" | "warn" | "error" | "deprecated" | "removed";
+  defaultSeverity: "info" | "warning" | "error";
+  introduced: ReleaseMetadata;
+  deprecated?: ReleaseMetadata;
+  removed?: ReleaseMetadata;
+  /**
+   * This interface was referenced by `undefined`'s JSON-Schema
+   * via the `definition` "ruleId".
+   */
+  replacementRuleId?: string;
+  selectors: {
+    /**
+     * @minItems 1
+     */
+    repositoryShapes: [string, ...string[]];
+    /**
+     * @minItems 1
+     */
+    include: [string, ...string[]];
+    exclude: string[];
+  };
+  topInvariant: boolean;
+  promotion?: Promotion;
+  implementation: {
+    capabilities: string[];
+    adapterRequirements: string[];
+  };
+  fix:
+    | {
+        kind: "none";
+        maxPasses: 0;
+        /**
+         * @maxItems 0
+         */
+        writableFileClasses: [];
+      }
+    | {
+        kind: "bounded";
+        maxPasses: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+        /**
+         * @minItems 1
+         */
+        writableFileClasses: [
+          (
+            | "documentation"
+            | "source"
+            | "test"
+            | "tool-config"
+            | "repository-metadata"
+            | "generated"
+            | "vendored"
+          ),
+          ...(
+            | "documentation"
+            | "source"
+            | "test"
+            | "tool-config"
+            | "repository-metadata"
+            | "generated"
+            | "vendored"
+          )[],
+        ];
+      };
+  suppressionFormIds: string[];
+  vectors: {
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema
+     * via the `definition` "kebabId".
+     */
+    vectorId: string;
+    kind: "positive" | "negative";
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema
+     * via the `definition` "engine".
+     */
+    engine: "canon" | "crucible" | "conform";
+    expectedOutcome: "pass" | "fail";
+  }[];
+  extensions?: Extensions;
+} & (
+  | {
+      lifecycle?: "proposed";
+      defaultSeverity?: "info";
+      topInvariant?: false;
+      promotion: Promotion;
+    }
+  | {
+      lifecycle?: "warn";
+      defaultSeverity?: "warning";
+      promotion: Promotion;
+    }
+  | {
+      lifecycle?: "error";
+      defaultSeverity?: "error";
+    }
+  | {
+      lifecycle?: "deprecated";
+      deprecated: ReleaseMetadata;
+    }
+  | {
+      lifecycle?: "removed";
+      defaultSeverity?: "info";
+      topInvariant?: false;
+      deprecated: ReleaseMetadata;
+      removed: ReleaseMetadata;
+    }
+) & {
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema
+     * via the `definition` "semver".
+     */
+    schemaVersion: string;
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema
+     * via the `definition` "ruleId".
+     */
+    ruleId: string;
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema
+     * via the `definition` "nonEmptyText".
+     */
+    title: string;
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema
+     * via the `definition` "nonEmptyText".
+     */
+    summary: string;
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema
+     * via the `definition` "nonEmptyText".
+     */
+    rationale: string;
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema
+     * via the `definition` "nonEmptyText".
+     */
+    remediation: string;
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema
+     * via the `definition` "engine".
+     */
+    owner: "canon" | "crucible" | "conform";
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema
+     * via the `definition` "fileClass".
+     */
+    fileClass:
+      | "documentation"
+      | "source"
+      | "test"
+      | "tool-config"
+      | "repository-metadata"
+      | "generated"
+      | "vendored";
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema
+     * via the `definition` "kebabId".
+     */
+    aspect: string;
+    checkKind: "static" | "executing";
+    /**
+     * @minItems 1
+     */
+    domains: [string, ...string[]];
+    lifecycle: "proposed" | "warn" | "error" | "deprecated" | "removed";
+    defaultSeverity: "info" | "warning" | "error";
+    introduced: ReleaseMetadata;
+    deprecated?: ReleaseMetadata;
+    removed?: ReleaseMetadata;
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema
+     * via the `definition` "ruleId".
+     */
+    replacementRuleId?: string;
+    selectors: {
+      /**
+       * @minItems 1
+       */
+      repositoryShapes: [string, ...string[]];
+      /**
+       * @minItems 1
+       */
+      include: [string, ...string[]];
+      exclude: string[];
+    };
+    topInvariant: boolean;
+    promotion?: Promotion;
+    implementation: {
+      capabilities: string[];
+      adapterRequirements: string[];
+    };
+    fix:
+      | {
+          kind: "none";
+          maxPasses: 0;
+          /**
+           * @maxItems 0
+           */
+          writableFileClasses: [];
+        }
+      | {
+          kind: "bounded";
+          maxPasses: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+          /**
+           * @minItems 1
+           */
+          writableFileClasses: [
+            (
+              | "documentation"
+              | "source"
+              | "test"
+              | "tool-config"
+              | "repository-metadata"
+              | "generated"
+              | "vendored"
+            ),
+            ...(
+              | "documentation"
+              | "source"
+              | "test"
+              | "tool-config"
+              | "repository-metadata"
+              | "generated"
+              | "vendored"
+            )[],
+          ];
+        };
+    suppressionFormIds: string[];
+    vectors: {
+      /**
+       * This interface was referenced by `undefined`'s JSON-Schema
+       * via the `definition` "kebabId".
+       */
+      vectorId: string;
+      kind: "positive" | "negative";
+      /**
+       * This interface was referenced by `undefined`'s JSON-Schema
+       * via the `definition` "engine".
+       */
+      engine: "canon" | "crucible" | "conform";
+      expectedOutcome: "pass" | "fail";
+    }[];
+    extensions?: Extensions;
+  } & (
+    | {
+        lifecycle?: "proposed";
+        defaultSeverity?: "info";
+        topInvariant?: false;
+        promotion: Promotion;
+      }
+    | {
+        lifecycle?: "warn";
+        defaultSeverity?: "warning";
+        promotion: Promotion;
+      }
+    | {
+        lifecycle?: "error";
+        defaultSeverity?: "error";
+      }
+    | {
+        lifecycle?: "deprecated";
+        deprecated: ReleaseMetadata;
+      }
+    | {
+        lifecycle?: "removed";
+        defaultSeverity?: "info";
+        topInvariant?: false;
+        deprecated: ReleaseMetadata;
+        removed: ReleaseMetadata;
+      }
+  );
+
+/**
  * Ordered authoritative rules and shared policy data.
  */
 export interface Policy {
   /**
-   * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
+   * This interface was referenced by `undefined`'s JSON-Schema
    * via the `definition` "semver".
    */
   schemaVersion: string;
   policyId: string;
   /**
-   * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
+   * This interface was referenced by `undefined`'s JSON-Schema
    * via the `definition` "semver".
    */
   policyVersion: string;
@@ -35,7 +368,7 @@ export interface Policy {
   fileClassRules: [
     {
       /**
-       * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
+       * This interface was referenced by `undefined`'s JSON-Schema
        * via the `definition` "fileClass".
        */
       fileClass:
@@ -54,7 +387,7 @@ export interface Policy {
     },
     ...{
       /**
-       * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
+       * This interface was referenced by `undefined`'s JSON-Schema
        * via the `definition` "fileClass".
        */
       fileClass:
@@ -95,144 +428,31 @@ export interface Policy {
   extensions?: Extensions;
 }
 /**
- * Authoritative metadata and ownership contract for one permanent Crux rule ID.
- */
-export interface HttpsSchemasClockworkKittenDevCruxRule1 {
-  /**
-   * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
-   * via the `definition` "semver".
-   */
-  schemaVersion: string;
-  /**
-   * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
-   * via the `definition` "ruleId".
-   */
-  ruleId: string;
-  /**
-   * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
-   * via the `definition` "nonEmptyText".
-   */
-  title: string;
-  /**
-   * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
-   * via the `definition` "nonEmptyText".
-   */
-  summary: string;
-  /**
-   * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
-   * via the `definition` "nonEmptyText".
-   */
-  rationale: string;
-  /**
-   * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
-   * via the `definition` "nonEmptyText".
-   */
-  remediation: string;
-  /**
-   * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
-   * via the `definition` "engine".
-   */
-  owner: "canon" | "crucible" | "conform";
-  /**
-   * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
-   * via the `definition` "fileClass".
-   */
-  fileClass:
-    | "documentation"
-    | "source"
-    | "test"
-    | "tool-config"
-    | "repository-metadata"
-    | "generated"
-    | "vendored";
-  /**
-   * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
-   * via the `definition` "kebabId".
-   */
-  aspect: string;
-  checkKind: "static" | "executing";
-  /**
-   * @minItems 1
-   */
-  domains: [string, ...string[]];
-  lifecycle: "proposed" | "warn" | "error" | "deprecated" | "removed";
-  defaultSeverity: "info" | "warning" | "error";
-  introduced: ReleaseMetadata;
-  deprecated?: ReleaseMetadata;
-  removed?: ReleaseMetadata;
-  /**
-   * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
-   * via the `definition` "ruleId".
-   */
-  replacementRuleId?: string;
-  selectors: {
-    /**
-     * @minItems 1
-     */
-    repositoryShapes: [string, ...string[]];
-    /**
-     * @minItems 1
-     */
-    include: [string, ...string[]];
-    exclude: string[];
-  };
-  topInvariant: boolean;
-  promotion?: {
-    /**
-     * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
-     * via the `definition` "nonEmptyText".
-     */
-    condition: string;
-    falsePositiveCeiling: number;
-  };
-  implementation: {
-    capabilities: string[];
-    adapterRequirements: string[];
-  };
-  fix: {
-    kind: "none" | "bounded";
-    maxPasses: number;
-    writableFileClasses: (
-      | "documentation"
-      | "source"
-      | "test"
-      | "tool-config"
-      | "repository-metadata"
-      | "generated"
-      | "vendored"
-    )[];
-  };
-  suppressionFormIds: string[];
-  vectors: {
-    /**
-     * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
-     * via the `definition` "kebabId".
-     */
-    vectorId: string;
-    kind: "positive" | "negative";
-    /**
-     * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
-     * via the `definition` "engine".
-     */
-    engine: "canon" | "crucible" | "conform";
-    expectedOutcome: "pass" | "fail";
-  }[];
-  extensions?: Extensions;
-}
-/**
- * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
+ * This interface was referenced by `undefined`'s JSON-Schema
  * via the `definition` "releaseMetadata".
  */
 export interface ReleaseMetadata {
   /**
-   * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
+   * This interface was referenced by `undefined`'s JSON-Schema
    * via the `definition` "semver".
    */
   version: string;
   date: string;
 }
 /**
- * This interface was referenced by `HttpsSchemasClockworkKittenDevCruxRule1`'s JSON-Schema
+ * This interface was referenced by `undefined`'s JSON-Schema
+ * via the `definition` "promotion".
+ */
+export interface Promotion {
+  /**
+   * This interface was referenced by `undefined`'s JSON-Schema
+   * via the `definition` "nonEmptyText".
+   */
+  condition: string;
+  falsePositiveCeiling: number;
+}
+/**
+ * This interface was referenced by `undefined`'s JSON-Schema
  * via the `definition` "extensions".
  */
 export interface Extensions {

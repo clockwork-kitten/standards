@@ -48,3 +48,9 @@ Rule IDs are permanent and never reused. Cross-release validation permits only
 the lifecycle transitions encoded by the development validator and rejects
 missing IDs, duplicate IDs, removed-ID reuse, zero or multiple owners, and
 overlapping ownership tuples assigned to different engines.
+
+Engine manifests bind Canon, Crucible, and Conform to their exact package
+identities. Development-only catalog validation reconciles manifest rule,
+vector, and capability claims against supplied policy records, including
+complete coverage for applicable owned rules. This relational validation is
+not exported from the inert package and does not add runtime behavior.

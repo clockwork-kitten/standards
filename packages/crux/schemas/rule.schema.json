@@ -116,19 +116,7 @@
       "type": "boolean"
     },
     "promotion": {
-      "type": "object",
-      "required": ["condition", "falsePositiveCeiling"],
-      "properties": {
-        "condition": {
-          "$ref": "#/$defs/nonEmptyText"
-        },
-        "falsePositiveCeiling": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 1
-        }
-      },
-      "unevaluatedProperties": false
+      "$ref": "#/$defs/promotion"
     },
     "implementation": {
       "type": "object",
@@ -152,70 +140,48 @@
       "unevaluatedProperties": false
     },
     "fix": {
-      "type": "object",
-      "required": ["kind", "maxPasses", "writableFileClasses"],
-      "properties": {
-        "kind": {
-          "enum": ["none", "bounded"]
-        },
-        "maxPasses": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 10
-        },
-        "writableFileClasses": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/fileClass"
-          },
-          "uniqueItems": true
-        }
-      },
-      "allOf": [
+      "oneOf": [
         {
-          "if": {
-            "properties": {
-              "kind": {
-                "const": "none"
-              }
+          "type": "object",
+          "required": ["kind", "maxPasses", "writableFileClasses"],
+          "properties": {
+            "kind": {
+              "const": "none"
+            },
+            "maxPasses": {
+              "type": "integer",
+              "const": 0
+            },
+            "writableFileClasses": {
+              "type": "array",
+              "maxItems": 0
             }
           },
-          "then": {
-            "properties": {
-              "maxPasses": {
-                "type": "integer",
-                "const": 0
-              },
-              "writableFileClasses": {
-                "type": "array",
-                "maxItems": 0
-              }
-            }
-          }
+          "unevaluatedProperties": false
         },
         {
-          "if": {
-            "properties": {
-              "kind": {
-                "const": "bounded"
-              }
+          "type": "object",
+          "required": ["kind", "maxPasses", "writableFileClasses"],
+          "properties": {
+            "kind": {
+              "const": "bounded"
+            },
+            "maxPasses": {
+              "type": "integer",
+              "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            },
+            "writableFileClasses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/fileClass"
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
-          "then": {
-            "properties": {
-              "maxPasses": {
-                "type": "integer",
-                "minimum": 1
-              },
-              "writableFileClasses": {
-                "type": "array",
-                "minItems": 1
-              }
-            }
-          }
+          "unevaluatedProperties": false
         }
-      ],
-      "unevaluatedProperties": false
+      ]
     },
     "suppressionFormIds": {
       "type": "array",
@@ -251,97 +217,78 @@
       "$ref": "#/$defs/extensions"
     }
   },
-  "allOf": [
+  "oneOf": [
     {
-      "if": {
-        "properties": {
-          "lifecycle": {
-            "const": "proposed"
-          }
+      "properties": {
+        "lifecycle": {
+          "const": "proposed"
+        },
+        "defaultSeverity": {
+          "const": "info"
+        },
+        "topInvariant": {
+          "const": false
+        },
+        "promotion": {
+          "$ref": "#/$defs/promotion"
         }
       },
-      "then": {
-        "properties": {
-          "defaultSeverity": {
-            "const": "info"
-          },
-          "promotion": true,
-          "topInvariant": {
-            "const": false
-          }
-        },
-        "required": ["promotion"]
-      }
+      "required": ["promotion"]
     },
     {
-      "if": {
-        "properties": {
-          "lifecycle": {
-            "const": "warn"
-          }
+      "properties": {
+        "lifecycle": {
+          "const": "warn"
+        },
+        "defaultSeverity": {
+          "const": "warning"
+        },
+        "promotion": {
+          "$ref": "#/$defs/promotion"
         }
       },
-      "then": {
-        "properties": {
-          "defaultSeverity": {
-            "const": "warning"
-          },
-          "promotion": true
-        },
-        "required": ["promotion"]
-      }
+      "required": ["promotion"]
     },
     {
-      "if": {
-        "properties": {
-          "lifecycle": {
-            "const": "error"
-          }
-        }
-      },
-      "then": {
-        "properties": {
-          "defaultSeverity": {
-            "const": "error"
-          }
+      "properties": {
+        "lifecycle": {
+          "const": "error"
+        },
+        "defaultSeverity": {
+          "const": "error"
         }
       }
     },
     {
-      "if": {
-        "properties": {
-          "lifecycle": {
-            "enum": ["deprecated", "removed"]
-          }
+      "properties": {
+        "lifecycle": {
+          "const": "deprecated"
+        },
+        "deprecated": {
+          "$ref": "#/$defs/releaseMetadata"
         }
       },
-      "then": {
-        "properties": {
-          "deprecated": true
-        },
-        "required": ["deprecated"]
-      }
+      "required": ["deprecated"]
     },
     {
-      "if": {
-        "properties": {
-          "lifecycle": {
-            "const": "removed"
-          }
+      "properties": {
+        "lifecycle": {
+          "const": "removed"
+        },
+        "defaultSeverity": {
+          "const": "info"
+        },
+        "topInvariant": {
+          "const": false
+        },
+        "deprecated": {
+          "$ref": "#/$defs/releaseMetadata"
+        },
+        "removed": {
+          "$ref": "#/$defs/releaseMetadata"
         }
       },
-      "then": {
-        "properties": {
-          "defaultSeverity": {
-            "const": "info"
-          },
-          "removed": true,
-          "topInvariant": {
-            "const": false
-          }
-        },
-        "required": ["removed"]
-      }
+      "required": ["deprecated", "removed"]
     }
   ],
   "$defs": {
@@ -386,6 +333,21 @@
       "type": "string",
       "minLength": 1,
       "maxLength": 4096
+    },
+    "promotion": {
+      "type": "object",
+      "required": ["condition", "falsePositiveCeiling"],
+      "properties": {
+        "condition": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "falsePositiveCeiling": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "unevaluatedProperties": false
     },
     "releaseMetadata": {
       "type": "object",

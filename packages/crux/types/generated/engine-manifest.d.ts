@@ -4,17 +4,9 @@
  */
 
 /**
- * @minItems 1
- *
- * This interface was referenced by `EngineManifest`'s JSON-Schema
- * via the `definition` "positiveIntegerArray".
- */
-export type PositiveIntegerArray = [number, ...number[]];
-
-/**
  * Published engine implementation, capability, and vector coverage declaration.
  */
-export interface EngineManifest {
+export type EngineManifest = {
   schemaVersion: string;
   engine: "canon" | "crucible" | "conform";
   package: {
@@ -59,7 +51,34 @@ export interface EngineManifest {
   };
   manifestHash: string | null;
   extensions?: Extensions;
-}
+} & (
+  | {
+      engine?: "canon";
+      package?: {
+        name?: "@clockwork-kitten/canon";
+      };
+    }
+  | {
+      engine?: "crucible";
+      package?: {
+        name?: "@clockwork-kitten/crucible";
+      };
+    }
+  | {
+      engine?: "conform";
+      package?: {
+        name?: "@clockwork-kitten/conform";
+      };
+    }
+);
+/**
+ * @minItems 1
+ *
+ * This interface was referenced by `undefined`'s JSON-Schema
+ * via the `definition` "positiveIntegerArray".
+ */
+export type PositiveIntegerArray = [number, ...number[]];
+
 export interface Extensions {
   [k: string]: unknown;
 }

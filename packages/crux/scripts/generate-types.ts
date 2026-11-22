@@ -46,7 +46,7 @@ async function generateDeclarations(): Promise<GeneratedFile[]> {
       if (schema === undefined) {
         throw new Error(`Schema not found for ${schemaId}`);
       }
-      const generationSchema = schemaForTypes(structuredClone(schema)) as {
+      const generationSchema = structuredClone(schema) as {
         $id?: string;
       };
       delete generationSchema.$id;
@@ -60,9 +60,7 @@ async function generateDeclarations(): Promise<GeneratedFile[]> {
                 if (referencedSchema === undefined) {
                   throw new Error(`Unknown Crux schema reference: ${file.url}`);
                 }
-                return schemaForTypes(
-                  structuredClone(referencedSchema),
-                ) as object;
+                return structuredClone(referencedSchema);
               },
             },
             http: false,
@@ -148,33 +146,6 @@ async function main(): Promise<void> {
     generatedFiles.map((generatedFile) =>
       writeFile(generatedFile.path, generatedFile.content),
     ),
-  );
-}
-
-function schemaForTypes(value: unknown): unknown {
-  if (Array.isArray(value)) {
-    return value.map((item) => schemaForTypes(item));
-  }
-  if (value === null || typeof value !== "object") {
-    return value;
-  }
-
-  return Object.fromEntries(
-    Object.entries(value).flatMap(([key, entry]) => {
-      const isConditionalConstraints =
-        key === "allOf" &&
-        Array.isArray(entry) &&
-        entry.every(
-          (item) =>
-            item !== null &&
-            typeof item === "object" &&
-            "if" in item &&
-            "then" in item,
-        );
-      return isConditionalConstraints
-        ? []
-        : [[key, schemaForTypes(entry)] as const];
-    }),
   );
 }
 

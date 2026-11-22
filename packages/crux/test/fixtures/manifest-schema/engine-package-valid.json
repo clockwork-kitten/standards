@@ -1,0 +1,18 @@
+{
+  "fixtureRevision": 1,
+  "name": "each engine names its authoritative package",
+  "pairs": [
+    {
+      "engine": "canon",
+      "packageName": "@clockwork-kitten/canon"
+    },
+    {
+      "engine": "crucible",
+      "packageName": "@clockwork-kitten/crucible"
+    },
+    {
+      "engine": "conform",
+      "packageName": "@clockwork-kitten/conform"
+    }
+  ]
+}

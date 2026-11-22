@@ -1,0 +1,34 @@
+{
+  "fixtureRevision": 1,
+  "name": "unknown manifest claims",
+  "rules": [
+    {
+      "ruleId": "crux/docs/markdown-format",
+      "owner": "canon",
+      "lifecycle": "warn",
+      "implementation": {
+        "capabilities": ["markdown-parser"]
+      },
+      "vectors": [
+        {
+          "vectorId": "markdown-format-positive",
+          "engine": "canon"
+        }
+      ]
+    }
+  ],
+  "manifest": {
+    "engine": "canon",
+    "implementedRuleIds": [
+      "crux/docs/markdown-format",
+      "crux/docs/unknown-rule"
+    ],
+    "vectorCoverageIds": ["markdown-format-positive", "unknown-vector"],
+    "capabilities": ["markdown-parser", "unknown-capability"]
+  },
+  "expectedErrors": [
+    "manifest claims unknown capability: unknown-capability",
+    "manifest claims unknown rule: crux/docs/unknown-rule",
+    "manifest claims unknown vector: unknown-vector"
+  ]
+}

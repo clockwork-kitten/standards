@@ -1,0 +1,31 @@
+{
+  "fixtureRevision": 1,
+  "name": "missing applicable coverage",
+  "rules": [
+    {
+      "ruleId": "crux/docs/markdown-format",
+      "owner": "canon",
+      "lifecycle": "warn",
+      "implementation": {
+        "capabilities": ["markdown-parser"]
+      },
+      "vectors": [
+        {
+          "vectorId": "markdown-format-positive",
+          "engine": "canon"
+        }
+      ]
+    }
+  ],
+  "manifest": {
+    "engine": "canon",
+    "implementedRuleIds": [],
+    "vectorCoverageIds": [],
+    "capabilities": []
+  },
+  "expectedErrors": [
+    "manifest is missing applicable rule: crux/docs/markdown-format",
+    "manifest is missing applicable vector: markdown-format-positive",
+    "manifest is missing implemented-rule capability: markdown-parser"
+  ]
+}

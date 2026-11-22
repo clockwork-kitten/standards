@@ -1,0 +1,44 @@
+{
+  "fixtureRevision": 1,
+  "name": "cross-owner manifest claims",
+  "rules": [
+    {
+      "ruleId": "crux/docs/markdown-format",
+      "owner": "canon",
+      "lifecycle": "warn",
+      "implementation": {
+        "capabilities": ["markdown-parser"]
+      },
+      "vectors": [
+        {
+          "vectorId": "markdown-format-positive",
+          "engine": "canon"
+        }
+      ]
+    },
+    {
+      "ruleId": "crux/code/typecheck",
+      "owner": "crucible",
+      "lifecycle": "error",
+      "implementation": {
+        "capabilities": ["typescript-parser"]
+      },
+      "vectors": [
+        {
+          "vectorId": "typecheck-positive",
+          "engine": "crucible"
+        }
+      ]
+    }
+  ],
+  "manifest": {
+    "engine": "canon",
+    "implementedRuleIds": ["crux/docs/markdown-format", "crux/code/typecheck"],
+    "vectorCoverageIds": ["markdown-format-positive", "typecheck-positive"],
+    "capabilities": ["markdown-parser"]
+  },
+  "expectedErrors": [
+    "manifest for canon claims rule owned by crucible: crux/code/typecheck",
+    "manifest for canon claims vector outside its implemented ownership: typecheck-positive"
+  ]
+}

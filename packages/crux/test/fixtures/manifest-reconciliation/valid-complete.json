@@ -1,0 +1,41 @@
+{
+  "fixtureRevision": 1,
+  "name": "complete owner manifest",
+  "rules": [
+    {
+      "ruleId": "crux/docs/markdown-format",
+      "owner": "canon",
+      "lifecycle": "warn",
+      "implementation": {
+        "capabilities": ["markdown-parser"]
+      },
+      "vectors": [
+        {
+          "vectorId": "markdown-format-positive",
+          "engine": "canon"
+        }
+      ]
+    },
+    {
+      "ruleId": "crux/code/typecheck",
+      "owner": "crucible",
+      "lifecycle": "error",
+      "implementation": {
+        "capabilities": ["typescript-parser"]
+      },
+      "vectors": [
+        {
+          "vectorId": "typecheck-positive",
+          "engine": "crucible"
+        }
+      ]
+    }
+  ],
+  "manifest": {
+    "engine": "canon",
+    "implementedRuleIds": ["crux/docs/markdown-format"],
+    "vectorCoverageIds": ["markdown-format-positive"],
+    "capabilities": ["markdown-parser"]
+  },
+  "expectedErrors": []
+}

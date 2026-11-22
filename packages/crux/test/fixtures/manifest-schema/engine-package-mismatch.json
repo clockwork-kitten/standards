@@ -1,0 +1,30 @@
+{
+  "fixtureRevision": 1,
+  "name": "engines cannot claim another engine package",
+  "pairs": [
+    {
+      "engine": "canon",
+      "packageName": "@clockwork-kitten/crucible"
+    },
+    {
+      "engine": "canon",
+      "packageName": "@clockwork-kitten/conform"
+    },
+    {
+      "engine": "crucible",
+      "packageName": "@clockwork-kitten/canon"
+    },
+    {
+      "engine": "crucible",
+      "packageName": "@clockwork-kitten/conform"
+    },
+    {
+      "engine": "conform",
+      "packageName": "@clockwork-kitten/canon"
+    },
+    {
+      "engine": "conform",
+      "packageName": "@clockwork-kitten/crucible"
+    }
+  ]
+}

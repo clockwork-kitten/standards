@@ -14,6 +14,9 @@ const SCHEMA_FILES = [
   "policy.schema.json",
   "engine-manifest.schema.json",
 ] as const;
+const MANIFEST_SCHEMA_FIXTURE_DIRECTORY = fileURLToPath(
+  new URL("fixtures/manifest-schema", import.meta.url),
+);
 
 async function createValidator(): Promise<Ajv2020> {
   const ajv = new Ajv2020({
@@ -133,6 +136,41 @@ const validProfile = {
   schemaVersion: "1.0.0",
 } as const;
 
+type EnginePackageFixture = {
+  fixtureRevision: number;
+  name: string;
+  pairs: {
+    engine: "canon" | "conform" | "crucible";
+    packageName: string;
+  }[];
+};
+
+const validManifest = {
+  capabilities: ["markdown-parser"],
+  commandClasses: ["static", "fix"],
+  compatibleSchemaMajors: {
+    policy: [1],
+    profile: [1],
+    result: [1],
+    rule: [1],
+    suppression: [1],
+  },
+  engine: "canon",
+  fixerFileClasses: ["documentation"],
+  implementedRuleIds: ["crux/docs/markdown-format"],
+  manifestHash: "0".repeat(64),
+  package: {
+    integrity: "sha512-YQ==",
+    name: "@clockwork-kitten/canon",
+    version: "1.0.0",
+  },
+  schemaVersion: "1.0.0",
+  supportedResultMinors: {
+    "1": [0],
+  },
+  vectorCoverageIds: ["markdown-format-negative", "markdown-format-positive"],
+} as const;
+
 describe("authoritative schemas", () => {
   test("self-validate and accept complete records", async () => {
     const ajv = await createValidator();
@@ -158,35 +196,6 @@ describe("authoritative schemas", () => {
       ],
       suppressions: [validSuppression],
     };
-    const manifest = {
-      capabilities: ["markdown-parser"],
-      commandClasses: ["static", "fix"],
-      compatibleSchemaMajors: {
-        policy: [1],
-        profile: [1],
-        result: [1],
-        rule: [1],
-        suppression: [1],
-      },
-      engine: "canon",
-      fixerFileClasses: ["documentation"],
-      implementedRuleIds: ["crux/docs/markdown-format"],
-      manifestHash: "0".repeat(64),
-      package: {
-        integrity: "sha512-YQ==",
-        name: "@clockwork-kitten/canon",
-        version: "1.0.0",
-      },
-      schemaVersion: "1.0.0",
-      supportedResultMinors: {
-        "1": [0],
-      },
-      vectorCoverageIds: [
-        "markdown-format-negative",
-        "markdown-format-positive",
-      ],
-    };
-
     expect(
       ajv.getSchema("https://schemas.clockwork-kitten.dev/crux/rule/1")?.(
         validRule,
@@ -200,8 +209,56 @@ describe("authoritative schemas", () => {
     expect(
       ajv.getSchema(
         "https://schemas.clockwork-kitten.dev/crux/engine-manifest/1",
-      )?.(manifest),
+      )?.(validManifest),
     ).toBe(true);
+  });
+
+  test("binds every engine to its exact package identity", async () => {
+    const ajv = await createValidator();
+    const validateManifest = ajv.getSchema(
+      "https://schemas.clockwork-kitten.dev/crux/engine-manifest/1",
+    );
+    const validFixture = JSON.parse(
+      await readFile(
+        join(MANIFEST_SCHEMA_FIXTURE_DIRECTORY, "engine-package-valid.json"),
+        "utf8",
+      ),
+    ) as EnginePackageFixture;
+    const mismatchFixture = JSON.parse(
+      await readFile(
+        join(MANIFEST_SCHEMA_FIXTURE_DIRECTORY, "engine-package-mismatch.json"),
+        "utf8",
+      ),
+    ) as EnginePackageFixture;
+
+    expect(validFixture.fixtureRevision, validFixture.name).toBe(1);
+    expect(mismatchFixture.fixtureRevision, mismatchFixture.name).toBe(1);
+    for (const pair of validFixture.pairs) {
+      expect(
+        validateManifest?.({
+          ...validManifest,
+          engine: pair.engine,
+          package: {
+            ...validManifest.package,
+            name: pair.packageName,
+          },
+        }),
+        `${pair.engine} -> ${pair.packageName}`,
+      ).toBe(true);
+    }
+    for (const pair of mismatchFixture.pairs) {
+      expect(
+        validateManifest?.({
+          ...validManifest,
+          engine: pair.engine,
+          package: {
+            ...validManifest.package,
+            name: pair.packageName,
+          },
+        }),
+        `${pair.engine} -> ${pair.packageName}`,
+      ).toBe(false);
+    }
   });
 
   test("rejects unknown critical fields and invalid owner shapes", async () => {

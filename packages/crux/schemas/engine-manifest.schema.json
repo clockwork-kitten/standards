@@ -123,6 +123,53 @@
       "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/extensions"
     }
   },
+  "oneOf": [
+    {
+      "properties": {
+        "engine": {
+          "const": "canon"
+        },
+        "package": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "@clockwork-kitten/canon"
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "engine": {
+          "const": "crucible"
+        },
+        "package": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "@clockwork-kitten/crucible"
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "engine": {
+          "const": "conform"
+        },
+        "package": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "@clockwork-kitten/conform"
+            }
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "positiveIntegerArray": {
       "type": "array",
