@@ -109,17 +109,12 @@ const bundle: CompatibilityBundle = {
   },
   profiles: ["full", "static"],
   resultMajorSupport: {
-    current: 2,
-    previous: {
-      major: 1,
-      minimumConformMinorReleases: 1,
-      minimumDays: 90,
-    },
+    current: 1,
   },
   schemaMajors: {
     lock: 1,
     policy: 1,
-    result: 2,
+    result: 1,
   },
   schemaVersion: "1.0.0",
 };

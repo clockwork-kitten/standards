@@ -34,9 +34,12 @@ supported environment. The first bundle supports Node.js 24 and 26 on Linux
 and macOS. Both npm `package-lock.json` and `bun.lock` installations are
 recognized, but verdicts always execute under Node. The mandatory bundle
 profiles are `static` and `full`; bundle capabilities are the exact union of
-the declared component and verdict-tool capabilities. Bundle result readers
-support the current and immediately previous result-schema major for at least
-one Conform minor and 90 days.
+the declared component and verdict-tool capabilities. The first bundle uses
+result-schema major 1 and omits `previous` because no earlier published major
+exists. Future bundle readers support exactly the current and immediately
+previous result-schema majors for at least one Conform minor and 90 days.
+Results emitted for a bundle always use that bundle's current result-schema
+major.
 
 `EngineResult` is the canonical partial result. `ConformResult` preserves those
 validated partials unchanged, adds Conform-owned contract findings, and exposes

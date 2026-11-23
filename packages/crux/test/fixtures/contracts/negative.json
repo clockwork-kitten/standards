@@ -69,12 +69,12 @@
       "schemaId": "https://schemas.clockwork-kitten.dev/crux/bundle/1",
       "from": "bundle",
       "patch": {
-        "path": [
-          "resultMajorSupport",
-          "previous",
-          "minimumConformMinorReleases"
-        ],
-        "value": 0
+        "path": ["resultMajorSupport", "previous"],
+        "value": {
+          "major": 1,
+          "minimumConformMinorReleases": 0,
+          "minimumDays": 90
+        }
       }
     },
     {
@@ -82,8 +82,12 @@
       "schemaId": "https://schemas.clockwork-kitten.dev/crux/bundle/1",
       "from": "bundle",
       "patch": {
-        "path": ["resultMajorSupport", "previous", "minimumDays"],
-        "value": 89
+        "path": ["resultMajorSupport", "previous"],
+        "value": {
+          "major": 1,
+          "minimumConformMinorReleases": 1,
+          "minimumDays": 89
+        }
       }
     },
     {

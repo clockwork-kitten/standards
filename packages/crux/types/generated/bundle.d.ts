@@ -153,14 +153,14 @@ export interface EnvironmentSupport {
   verdictRuntime: "node";
 }
 /**
- * Readers support current and immediately previous result-schema majors for at least one Conform minor release and 90 days, whichever is longer.
+ * Readers support the current result-schema major and, once one exists, the immediately previous major for at least one Conform minor release and 90 days, whichever is longer. The first result-schema release omits previous because no previous published major exists.
  *
  * This interface was referenced by `CompatibilityBundle`'s JSON-Schema
  * via the `definition` "resultMajorSupport".
  */
 export interface ResultMajorSupport {
   current: number;
-  previous: {
+  previous?: {
     major: number;
     minimumConformMinorReleases: number;
     minimumDays: number;

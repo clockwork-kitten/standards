@@ -12,6 +12,26 @@
       "expectedError": "resultMajorSupport.previous.major"
     },
     {
+      "name": "first result release must not invent a previous major",
+      "mutation": "first-release-previous",
+      "expectedError": "resultMajorSupport.previous"
+    },
+    {
+      "name": "future result support requires a previous major",
+      "mutation": "future-release-missing-previous",
+      "expectedError": "resultMajorSupport.previous"
+    },
+    {
+      "name": "future result support requires one Conform minor",
+      "mutation": "result-minimum-minor-window",
+      "expectedError": "minimumConformMinorReleases"
+    },
+    {
+      "name": "future result support requires 90 days",
+      "mutation": "result-minimum-day-window",
+      "expectedError": "minimumDays"
+    },
+    {
       "name": "first bundle requires Node 24 and 26",
       "mutation": "missing-node-major",
       "expectedError": "first-bundle Node majors"
@@ -105,6 +125,17 @@
     }
   ],
   "engineResultCases": [
+    {
+      "name": "major-1 engine result is incompatible with a current-major-2 bundle",
+      "mutation": "none",
+      "bundleMutation": "future-result-major",
+      "expectedError": "schemaVersion major"
+    },
+    {
+      "name": "engine result schema major must match its bundle",
+      "mutation": "schema-major",
+      "expectedError": "schemaVersion major"
+    },
     {
       "name": "counts must be derived from findings",
       "mutation": "counts",
@@ -287,6 +318,22 @@
     }
   ],
   "conformResultCases": [
+    {
+      "name": "major-1 Conform result is incompatible with a current-major-2 bundle",
+      "mutation": "none",
+      "bundleMutation": "future-result-major",
+      "expectedError": "schemaVersion major"
+    },
+    {
+      "name": "Conform result schema major must match its bundle",
+      "mutation": "schema-major",
+      "expectedError": "schemaVersion major"
+    },
+    {
+      "name": "embedded engine result schema major must match its bundle",
+      "mutation": "engine-schema-major",
+      "expectedError": "schemaVersion major"
+    },
     {
       "name": "aggregate findings preserve validated engine partials",
       "mutation": "missing-engine-finding",

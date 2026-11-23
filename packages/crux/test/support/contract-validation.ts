@@ -63,12 +63,29 @@ export function validateCompatibilityBundle(
     bundle.resultMajorSupport.current,
     bundle.schemaMajors.result,
   );
-  requireEqual(
-    errors,
-    "resultMajorSupport.previous.major",
-    bundle.resultMajorSupport.previous.major,
-    bundle.resultMajorSupport.current - 1,
-  );
+  const previous = bundle.resultMajorSupport.previous;
+  if (bundle.resultMajorSupport.current === 1) {
+    if (previous !== undefined) {
+      errors.push("resultMajorSupport.previous must be absent for major 1");
+    }
+  } else if (previous === undefined) {
+    errors.push("resultMajorSupport.previous is required after major 1");
+  } else {
+    requireEqual(
+      errors,
+      "resultMajorSupport.previous.major",
+      previous.major,
+      bundle.resultMajorSupport.current - 1,
+    );
+    if (previous.minimumConformMinorReleases < 1) {
+      errors.push(
+        "resultMajorSupport.previous.minimumConformMinorReleases is below 1",
+      );
+    }
+    if (previous.minimumDays < 90) {
+      errors.push("resultMajorSupport.previous.minimumDays is below 90");
+    }
+  }
   requireEqual(
     errors,
     "first-bundle Node majors",
@@ -392,6 +409,10 @@ function requiresUnsuppressedOutcome(finding: Finding): boolean {
   return requiresFailingOutcome(finding) || finding.kind === "protected-review";
 }
 
+function schemaVersionMajor(schemaVersion: string): number {
+  return Number(schemaVersion.slice(0, schemaVersion.indexOf(".")));
+}
+
 function sortedUnique(
   values: readonly (number | string)[],
 ): (number | string)[] {
@@ -468,6 +489,18 @@ function validateResultCore(
   );
 
   if (bundle !== undefined) {
+    requireEqual(
+      errors,
+      "schemaVersion major",
+      schemaVersionMajor(result.schemaVersion),
+      bundle.schemaMajors.result,
+    );
+    requireEqual(
+      errors,
+      "schemaVersion supported current major",
+      schemaVersionMajor(result.schemaVersion),
+      bundle.resultMajorSupport.current,
+    );
     const isSupported = isSupportedEnvironment(result.environment, bundle);
     if (!isSupported && result.completionState !== "unsupported") {
       errors.push("unsupported observations require unsupported completion");

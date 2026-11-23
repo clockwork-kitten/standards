@@ -33,6 +33,7 @@ const SCHEMA_FILES = [
 ] as const;
 
 type Case = {
+  bundleMutation?: string;
   expectedError: string;
   mutation: string;
   name: string;
@@ -52,6 +53,20 @@ type RelationalFixture = {
   engineResultCases: Case[];
   fixtureRevision: number;
   lockCases: Case[];
+};
+
+type ResultMajorSupportFixture = {
+  firstRelease: {
+    currentResultVersion: string;
+    schemaMajor: number;
+    support: CompatibilityBundle["resultMajorSupport"];
+  };
+  fixtureRevision: number;
+  futureRelease: {
+    currentResultVersion: string;
+    schemaMajor: number;
+    support: CompatibilityBundle["resultMajorSupport"];
+  };
 };
 
 type UnsupportedFixture = {
@@ -162,6 +177,31 @@ function mutateBundle(
 ): CompatibilityBundle {
   const bundle = clone(source);
   switch (mutation) {
+    case "first-release-previous": {
+      bundle.resultMajorSupport.previous = {
+        major: 1,
+        minimumConformMinorReleases: 1,
+        minimumDays: 90,
+      };
+      break;
+    }
+    case "future-release-missing-previous": {
+      bundle.schemaMajors.result = 2;
+      bundle.resultMajorSupport = { current: 2 };
+      break;
+    }
+    case "future-result-major": {
+      bundle.schemaMajors.result = 2;
+      bundle.resultMajorSupport = {
+        current: 2,
+        previous: {
+          major: 1,
+          minimumConformMinorReleases: 1,
+          minimumDays: 90,
+        },
+      };
+      break;
+    }
     case "missing-capability": {
       bundle.capabilities = bundle.capabilities.filter(
         (capability) => capability !== "typecheck",
@@ -188,8 +228,40 @@ function mutateBundle(
       bundle.resultMajorSupport.current = 3;
       break;
     }
+    case "result-minimum-day-window": {
+      bundle.schemaMajors.result = 2;
+      bundle.resultMajorSupport = {
+        current: 2,
+        previous: {
+          major: 1,
+          minimumConformMinorReleases: 1,
+          minimumDays: 89,
+        },
+      };
+      break;
+    }
+    case "result-minimum-minor-window": {
+      bundle.schemaMajors.result = 2;
+      bundle.resultMajorSupport = {
+        current: 2,
+        previous: {
+          major: 1,
+          minimumConformMinorReleases: 0,
+          minimumDays: 90,
+        },
+      };
+      break;
+    }
     case "result-previous-mismatch": {
-      bundle.resultMajorSupport.previous.major = 5;
+      bundle.schemaMajors.result = 2;
+      bundle.resultMajorSupport = {
+        current: 2,
+        previous: {
+          major: 5,
+          minimumConformMinorReleases: 1,
+          minimumDays: 90,
+        },
+      };
       break;
     }
     default: {
@@ -228,8 +300,21 @@ function mutateConformResult(
       result.engineResults = [crucible, canon];
       break;
     }
+    case "engine-schema-major": {
+      const engineResult = clone(engineSource);
+      engineResult.schemaVersion = "2.0.0";
+      result.engineResults = [engineResult];
+      break;
+    }
     case "missing-engine-finding": {
       result.engineResults = [withValidWarning(engineSource)];
+      break;
+    }
+    case "none": {
+      break;
+    }
+    case "schema-major": {
+      result.schemaVersion = "2.0.0";
       break;
     }
     default: {
@@ -335,9 +420,16 @@ function mutateEngineResult(
       ];
       break;
     }
+    case "none": {
+      break;
+    }
     case "review-classification": {
       result.findings = [finding({ kind: "protected-review" })];
       result.repository.baseRevision = "b".repeat(40);
+      break;
+    }
+    case "schema-major": {
+      result.schemaVersion = "2.0.0";
       break;
     }
     case "truncated-integrity": {
@@ -499,6 +591,50 @@ function withValidWarning(result: EngineResult): EngineResult {
 }
 
 describe("development-only lock and result reconciliation", () => {
+  test("accepts first-release absence and future current-plus-previous support", async () => {
+    const ajv = await createValidator();
+    const positive = await loadJson<PositiveFixture>(
+      join(FIXTURE_DIRECTORY, "positive.json"),
+    );
+    const fixture = await loadJson<ResultMajorSupportFixture>(
+      join(FIXTURE_DIRECTORY, "result-major-support.json"),
+    );
+
+    expect(fixture.fixtureRevision).toBe(1);
+    for (const release of [fixture.firstRelease, fixture.futureRelease]) {
+      const bundle = clone(positive.bundle);
+      bundle.schemaMajors.result = release.schemaMajor;
+      bundle.resultMajorSupport = release.support;
+      expect(
+        ajv.getSchema("https://schemas.clockwork-kitten.dev/crux/bundle/1")?.(
+          bundle,
+        ),
+        JSON.stringify(
+          ajv.getSchema("https://schemas.clockwork-kitten.dev/crux/bundle/1")
+            ?.errors,
+        ),
+      ).toBe(true);
+      expect(validateCompatibilityBundle(bundle)).toEqual({
+        errors: [],
+        valid: true,
+      });
+
+      const engineResult = clone(positive.engineResult);
+      engineResult.schemaVersion = release.currentResultVersion;
+      expect(validateEngineResult(engineResult, bundle)).toEqual({
+        errors: [],
+        valid: true,
+      });
+
+      const conformResult = clone(positive.conformResult);
+      conformResult.schemaVersion = release.currentResultVersion;
+      expect(validateConformResult(conformResult, bundle)).toEqual({
+        errors: [],
+        valid: true,
+      });
+    }
+  });
+
   test("accepts the exact bundle, lock, and canonical results", async () => {
     const positive = await loadJson<PositiveFixture>(
       join(FIXTURE_DIRECTORY, "positive.json"),
@@ -549,9 +685,13 @@ describe("development-only lock and result reconciliation", () => {
       );
     }
     for (const fixtureCase of fixture.engineResultCases) {
+      const bundle =
+        fixtureCase.bundleMutation === undefined
+          ? positive.bundle
+          : mutateBundle(positive.bundle, fixtureCase.bundleMutation);
       const result = validateEngineResult(
         mutateEngineResult(positive.engineResult, fixtureCase.mutation),
-        positive.bundle,
+        bundle,
       );
       expect(result.valid, fixtureCase.name).toBe(false);
       expect(result.errors.join("\n"), fixtureCase.name).toContain(
@@ -564,13 +704,17 @@ describe("development-only lock and result reconciliation", () => {
       }
     }
     for (const fixtureCase of fixture.conformResultCases) {
+      const bundle =
+        fixtureCase.bundleMutation === undefined
+          ? positive.bundle
+          : mutateBundle(positive.bundle, fixtureCase.bundleMutation);
       const result = validateConformResult(
         mutateConformResult(
           positive.conformResult,
           positive.engineResult,
           fixtureCase.mutation,
         ),
-        positive.bundle,
+        bundle,
       );
       expect(result.valid, fixtureCase.name).toBe(false);
       expect(result.errors.join("\n"), fixtureCase.name).toContain(
