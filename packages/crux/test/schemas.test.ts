@@ -19,6 +19,8 @@ const SCHEMA_FILES = [
   "exception.schema.json",
   "repository-policy.schema.json",
   "migration-disposition.schema.json",
+  "inventory-reconciliation.schema.json",
+  "vector-catalog.schema.json",
   "bundle.schema.json",
   "lock.schema.json",
   "engine-result.schema.json",
