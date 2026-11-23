@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/migration-disposition/1",
+  "description": "One-way diagnostic dispositions for known legacy inputs. This ledger never authorizes alias execution or a compatibility window.",
+  "type": "object",
+  "required": ["schemaVersion", "inventoryRevision", "entries"],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "inventoryRevision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dispositionEntry"
+      }
+    }
+  },
+  "$defs": {
+    "diagnosticIdentity": {
+      "type": "object",
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": {
+          "enum": ["command", "config-key", "rule", "suppression"]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "replacementIdentity": {
+      "type": "object",
+      "required": ["kind", "id", "owner"],
+      "properties": {
+        "kind": {
+          "enum": ["command", "config-key", "rule", "suppression"]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "owner": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/engine"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "dispositionEntry": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["legacy", "disposition", "replacement", "rationale"],
+          "properties": {
+            "legacy": {
+              "$ref": "#/$defs/diagnosticIdentity"
+            },
+            "disposition": {
+              "const": "replaced"
+            },
+            "replacement": {
+              "$ref": "#/$defs/replacementIdentity"
+            },
+            "rationale": {
+              "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
+            }
+          },
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["legacy", "disposition", "rationale"],
+          "properties": {
+            "legacy": {
+              "$ref": "#/$defs/diagnosticIdentity"
+            },
+            "disposition": {
+              "const": "dropped"
+            },
+            "rationale": {
+              "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      ]
+    }
+  },
+  "unevaluatedProperties": false
+}

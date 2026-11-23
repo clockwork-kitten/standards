@@ -26,9 +26,19 @@
       "enum": ["canon", "crucible", "conform"]
     },
     "parser": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 160
+      "type": "object",
+      "required": ["id", "owner"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "owner": {
+          "enum": ["canon", "crucible", "conform"]
+        }
+      },
+      "unevaluatedProperties": false
     },
     "syntax": {
       "type": "object",
@@ -80,5 +90,52 @@
       "additionalProperties": true
     }
   },
+  "oneOf": [
+    {
+      "properties": {
+        "owner": {
+          "const": "canon"
+        },
+        "parser": {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "canon"
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "owner": {
+          "const": "crucible"
+        },
+        "parser": {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "crucible"
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "owner": {
+          "const": "conform"
+        },
+        "parser": {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "const": "conform"
+            }
+          }
+        }
+      }
+    }
+  ],
   "unevaluatedProperties": false
 }

@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/exception/1",
+  "description": "A human-authored exception ledger. Dates are report inputs and never ambient-clock verdict state.",
+  "type": "object",
+  "required": ["schemaVersion", "ledgerId", "entries"],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "ledgerId": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/exceptionEntry"
+      }
+    }
+  },
+  "$defs": {
+    "exceptionEntry": {
+      "type": "object",
+      "required": [
+        "exceptionId",
+        "ruleId",
+        "ruleOwner",
+        "rationale",
+        "scope",
+        "owner",
+        "createdBy",
+        "createdOn",
+        "reference"
+      ],
+      "properties": {
+        "exceptionId": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+        },
+        "ruleId": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/ruleId"
+        },
+        "ruleOwner": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/engine"
+        },
+        "rationale": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
+        },
+        "scope": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["kind"],
+              "properties": {
+                "kind": {
+                  "const": "repository"
+                }
+              },
+              "unevaluatedProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["kind", "paths"],
+              "properties": {
+                "kind": {
+                  "const": "paths"
+                },
+                "paths": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "https://schemas.clockwork-kitten.dev/crux/fingerprint/1#/$defs/repositoryPath"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                }
+              },
+              "unevaluatedProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["kind", "fingerprints"],
+              "properties": {
+                "kind": {
+                  "const": "fingerprints"
+                },
+                "fingerprints": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                }
+              },
+              "unevaluatedProperties": false
+            }
+          ]
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "createdBy": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "createdOn": {
+          "type": "string",
+          "format": "date"
+        },
+        "expiresOn": {
+          "description": "Optional report datum. Its presence does not imply an ambient-clock verdict.",
+          "type": "string",
+          "format": "date"
+        },
+        "reference": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,45 @@
+{
+  "name": "duplicate fingerprint occurrence identity",
+  "fixtureRevision": 1,
+  "currentFingerprintVersion": "1.0.0",
+  "baseline": {
+    "schemaVersion": "1.0.0",
+    "baselineId": "initial-adoption",
+    "bundleId": "t1-candidate",
+    "effectivePolicyHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "repositoryRevision": "dddddddddddddddddddddddddddddddddddddddd",
+    "fingerprintVersion": "1.0.0",
+    "entries": [
+      {
+        "findingState": "active",
+        "record": {
+          "schemaVersion": "1.0.0",
+          "fingerprintVersion": "1.0.0",
+          "algorithm": "sha256",
+          "ruleId": "crux/docs/markdown-format",
+          "path": "docs/README.md",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "count": 2,
+          "structuralSummary": "Two headings omit the required spacing."
+        }
+      },
+      {
+        "findingState": "active",
+        "record": {
+          "schemaVersion": "1.0.0",
+          "fingerprintVersion": "1.0.0",
+          "algorithm": "sha256",
+          "ruleId": "crux/docs/markdown-format",
+          "path": "docs/README.md",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "count": 999,
+          "structuralSummary": "A conflicting count for the same identity."
+        }
+      }
+    ],
+    "migrations": []
+  },
+  "expectedErrors": [
+    "duplicate baseline occurrence identity: crux/docs/markdown-format:docs/README.md:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ]
+}

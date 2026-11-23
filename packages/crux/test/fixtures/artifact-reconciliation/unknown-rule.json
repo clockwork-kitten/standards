@@ -1,0 +1,25 @@
+{
+  "name": "unknown rule references across policy artifacts",
+  "fixtureRevision": 1,
+  "rules": [
+    {
+      "ruleId": "crux/docs/markdown-format",
+      "owner": "canon",
+      "lifecycle": "warn"
+    }
+  ],
+  "baselineRuleId": "crux/docs/nonexistent",
+  "exceptionReference": {
+    "ruleId": "crux/docs/nonexistent",
+    "owner": "canon"
+  },
+  "overrideReference": {
+    "ruleId": "crux/docs/nonexistent",
+    "owner": "canon"
+  },
+  "expectedErrors": [
+    "baseline references unknown rule: crux/docs/nonexistent",
+    "exception references unknown rule: crux/docs/nonexistent",
+    "override references unknown rule: crux/docs/nonexistent"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "removed rule references across policy artifacts",
+  "fixtureRevision": 1,
+  "rules": [
+    {
+      "ruleId": "crux/docs/retired-format",
+      "owner": "canon",
+      "lifecycle": "removed"
+    }
+  ],
+  "baselineRuleId": "crux/docs/retired-format",
+  "exceptionReference": {
+    "ruleId": "crux/docs/retired-format",
+    "owner": "canon"
+  },
+  "overrideReference": {
+    "ruleId": "crux/docs/retired-format",
+    "owner": "canon"
+  },
+  "expectedErrors": [
+    "baseline references removed rule: crux/docs/retired-format",
+    "exception references removed rule: crux/docs/retired-format",
+    "override references removed rule: crux/docs/retired-format"
+  ]
+}

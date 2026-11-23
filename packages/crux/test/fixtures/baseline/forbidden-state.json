@@ -1,0 +1,14 @@
+{
+  "fixtureRevision": 1,
+  "name": "forbidden-baseline-state",
+  "states": [
+    "integrity-failure",
+    "unknown",
+    "unimplemented",
+    "incomplete",
+    "unlocked",
+    "unsupported",
+    "compatibility-failure",
+    "engine-failure"
+  ]
+}

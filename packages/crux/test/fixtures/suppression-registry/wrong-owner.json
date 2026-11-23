@@ -1,0 +1,6 @@
+{
+  "fixtureRevision": 1,
+  "name": "wrong-parser-owner",
+  "owner": "canon",
+  "parserOwner": "crucible"
+}

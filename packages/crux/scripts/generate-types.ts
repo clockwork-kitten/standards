@@ -13,9 +13,15 @@ const CHECK_FLAG = "--check";
 const SCHEMAS = [
   ["rule.schema.json", "RuleRecord"],
   ["suppression.schema.json", "SuppressionForm"],
+  ["suppression-registry.schema.json", "SuppressionRegistry"],
   ["profile.schema.json", "ExecutionProfile"],
   ["policy.schema.json", "Policy"],
   ["engine-manifest.schema.json", "EngineManifest"],
+  ["fingerprint.schema.json", "FingerprintRecord"],
+  ["baseline.schema.json", "Baseline"],
+  ["exception.schema.json", "ExceptionLedger"],
+  ["repository-policy.schema.json", "RepositoryPolicy"],
+  ["migration-disposition.schema.json", "MigrationDispositionLedger"],
 ] as const;
 
 const BANNER = `/**

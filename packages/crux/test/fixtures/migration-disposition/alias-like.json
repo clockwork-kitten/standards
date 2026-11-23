@@ -1,0 +1,18 @@
+{
+  "fixtureRevision": 1,
+  "name": "forbidden-alias-like-semantics",
+  "entry": {
+    "legacy": {
+      "kind": "rule",
+      "id": "legacy/no-tabs"
+    },
+    "disposition": "replaced",
+    "replacement": {
+      "kind": "rule",
+      "id": "crux/code/no-tabs",
+      "owner": "crucible"
+    },
+    "rationale": "The permanent rule ID replaces the old diagnostic identity.",
+    "executeAsAlias": true
+  }
+}

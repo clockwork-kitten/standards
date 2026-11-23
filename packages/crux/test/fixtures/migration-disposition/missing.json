@@ -1,0 +1,22 @@
+{
+  "fixtureRevision": 1,
+  "name": "missing-disposition",
+  "inventory": [
+    {
+      "kind": "rule",
+      "id": "legacy/no-tabs"
+    },
+    {
+      "kind": "command",
+      "id": "conform legacy-check"
+    }
+  ],
+  "entries": [
+    {
+      "legacy": {
+        "kind": "rule",
+        "id": "legacy/no-tabs"
+      }
+    }
+  ]
+}

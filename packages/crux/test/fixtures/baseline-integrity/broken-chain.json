@@ -1,0 +1,45 @@
+{
+  "name": "migration record changes the exact occurrence total",
+  "fixtureRevision": 1,
+  "currentFingerprintVersion": "1.0.0",
+  "baseline": {
+    "schemaVersion": "1.0.0",
+    "baselineId": "initial-adoption",
+    "bundleId": "t1-candidate",
+    "effectivePolicyHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "repositoryRevision": "dddddddddddddddddddddddddddddddddddddddd",
+    "fingerprintVersion": "1.0.0",
+    "entries": [
+      {
+        "findingState": "active",
+        "record": {
+          "schemaVersion": "1.0.0",
+          "fingerprintVersion": "1.0.0",
+          "algorithm": "sha256",
+          "ruleId": "crux/docs/markdown-format",
+          "path": "docs/README.md",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "count": 2,
+          "structuralSummary": "Two headings omit the required spacing."
+        }
+      }
+    ],
+    "migrations": [
+      {
+        "migrationId": "fingerprint-v1",
+        "owner": "canon",
+        "ownerPackageVersion": "1.0.0",
+        "bundleId": "t1-candidate",
+        "fromFingerprintVersion": "0.9.0",
+        "toFingerprintVersion": "1.0.0",
+        "beforeCount": 2,
+        "afterCount": 3,
+        "mappingHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      }
+    ]
+  },
+  "expectedErrors": [
+    "fingerprint migration fingerprint-v1 changes occurrence total: 2 -> 3",
+    "fingerprint migration final count does not match baseline occurrences: 3 != 2"
+  ]
+}

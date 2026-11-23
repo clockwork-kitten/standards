@@ -8,6 +8,13 @@ type PackageManifest = {
   scripts: Record<string, string>;
 };
 
+type PackResult = {
+  files: {
+    path: string;
+  }[];
+};
+
+const PACKAGE_ROOT = fileURLToPath(new URL("..", import.meta.url));
 const PACKAGE_PATH = fileURLToPath(new URL("../package.json", import.meta.url));
 
 describe("inert package boundary", () => {
@@ -33,13 +40,60 @@ describe("inert package boundary", () => {
     ).toEqual([]);
     expect(Object.values(packageManifest.exports)).toEqual(
       expect.arrayContaining([
+        "./schemas/baseline.schema.json",
         "./schemas/rule.schema.json",
         "./schemas/policy.schema.json",
         "./schemas/profile.schema.json",
         "./schemas/suppression.schema.json",
+        "./schemas/suppression-registry.schema.json",
         "./schemas/engine-manifest.schema.json",
+        "./schemas/exception.schema.json",
+        "./schemas/fingerprint.schema.json",
+        "./schemas/migration-disposition.schema.json",
+        "./schemas/repository-policy.schema.json",
         "./types/index.d.ts",
       ]),
     );
+  });
+
+  test("packs every public schema and generated declaration without development code", async () => {
+    const process = Bun.spawn(
+      ["npm", "pack", PACKAGE_ROOT, "--dry-run", "--json"],
+      {
+        stderr: "pipe",
+        stdout: "pipe",
+      },
+    );
+    const [exitCode, output, errorOutput] = await Promise.all([
+      process.exited,
+      new Response(process.stdout).text(),
+      new Response(process.stderr).text(),
+    ]);
+    expect(exitCode, errorOutput).toBe(0);
+
+    const [packResult] = JSON.parse(output) as PackResult[];
+    const packedPaths = packResult?.files.map((file) => file.path) ?? [];
+    expect(packedPaths).toEqual(
+      expect.arrayContaining([
+        "schemas/baseline.schema.json",
+        "schemas/exception.schema.json",
+        "schemas/fingerprint.schema.json",
+        "schemas/migration-disposition.schema.json",
+        "schemas/repository-policy.schema.json",
+        "schemas/suppression-registry.schema.json",
+        "types/generated/baseline.d.ts",
+        "types/generated/exception.d.ts",
+        "types/generated/fingerprint.d.ts",
+        "types/generated/migration-disposition.d.ts",
+        "types/generated/repository-policy.d.ts",
+        "types/generated/suppression-registry.d.ts",
+        "types/index.d.ts",
+      ]),
+    );
+    expect(
+      packedPaths.filter(
+        (path) => path.startsWith("scripts/") || path.startsWith("test/"),
+      ),
+    ).toEqual([]);
   });
 });

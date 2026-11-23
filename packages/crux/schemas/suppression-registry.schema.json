@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/suppression-registry/1",
+  "description": "The authoritative registry of inline suppression forms and their sole parser owners.",
+  "type": "object",
+  "required": ["schemaVersion", "forms"],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "forms": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/suppression/1"
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}
