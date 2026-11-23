@@ -15,13 +15,27 @@
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "deadcode": "knip",
-    "test": "bun run --cwd packages/conform test && bun run --cwd packages/crux test",
-    "typecheck": "bun run --cwd packages/conform typecheck && bun run --cwd packages/crux typecheck",
+    "crux:check:existing-behavior": "bun ./packages/crux/scripts/generate-existing-behavior.ts --check",
+    "crux:check:generated": "bun ./packages/crux/scripts/generate-types.ts --check",
+    "crux:generate:existing-behavior": "bun ./packages/crux/scripts/generate-existing-behavior.ts",
+    "crux:generate:types": "bun ./packages/crux/scripts/generate-types.ts",
+    "crux:test:canonical": "node ./packages/crux/scripts/verify-canonical-vectors.mjs",
+    "crux:test:distribution": "node ./packages/crux/test/distribution/verify-package.mjs",
+    "crux:test": "bun test ./packages/crux/test && bun run crux:check:generated && bun run crux:check:existing-behavior",
+    "crux:typecheck": "tsc --noEmit --project ./packages/crux/tsconfig.json",
+    "test": "bun run --cwd packages/conform test && bun run crux:test",
+    "typecheck": "bun run --cwd packages/conform typecheck && bun run crux:typecheck",
     "canon": "bun ./node_modules/@clockwork-kitten/canon/src/cli/main.ts"
   },
   "prettier": "@clockwork-kitten/conform/configs/prettier.base.json",
   "devDependencies": {
+    "@types/bun": "^1.3.3",
     "@clockwork-kitten/conform": "workspace:*",
-    "lefthook": "^2.2.2"
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "json-schema-to-typescript": "^15.0.4",
+    "lefthook": "^2.2.2",
+    "prettier": "^3.9.6",
+    "typescript": "^5.7.3"
   }
 }
