@@ -335,6 +335,59 @@ export type HttpsSchemasClockworkKittenDevCruxRule1 = {
         removed: ReleaseMetadata;
       }
   );
+/**
+ * One recognized inline suppression syntax and its sole parser owner.
+ */
+export type HttpsSchemasClockworkKittenDevCruxSuppression1 = {
+  schemaVersion: string;
+  suppressionId: string;
+  owner: "canon" | "crucible" | "conform";
+  parser: {
+    id: string;
+    owner: "canon" | "crucible" | "conform";
+  };
+  syntax: {
+    kind: "line-comment" | "block-comment" | "document-directive" | "metadata";
+    pattern: string;
+    maxLength: number;
+  };
+  /**
+   * @minItems 1
+   */
+  fileClasses: [
+    "documentation" | "source" | "test" | "tool-config" | "repository-metadata",
+    ...(
+      | "documentation"
+      | "source"
+      | "test"
+      | "tool-config"
+      | "repository-metadata"
+    )[],
+  ];
+  requiresLedgerEntry: true;
+  extensions?: {
+    [k: string]: unknown;
+  };
+} & (
+  | {
+      owner?: "canon";
+      parser?: {
+        owner?: "canon";
+      };
+    }
+  | {
+      owner?: "crucible";
+      parser?: {
+        owner?: "crucible";
+      };
+    }
+  | {
+      owner?: "conform";
+      parser?: {
+        owner?: "conform";
+      };
+    }
+);
 
 /**
  * Ordered authoritative rules and shared policy data.
@@ -457,37 +510,6 @@ export interface Promotion {
  */
 export interface Extensions {
   [k: string]: unknown;
-}
-/**
- * One recognized inline suppression syntax and its sole parser owner.
- */
-export interface HttpsSchemasClockworkKittenDevCruxSuppression1 {
-  schemaVersion: string;
-  suppressionId: string;
-  owner: "canon" | "crucible" | "conform";
-  parser: string;
-  syntax: {
-    kind: "line-comment" | "block-comment" | "document-directive" | "metadata";
-    pattern: string;
-    maxLength: number;
-  };
-  /**
-   * @minItems 1
-   */
-  fileClasses: [
-    "documentation" | "source" | "test" | "tool-config" | "repository-metadata",
-    ...(
-      | "documentation"
-      | "source"
-      | "test"
-      | "tool-config"
-      | "repository-metadata"
-    )[],
-  ];
-  requiresLedgerEntry: true;
-  extensions?: {
-    [k: string]: unknown;
-  };
 }
 /**
  * Versioned verdict, evidence, execution, and bounded-fix policy.

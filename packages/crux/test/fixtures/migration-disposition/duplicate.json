@@ -1,0 +1,24 @@
+{
+  "fixtureRevision": 1,
+  "name": "duplicate-disposition",
+  "inventory": [
+    {
+      "kind": "rule",
+      "id": "legacy/no-tabs"
+    }
+  ],
+  "entries": [
+    {
+      "legacy": {
+        "kind": "rule",
+        "id": "legacy/no-tabs"
+      }
+    },
+    {
+      "legacy": {
+        "kind": "rule",
+        "id": "legacy/no-tabs"
+      }
+    }
+  ]
+}

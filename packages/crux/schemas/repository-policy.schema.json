@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/repository-policy/1",
+  "description": "Human-authored repository policy inputs, including explicit and reviewable rule overrides.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "profileId",
+    "repositoryShape",
+    "severityOverrides"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "profileId": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+    },
+    "repositoryShape": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+    },
+    "severityOverrides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ruleId", "owner", "severity", "rationale", "reference"],
+        "properties": {
+          "ruleId": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/ruleId"
+          },
+          "owner": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/engine"
+          },
+          "severity": {
+            "enum": ["info", "warning", "error", "disabled"]
+          },
+          "rationale": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
+          },
+          "reference": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 2048
+          }
+        },
+        "unevaluatedProperties": false
+      }
+    },
+    "extensions": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/extensions"
+    }
+  },
+  "unevaluatedProperties": false
+}

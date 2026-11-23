@@ -6,11 +6,14 @@
 /**
  * One recognized inline suppression syntax and its sole parser owner.
  */
-export interface SuppressionForm {
+export type SuppressionForm = {
   schemaVersion: string;
   suppressionId: string;
   owner: "canon" | "crucible" | "conform";
-  parser: string;
+  parser: {
+    id: string;
+    owner: "canon" | "crucible" | "conform";
+  };
   syntax: {
     kind: "line-comment" | "block-comment" | "document-directive" | "metadata";
     pattern: string;
@@ -33,4 +36,23 @@ export interface SuppressionForm {
   extensions?: {
     [k: string]: unknown;
   };
-}
+} & (
+  | {
+      owner?: "canon";
+      parser?: {
+        owner?: "canon";
+      };
+    }
+  | {
+      owner?: "crucible";
+      parser?: {
+        owner?: "crucible";
+      };
+    }
+  | {
+      owner?: "conform";
+      parser?: {
+        owner?: "conform";
+      };
+    }
+);

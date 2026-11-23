@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/baseline/1",
+  "description": "A strict generated baseline artifact containing count-aware fingerprints and explicit fingerprint migrations.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "baselineId",
+    "bundleId",
+    "effectivePolicyHash",
+    "repositoryRevision",
+    "fingerprintVersion",
+    "entries",
+    "migrations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "baselineId": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+    },
+    "bundleId": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+    },
+    "effectivePolicyHash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "repositoryRevision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40,64}$"
+    },
+    "fingerprintVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["findingState", "record"],
+        "properties": {
+          "findingState": {
+            "const": "active"
+          },
+          "record": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/fingerprint/1"
+          }
+        },
+        "unevaluatedProperties": false
+      }
+    },
+    "migrations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fingerprintMigration"
+      }
+    }
+  },
+  "$defs": {
+    "fingerprintMigration": {
+      "description": "Reviewable metadata for a deterministic, owner-supplied fingerprint-version migration. Counts are occurrence totals before and after migration.",
+      "type": "object",
+      "required": [
+        "migrationId",
+        "owner",
+        "ownerPackageVersion",
+        "bundleId",
+        "fromFingerprintVersion",
+        "toFingerprintVersion",
+        "beforeCount",
+        "afterCount",
+        "mappingHash"
+      ],
+      "properties": {
+        "migrationId": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+        },
+        "owner": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/engine"
+        },
+        "ownerPackageVersion": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+        },
+        "bundleId": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+        },
+        "fromFingerprintVersion": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+        },
+        "toFingerprintVersion": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+        },
+        "beforeCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "afterCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "mappingHash": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "unbaselinableState": {
+      "description": "Finding states that must never appear in baseline entries.",
+      "enum": [
+        "integrity-failure",
+        "unknown",
+        "unimplemented",
+        "incomplete",
+        "unlocked",
+        "unsupported",
+        "compatibility-failure",
+        "engine-failure"
+      ]
+    }
+  },
+  "unevaluatedProperties": false
+}

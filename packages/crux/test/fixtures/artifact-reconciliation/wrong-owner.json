@@ -1,0 +1,24 @@
+{
+  "name": "wrong owner claims in exception and override artifacts",
+  "fixtureRevision": 1,
+  "rules": [
+    {
+      "ruleId": "crux/docs/markdown-format",
+      "owner": "canon",
+      "lifecycle": "warn"
+    }
+  ],
+  "baselineRuleId": "crux/docs/markdown-format",
+  "exceptionReference": {
+    "ruleId": "crux/docs/markdown-format",
+    "owner": "crucible"
+  },
+  "overrideReference": {
+    "ruleId": "crux/docs/markdown-format",
+    "owner": "conform"
+  },
+  "expectedErrors": [
+    "exception claims owner crucible for crux/docs/markdown-format; policy owner is canon",
+    "override claims owner conform for crux/docs/markdown-format; policy owner is canon"
+  ]
+}
