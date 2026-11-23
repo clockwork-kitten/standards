@@ -1,0 +1,358 @@
+{
+  "fixtureRevision": 1,
+  "bundleCases": [
+    {
+      "name": "result support current must match schema major",
+      "mutation": "result-current-mismatch",
+      "expectedError": "resultMajorSupport.current"
+    },
+    {
+      "name": "result support previous must be immediately previous",
+      "mutation": "result-previous-mismatch",
+      "expectedError": "resultMajorSupport.previous.major"
+    },
+    {
+      "name": "first result release must not invent a previous major",
+      "mutation": "first-release-previous",
+      "expectedError": "resultMajorSupport.previous"
+    },
+    {
+      "name": "future result support requires a previous major",
+      "mutation": "future-release-missing-previous",
+      "expectedError": "resultMajorSupport.previous"
+    },
+    {
+      "name": "future result support requires one Conform minor",
+      "mutation": "result-minimum-minor-window",
+      "expectedError": "minimumConformMinorReleases"
+    },
+    {
+      "name": "future result support requires 90 days",
+      "mutation": "result-minimum-day-window",
+      "expectedError": "minimumDays"
+    },
+    {
+      "name": "first bundle requires Node 24 and 26",
+      "mutation": "missing-node-major",
+      "expectedError": "first-bundle Node majors"
+    },
+    {
+      "name": "first bundle requires Linux and macOS",
+      "mutation": "missing-operating-system",
+      "expectedError": "first-bundle operating systems"
+    },
+    {
+      "name": "first bundle requires npm and Bun lock installation",
+      "mutation": "missing-package-manager-lock",
+      "expectedError": "first-bundle package manager locks"
+    },
+    {
+      "name": "first bundle requires static and full profiles",
+      "mutation": "missing-profile",
+      "expectedError": "first-bundle profiles"
+    },
+    {
+      "name": "bundle capabilities preserve all component capabilities",
+      "mutation": "missing-capability",
+      "expectedError": "bundle capabilities"
+    }
+  ],
+  "lockCases": [
+    {
+      "name": "lock rejects mismatched component versions",
+      "mutation": "component-version",
+      "expectedError": "components"
+    },
+    {
+      "name": "lock rejects mismatched component registry sources",
+      "mutation": "component-registry",
+      "expectedError": "components"
+    },
+    {
+      "name": "lock rejects mismatched component SRIs",
+      "mutation": "component-integrity",
+      "expectedError": "components"
+    },
+    {
+      "name": "lock rejects mismatched component manifest hashes",
+      "mutation": "component-manifest",
+      "expectedError": "components"
+    },
+    {
+      "name": "lock rejects mismatched schema majors",
+      "mutation": "schema-major",
+      "expectedError": "schemaMajors"
+    },
+    {
+      "name": "lock rejects missing capabilities",
+      "mutation": "capability",
+      "expectedError": "capabilities"
+    },
+    {
+      "name": "lock rejects unsupported environment selections",
+      "mutation": "environment",
+      "expectedError": "supported bundle tuple"
+    },
+    {
+      "name": "lock rejects missing tool entries",
+      "mutation": "missing-tool",
+      "expectedError": "components"
+    },
+    {
+      "name": "lock rejects extra tool entries",
+      "mutation": "extra-tool",
+      "expectedError": "components"
+    },
+    {
+      "name": "lock rejects mismatched policy packages",
+      "mutation": "policy-package",
+      "expectedError": "policyPackage"
+    },
+    {
+      "name": "lock reconciliation rejects install-layout input IDs",
+      "mutation": "installation-input",
+      "expectedError": "forbidden path"
+    },
+    {
+      "name": "lock reconciliation rejects absolute input IDs",
+      "mutation": "absolute-input",
+      "expectedError": "forbidden path"
+    },
+    {
+      "name": "lock reconciliation rejects host-specific fields",
+      "mutation": "hostname-field",
+      "expectedError": "environment-specific field"
+    }
+  ],
+  "engineResultCases": [
+    {
+      "name": "major-1 engine result is incompatible with a current-major-2 bundle",
+      "mutation": "none",
+      "bundleMutation": "future-result-major",
+      "expectedError": "schemaVersion major"
+    },
+    {
+      "name": "engine result schema major must match its bundle",
+      "mutation": "schema-major",
+      "expectedError": "schemaVersion major"
+    },
+    {
+      "name": "counts must be derived from findings",
+      "mutation": "counts",
+      "expectedError": "counts"
+    },
+    {
+      "name": "non-complete results must classify fail",
+      "mutation": "classification",
+      "expectedError": "classification"
+    },
+    {
+      "name": "failing finding states must classify fail",
+      "mutation": "failure-classification",
+      "expectedError": "classification"
+    },
+    {
+      "name": "review signals must classify pass-review-required",
+      "mutation": "review-classification",
+      "expectedError": "classification"
+    },
+    {
+      "name": "baselined findings require baseline references",
+      "mutation": "missing-baseline-reference",
+      "expectedError": "needs baseline"
+    },
+    {
+      "name": "excepted findings require exception references",
+      "mutation": "missing-exception-reference",
+      "expectedError": "needs exception"
+    },
+    {
+      "name": "matched records are forbidden on active findings",
+      "mutation": "unexpected-matched-record",
+      "expectedError": "unmatched record"
+    },
+    {
+      "name": "disposition and finding state must agree",
+      "mutation": "disposition-state",
+      "expectedError": "disposition and state"
+    },
+    {
+      "name": "change-relative results require base metadata",
+      "mutation": "missing-base",
+      "expectedError": "baseRevision"
+    },
+    {
+      "name": "findings require stable canonical ordering",
+      "mutation": "finding-order",
+      "expectedError": "stable order"
+    },
+    {
+      "name": "integrity findings cannot be baselined",
+      "mutation": "forbidden-disposition:integrity:baselined",
+      "expectedError": "cannot use baselined disposition"
+    },
+    {
+      "name": "integrity findings cannot be excepted",
+      "mutation": "forbidden-disposition:integrity:excepted",
+      "expectedError": "cannot use excepted disposition"
+    },
+    {
+      "name": "integrity findings cannot be disabled by override",
+      "mutation": "forbidden-disposition:integrity:disabled-by-override",
+      "expectedError": "cannot use disabled-by-override disposition"
+    },
+    {
+      "name": "integrity findings cannot be marked not enforced",
+      "mutation": "forbidden-disposition:integrity:not-enforced",
+      "expectedError": "cannot use not-enforced disposition"
+    },
+    {
+      "name": "compatibility findings cannot be baselined",
+      "mutation": "forbidden-disposition:compatibility:baselined",
+      "expectedError": "cannot use baselined disposition"
+    },
+    {
+      "name": "compatibility findings cannot be excepted",
+      "mutation": "forbidden-disposition:compatibility:excepted",
+      "expectedError": "cannot use excepted disposition"
+    },
+    {
+      "name": "compatibility findings cannot be disabled by override",
+      "mutation": "forbidden-disposition:compatibility:disabled-by-override",
+      "expectedError": "cannot use disabled-by-override disposition"
+    },
+    {
+      "name": "compatibility findings cannot be marked not enforced",
+      "mutation": "forbidden-disposition:compatibility:not-enforced",
+      "expectedError": "cannot use not-enforced disposition"
+    },
+    {
+      "name": "unsupported findings cannot be baselined",
+      "mutation": "forbidden-disposition:unsupported:baselined",
+      "expectedError": "cannot use baselined disposition"
+    },
+    {
+      "name": "unsupported findings cannot be excepted",
+      "mutation": "forbidden-disposition:unsupported:excepted",
+      "expectedError": "cannot use excepted disposition"
+    },
+    {
+      "name": "unsupported findings cannot be disabled by override",
+      "mutation": "forbidden-disposition:unsupported:disabled-by-override",
+      "expectedError": "cannot use disabled-by-override disposition"
+    },
+    {
+      "name": "unsupported findings cannot be marked not enforced",
+      "mutation": "forbidden-disposition:unsupported:not-enforced",
+      "expectedError": "cannot use not-enforced disposition"
+    },
+    {
+      "name": "incomplete findings cannot be baselined",
+      "mutation": "forbidden-disposition:incomplete:baselined",
+      "expectedError": "cannot use baselined disposition"
+    },
+    {
+      "name": "incomplete findings cannot be excepted",
+      "mutation": "forbidden-disposition:incomplete:excepted",
+      "expectedError": "cannot use excepted disposition"
+    },
+    {
+      "name": "incomplete findings cannot be disabled by override",
+      "mutation": "forbidden-disposition:incomplete:disabled-by-override",
+      "expectedError": "cannot use disabled-by-override disposition"
+    },
+    {
+      "name": "incomplete findings cannot be marked not enforced",
+      "mutation": "forbidden-disposition:incomplete:not-enforced",
+      "expectedError": "cannot use not-enforced disposition"
+    },
+    {
+      "name": "engine failure findings cannot be baselined",
+      "mutation": "forbidden-disposition:engine-failure:baselined",
+      "expectedError": "cannot use baselined disposition"
+    },
+    {
+      "name": "engine failure findings cannot be excepted",
+      "mutation": "forbidden-disposition:engine-failure:excepted",
+      "expectedError": "cannot use excepted disposition"
+    },
+    {
+      "name": "engine failure findings cannot be disabled by override",
+      "mutation": "forbidden-disposition:engine-failure:disabled-by-override",
+      "expectedError": "cannot use disabled-by-override disposition"
+    },
+    {
+      "name": "engine failure findings cannot be marked not enforced",
+      "mutation": "forbidden-disposition:engine-failure:not-enforced",
+      "expectedError": "cannot use not-enforced disposition"
+    },
+    {
+      "name": "protected review findings cannot be baselined",
+      "mutation": "forbidden-disposition:protected-review:baselined",
+      "expectedError": "cannot use baselined disposition"
+    },
+    {
+      "name": "protected review findings cannot be excepted",
+      "mutation": "forbidden-disposition:protected-review:excepted",
+      "expectedError": "cannot use excepted disposition"
+    },
+    {
+      "name": "protected review findings cannot be disabled by override",
+      "mutation": "forbidden-disposition:protected-review:disabled-by-override",
+      "expectedError": "cannot use disabled-by-override disposition"
+    },
+    {
+      "name": "protected review findings cannot be marked not enforced",
+      "mutation": "forbidden-disposition:protected-review:not-enforced",
+      "expectedError": "cannot use not-enforced disposition"
+    },
+    {
+      "name": "integrity finding evidence cannot be truncated",
+      "mutation": "truncated-integrity",
+      "expectedError": "priority finding evidence is truncated"
+    },
+    {
+      "name": "protected review finding evidence cannot be truncated",
+      "mutation": "truncated-protected-review",
+      "expectedError": "priority finding evidence is truncated"
+    }
+  ],
+  "conformResultCases": [
+    {
+      "name": "major-1 Conform result is incompatible with a current-major-2 bundle",
+      "mutation": "none",
+      "bundleMutation": "future-result-major",
+      "expectedError": "schemaVersion major"
+    },
+    {
+      "name": "Conform result schema major must match its bundle",
+      "mutation": "schema-major",
+      "expectedError": "schemaVersion major"
+    },
+    {
+      "name": "embedded engine result schema major must match its bundle",
+      "mutation": "engine-schema-major",
+      "expectedError": "schemaVersion major"
+    },
+    {
+      "name": "aggregate findings preserve validated engine partials",
+      "mutation": "missing-engine-finding",
+      "expectedError": "aggregate findings"
+    },
+    {
+      "name": "aggregate metadata must match engine partials",
+      "mutation": "engine-metadata",
+      "expectedError": "runId"
+    },
+    {
+      "name": "aggregate completion preserves engine failure state",
+      "mutation": "engine-completion",
+      "expectedError": "preserve engine failure state"
+    },
+    {
+      "name": "engine partials require stable ordering",
+      "mutation": "engine-order",
+      "expectedError": "engineResults stable order"
+    }
+  ]
+}

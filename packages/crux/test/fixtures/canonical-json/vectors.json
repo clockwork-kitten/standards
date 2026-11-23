@@ -1,0 +1,398 @@
+{
+  "fixtureRevision": 3,
+  "algorithm": "RFC 8785",
+  "hash": "SHA-256",
+  "targetRuntimes": ["node-24", "node-26", "bun-development"],
+  "provenance": [
+    {
+      "name": "RFC 8785 JSON Canonicalization Scheme",
+      "revision": "RFC 8785, June 2020",
+      "url": "https://www.rfc-editor.org/rfc/rfc8785"
+    },
+    {
+      "name": "cyberphone/json-canonicalization reference vectors",
+      "revision": "master testdata snapshot reviewed 2026-11-22",
+      "url": "https://github.com/cyberphone/json-canonicalization/tree/master/testdata"
+    }
+  ],
+  "rfcVectors": [
+    {
+      "name": "RFC 8785 section 3.2.2 canonical sample",
+      "input": {
+        "numbers": [333333333.33333329, 1e30, 4.5, 0.002, 1e-27],
+        "string": "€$\u000f\nA'B\"\\\\\"/",
+        "literals": [null, true, false]
+      },
+      "canonical": "{\"literals\":[null,true,false],\"numbers\":[333333333.3333333,1e+30,4.5,0.002,1e-27],\"string\":\"€$\\u000f\\nA'B\\\"\\\\\\\\\\\"/\"}",
+      "sha256": "2d5e01a318d0f0879ab568c4be289c8b1f64ef8921a53c6277d5e069978baacb"
+    },
+    {
+      "name": "RFC 8785 section 3.2.3 UTF-16 property sorting",
+      "input": {
+        "€": "Euro Sign",
+        "\r": "Carriage Return",
+        "דּ": "Hebrew Letter Dalet With Dagesh",
+        "1": "One",
+        "😀": "Emoji: Grinning Face",
+        "": "Control",
+        "ö": "Latin Small Letter O With Diaeresis"
+      },
+      "canonical": "{\"\\r\":\"Carriage Return\",\"1\":\"One\",\"\":\"Control\",\"ö\":\"Latin Small Letter O With Diaeresis\",\"€\":\"Euro Sign\",\"😀\":\"Emoji: Grinning Face\",\"דּ\":\"Hebrew Letter Dalet With Dagesh\"}",
+      "sha256": "5e321556d22018a9656991a9e94f77ec175fa193e52a2429d312f8419ec8b08c"
+    }
+  ],
+  "artifactVectors": [
+    {
+      "name": "effective policy excludes host time and installation metadata",
+      "artifact": "effective-policy",
+      "excludedFields": [
+        "absolutePath",
+        "generatedAt",
+        "hostname",
+        "installationLayout"
+      ],
+      "input": {
+        "effectivePolicyInputs": [
+          {
+            "contentHash": "3333333333333333333333333333333333333333333333333333333333333333",
+            "inputId": ".conform/policy.jsonc",
+            "kind": "repository-policy"
+          }
+        ],
+        "absolutePath": "/Users/first/repository/.conform/policy.jsonc",
+        "generatedAt": "2026-11-22T00:00:00Z",
+        "hostname": "builder-01",
+        "installationLayout": "node_modules/@clockwork-kitten/crux"
+      },
+      "excludedVariant": {
+        "effectivePolicyInputs": [
+          {
+            "contentHash": "3333333333333333333333333333333333333333333333333333333333333333",
+            "inputId": ".conform/policy.jsonc",
+            "kind": "repository-policy"
+          }
+        ],
+        "absolutePath": "C:/second/repository/.conform/policy.jsonc",
+        "generatedAt": "2030-01-01T00:00:00Z",
+        "hostname": "builder-99",
+        "installationLayout": ".pnpm/@clockwork-kitten+crux"
+      },
+      "canonical": "{\"effectivePolicyInputs\":[{\"contentHash\":\"3333333333333333333333333333333333333333333333333333333333333333\",\"inputId\":\".conform/policy.jsonc\",\"kind\":\"repository-policy\"}]}",
+      "sha256": "74a328a8338ba7126bb259bfc7bbad4298a4eb69d5b42674c9cc765a48281651"
+    },
+    {
+      "name": "policy excludes derivation environment metadata",
+      "artifact": "policy",
+      "excludedFields": ["absolutePath", "generatedAt", "hostname"],
+      "input": {
+        "policyId": "studio",
+        "policyVersion": "1.0.0",
+        "rules": ["crux/docs/format"],
+        "absolutePath": "/tmp/policy.json",
+        "generatedAt": "2026-11-22T00:00:00Z",
+        "hostname": "builder-01"
+      },
+      "excludedVariant": {
+        "policyId": "studio",
+        "policyVersion": "1.0.0",
+        "rules": ["crux/docs/format"],
+        "absolutePath": "D:/policy.json",
+        "generatedAt": "2030-01-01T00:00:00Z",
+        "hostname": "builder-99"
+      },
+      "canonical": "{\"policyId\":\"studio\",\"policyVersion\":\"1.0.0\",\"rules\":[\"crux/docs/format\"]}",
+      "sha256": "b9a424aedbd3dfbc76ad19c7292e2511568b4f4ba8de99bf2fd79912ac576a11"
+    },
+    {
+      "name": "context excludes only its self-referential hash",
+      "artifact": "context",
+      "excludedFields": ["contextHash"],
+      "input": {
+        "schemaVersion": "1.0.0",
+        "contextHash": "5555555555555555555555555555555555555555555555555555555555555555",
+        "bundleId": "conform-1.0.0",
+        "policy": {
+          "effectivePolicyHash": "4444444444444444444444444444444444444444444444444444444444444444",
+          "policyId": "studio",
+          "policyVersion": "1.0.0"
+        },
+        "rules": {
+          "active": [
+            {
+              "ruleId": "crux/docs/format",
+              "title": "Format documentation",
+              "summary": "Documentation follows the canonical format.",
+              "owner": "canon",
+              "lifecycle": "error"
+            }
+          ],
+          "disabled": [
+            {
+              "ruleId": "crux/code/disabled",
+              "title": "Disabled code rule",
+              "summary": "Disabled by an approved override.",
+              "owner": "crucible",
+              "lifecycle": "warn"
+            }
+          ],
+          "notEnforced": [
+            {
+              "ruleId": "crux/repository/not-enforced",
+              "title": "Not enforced repository rule",
+              "summary": "Known but not enforced by this profile.",
+              "owner": "conform",
+              "lifecycle": "proposed"
+            }
+          ]
+        },
+        "glossary": [
+          {
+            "term": "canonical",
+            "definition": "Stable across supported environments."
+          }
+        ],
+        "exceptions": [
+          {
+            "exceptionId": "legacy-doc",
+            "ruleId": "crux/docs/format",
+            "scope": ["docs/legacy.md"],
+            "rationale": "Migration is tracked separately."
+          }
+        ],
+        "architectureReferences": [
+          {
+            "title": "Architecture",
+            "path": "docs/ARCHITECTURE.md"
+          }
+        ],
+        "commands": [
+          {
+            "name": "check",
+            "command": "bun run check"
+          }
+        ],
+        "profiles": ["full", "static"],
+        "topInvariants": [
+          {
+            "ruleId": "crux/docs/format",
+            "title": "Format documentation",
+            "summary": "Documentation follows the canonical format.",
+            "owner": "canon",
+            "lifecycle": "error"
+          }
+        ],
+        "canonicalResultPath": ".conform/results/conform.json",
+        "extensions": {
+          "studio.context": {
+            "enabled": true
+          }
+        }
+      },
+      "excludedVariant": {
+        "schemaVersion": "1.0.0",
+        "contextHash": "9999999999999999999999999999999999999999999999999999999999999999",
+        "bundleId": "conform-1.0.0",
+        "policy": {
+          "effectivePolicyHash": "4444444444444444444444444444444444444444444444444444444444444444",
+          "policyId": "studio",
+          "policyVersion": "1.0.0"
+        },
+        "rules": {
+          "active": [
+            {
+              "ruleId": "crux/docs/format",
+              "title": "Format documentation",
+              "summary": "Documentation follows the canonical format.",
+              "owner": "canon",
+              "lifecycle": "error"
+            }
+          ],
+          "disabled": [
+            {
+              "ruleId": "crux/code/disabled",
+              "title": "Disabled code rule",
+              "summary": "Disabled by an approved override.",
+              "owner": "crucible",
+              "lifecycle": "warn"
+            }
+          ],
+          "notEnforced": [
+            {
+              "ruleId": "crux/repository/not-enforced",
+              "title": "Not enforced repository rule",
+              "summary": "Known but not enforced by this profile.",
+              "owner": "conform",
+              "lifecycle": "proposed"
+            }
+          ]
+        },
+        "glossary": [
+          {
+            "term": "canonical",
+            "definition": "Stable across supported environments."
+          }
+        ],
+        "exceptions": [
+          {
+            "exceptionId": "legacy-doc",
+            "ruleId": "crux/docs/format",
+            "scope": ["docs/legacy.md"],
+            "rationale": "Migration is tracked separately."
+          }
+        ],
+        "architectureReferences": [
+          {
+            "title": "Architecture",
+            "path": "docs/ARCHITECTURE.md"
+          }
+        ],
+        "commands": [
+          {
+            "name": "check",
+            "command": "bun run check"
+          }
+        ],
+        "profiles": ["full", "static"],
+        "topInvariants": [
+          {
+            "ruleId": "crux/docs/format",
+            "title": "Format documentation",
+            "summary": "Documentation follows the canonical format.",
+            "owner": "canon",
+            "lifecycle": "error"
+          }
+        ],
+        "canonicalResultPath": ".conform/results/conform.json",
+        "extensions": {
+          "studio.context": {
+            "enabled": true
+          }
+        }
+      },
+      "includedMutations": [
+        {
+          "name": "schema version",
+          "path": ["schemaVersion"],
+          "value": "1.0.1"
+        },
+        {
+          "name": "bundle ID",
+          "path": ["bundleId"],
+          "value": "conform-1.0.1"
+        },
+        {
+          "name": "policy ID",
+          "path": ["policy", "policyId"],
+          "value": "studio-next"
+        },
+        {
+          "name": "policy version",
+          "path": ["policy", "policyVersion"],
+          "value": "1.0.1"
+        },
+        {
+          "name": "effective policy hash",
+          "path": ["policy", "effectivePolicyHash"],
+          "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "name": "active rules",
+          "path": ["rules", "active", 0, "summary"],
+          "value": "Documentation follows the revised canonical format."
+        },
+        {
+          "name": "disabled rules",
+          "path": ["rules", "disabled", 0, "summary"],
+          "value": "Disabled by a revised approved override."
+        },
+        {
+          "name": "not-enforced rules",
+          "path": ["rules", "notEnforced", 0, "summary"],
+          "value": "Known but not enforced by the revised profile."
+        },
+        {
+          "name": "glossary",
+          "path": ["glossary", 0, "definition"],
+          "value": "Stable across every supported environment."
+        },
+        {
+          "name": "exceptions",
+          "path": ["exceptions", 0, "rationale"],
+          "value": "Migration is complete in the next release."
+        },
+        {
+          "name": "architecture references",
+          "path": ["architectureReferences", 0, "title"],
+          "value": "System architecture"
+        },
+        {
+          "name": "commands",
+          "path": ["commands", 0, "command"],
+          "value": "bun run ci"
+        },
+        {
+          "name": "profiles",
+          "path": ["profiles", 0],
+          "value": "ci"
+        },
+        {
+          "name": "top invariants",
+          "path": ["topInvariants", 0, "summary"],
+          "value": "Documentation always follows the canonical format."
+        },
+        {
+          "name": "result location",
+          "path": ["canonicalResultPath"],
+          "value": ".conform/results/revised.json"
+        },
+        {
+          "name": "extensions",
+          "path": ["extensions", "studio.context", "enabled"],
+          "value": false
+        }
+      ],
+      "canonical": "{\"architectureReferences\":[{\"path\":\"docs/ARCHITECTURE.md\",\"title\":\"Architecture\"}],\"bundleId\":\"conform-1.0.0\",\"canonicalResultPath\":\".conform/results/conform.json\",\"commands\":[{\"command\":\"bun run check\",\"name\":\"check\"}],\"exceptions\":[{\"exceptionId\":\"legacy-doc\",\"rationale\":\"Migration is tracked separately.\",\"ruleId\":\"crux/docs/format\",\"scope\":[\"docs/legacy.md\"]}],\"extensions\":{\"studio.context\":{\"enabled\":true}},\"glossary\":[{\"definition\":\"Stable across supported environments.\",\"term\":\"canonical\"}],\"policy\":{\"effectivePolicyHash\":\"4444444444444444444444444444444444444444444444444444444444444444\",\"policyId\":\"studio\",\"policyVersion\":\"1.0.0\"},\"profiles\":[\"full\",\"static\"],\"rules\":{\"active\":[{\"lifecycle\":\"error\",\"owner\":\"canon\",\"ruleId\":\"crux/docs/format\",\"summary\":\"Documentation follows the canonical format.\",\"title\":\"Format documentation\"}],\"disabled\":[{\"lifecycle\":\"warn\",\"owner\":\"crucible\",\"ruleId\":\"crux/code/disabled\",\"summary\":\"Disabled by an approved override.\",\"title\":\"Disabled code rule\"}],\"notEnforced\":[{\"lifecycle\":\"proposed\",\"owner\":\"conform\",\"ruleId\":\"crux/repository/not-enforced\",\"summary\":\"Known but not enforced by this profile.\",\"title\":\"Not enforced repository rule\"}]},\"schemaVersion\":\"1.0.0\",\"topInvariants\":[{\"lifecycle\":\"error\",\"owner\":\"canon\",\"ruleId\":\"crux/docs/format\",\"summary\":\"Documentation follows the canonical format.\",\"title\":\"Format documentation\"}]}",
+      "sha256": "2254a4bf04e0c05812a7b3759ec55dd7a18f33c850447aac53aa705f3ba5356a"
+    },
+    {
+      "name": "fingerprint excludes location prose host and time metadata",
+      "artifact": "fingerprint",
+      "excludedFields": [
+        "absolutePath",
+        "column",
+        "generatedAt",
+        "hostname",
+        "line",
+        "toolMessage"
+      ],
+      "input": {
+        "ruleId": "crux/docs/format",
+        "path": "docs/guide.md",
+        "structuralAnchor": "heading:introduction",
+        "evidenceIdentity": "heading-depth",
+        "occurrenceOrdinal": 1,
+        "line": 17,
+        "column": 3,
+        "toolMessage": "Heading level skipped",
+        "absolutePath": "/Users/first/repository/docs/guide.md",
+        "generatedAt": "2026-11-22T00:00:00Z",
+        "hostname": "builder-01"
+      },
+      "excludedVariant": {
+        "ruleId": "crux/docs/format",
+        "path": "docs/guide.md",
+        "structuralAnchor": "heading:introduction",
+        "evidenceIdentity": "heading-depth",
+        "occurrenceOrdinal": 1,
+        "line": 99,
+        "column": 8,
+        "toolMessage": "Different tool prose",
+        "absolutePath": "C:/second/repository/docs/guide.md",
+        "generatedAt": "2030-01-01T00:00:00Z",
+        "hostname": "builder-99"
+      },
+      "canonical": "{\"evidenceIdentity\":\"heading-depth\",\"occurrenceOrdinal\":1,\"path\":\"docs/guide.md\",\"ruleId\":\"crux/docs/format\",\"structuralAnchor\":\"heading:introduction\"}",
+      "sha256": "318e48703ca588f16c9daa4abfda4d39f6eccbbeedb88b795b18d22dd7804c88"
+    }
+  ]
+}

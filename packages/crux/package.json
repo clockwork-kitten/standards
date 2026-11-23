@@ -5,9 +5,14 @@
   "type": "module",
   "exports": {
     "./schemas/baseline": "./schemas/baseline.schema.json",
+    "./schemas/bundle": "./schemas/bundle.schema.json",
+    "./schemas/conform-result": "./schemas/conform-result.schema.json",
+    "./schemas/context": "./schemas/context.schema.json",
     "./schemas/engine-manifest": "./schemas/engine-manifest.schema.json",
+    "./schemas/engine-result": "./schemas/engine-result.schema.json",
     "./schemas/exception": "./schemas/exception.schema.json",
     "./schemas/fingerprint": "./schemas/fingerprint.schema.json",
+    "./schemas/lock": "./schemas/lock.schema.json",
     "./schemas/migration-disposition": "./schemas/migration-disposition.schema.json",
     "./schemas/policy": "./schemas/policy.schema.json",
     "./schemas/profile": "./schemas/profile.schema.json",
@@ -25,6 +30,7 @@
   "scripts": {
     "check:generated": "bun ./scripts/generate-types.ts --check",
     "generate:types": "bun ./scripts/generate-types.ts",
+    "test:canonical": "node ./scripts/verify-canonical-vectors.mjs",
     "test": "bun test ./test && bun run check:generated",
     "typecheck": "tsc --noEmit"
   },

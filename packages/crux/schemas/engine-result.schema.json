@@ -1,0 +1,482 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/engine-result/1",
+  "description": "Canonical partial result emitted by one policy engine.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "bundleId",
+    "runId",
+    "engine",
+    "repository",
+    "environment",
+    "command",
+    "profile",
+    "scope",
+    "policyPackage",
+    "effectivePolicyHash",
+    "completionState",
+    "findings",
+    "counts",
+    "classification"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "bundleId": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/bundleId"
+    },
+    "runId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "engine": {
+      "$ref": "#/$defs/engineIdentity"
+    },
+    "repository": {
+      "$ref": "#/$defs/repositoryRevision"
+    },
+    "environment": {
+      "$ref": "#/$defs/observedEnvironment"
+    },
+    "command": {
+      "enum": ["check", "fix", "report", "policy-operation"]
+    },
+    "profile": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "policyPackage": {
+      "allOf": [
+        {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/packageRecord"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "@clockwork-kitten/crux"
+            }
+          }
+        }
+      ]
+    },
+    "effectivePolicyHash": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/sha256"
+    },
+    "completionState": {
+      "$ref": "#/$defs/completionState"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    },
+    "counts": {
+      "$ref": "#/$defs/counts"
+    },
+    "classification": {
+      "$ref": "#/$defs/classification"
+    },
+    "extensions": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/extensions"
+    }
+  },
+  "$defs": {
+    "engineIdentity": {
+      "type": "object",
+      "required": ["name", "version", "package", "integrity", "manifestHash"],
+      "properties": {
+        "name": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/engine"
+        },
+        "version": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+        },
+        "package": {
+          "type": "string",
+          "pattern": "^@clockwork-kitten/(canon|crucible|conform)$"
+        },
+        "integrity": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/integrity"
+        },
+        "manifestHash": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/sha256"
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "name": {
+              "const": "canon"
+            },
+            "package": {
+              "const": "@clockwork-kitten/canon"
+            }
+          }
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "crucible"
+            },
+            "package": {
+              "const": "@clockwork-kitten/crucible"
+            }
+          }
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "conform"
+            },
+            "package": {
+              "const": "@clockwork-kitten/conform"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "repositoryRevision": {
+      "type": "object",
+      "required": ["revision"],
+      "properties": {
+        "revision": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40,64}$"
+        },
+        "baseRevision": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40,64}$"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "observedEnvironment": {
+      "description": "Observed execution environment. Unsupported values remain representable so canonical unsupported results can be emitted.",
+      "type": "object",
+      "required": [
+        "nodeMajor",
+        "operatingSystem",
+        "packageManagerLock",
+        "verdictRuntime"
+      ],
+      "properties": {
+        "nodeMajor": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "operatingSystem": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "maxLength": 64
+        },
+        "packageManagerLock": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+          "maxLength": 128
+        },
+        "verdictRuntime": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "maxLength": 64
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "required": ["kind", "paths"],
+      "properties": {
+        "kind": {
+          "enum": ["repository", "change", "paths"]
+        },
+        "paths": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/repositoryPath"
+          },
+          "uniqueItems": true
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "repositoryPath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))[^\\\\\\u0000]+$",
+      "maxLength": 4096
+    },
+    "completionState": {
+      "enum": [
+        "complete",
+        "incomplete",
+        "unlocked",
+        "unsupported",
+        "engine-failure",
+        "integrity-failure",
+        "compatibility-failure",
+        "fix-not-converged"
+      ]
+    },
+    "finding": {
+      "type": "object",
+      "required": [
+        "ruleId",
+        "owner",
+        "lifecycle",
+        "effectiveSeverity",
+        "kind",
+        "location",
+        "evidence",
+        "remediation",
+        "fixStatus",
+        "fingerprint",
+        "disposition",
+        "state"
+      ],
+      "properties": {
+        "ruleId": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/ruleId"
+        },
+        "owner": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/engine"
+        },
+        "lifecycle": {
+          "enum": ["proposed", "warn", "error", "deprecated", "removed"]
+        },
+        "effectiveSeverity": {
+          "enum": ["info", "warning", "error"]
+        },
+        "kind": {
+          "enum": ["policy", "integrity", "protected-review", "compatibility"]
+        },
+        "location": {
+          "$ref": "#/$defs/location"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        },
+        "remediation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "fixStatus": {
+          "enum": [
+            "not-fixable",
+            "available",
+            "applied",
+            "failed",
+            "not-converged"
+          ]
+        },
+        "fingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "disposition": {
+          "$ref": "#/$defs/disposition"
+        },
+        "matchedRecord": {
+          "$ref": "#/$defs/matchedRecord"
+        },
+        "state": {
+          "$ref": "#/$defs/findingState"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "location": {
+      "type": "object",
+      "required": ["path", "structuralAnchor"],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/repositoryPath"
+        },
+        "structuralAnchor": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "column": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "endLine": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "endColumn": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "identity",
+        "summary",
+        "byteLength",
+        "truncated",
+        "redactions"
+      ],
+      "properties": {
+        "identity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "byteLength": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "truncated": {
+          "type": "boolean"
+        },
+        "redactions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["category", "placeholder"],
+            "properties": {
+              "category": {
+                "enum": ["secret-path", "environment-value", "token-pattern"]
+              },
+              "placeholder": {
+                "type": "string",
+                "pattern": "^\\[REDACTED:[a-f0-9]{64}\\]$"
+              }
+            },
+            "unevaluatedProperties": false
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "fingerprint": {
+      "description": "SHA-256 over the versioned rule ID, normalized path, check-kind structural anchor, normalized evidence identity, and occurrence ordinal; line, column, and tool prose are excluded.",
+      "type": "object",
+      "required": ["version", "value", "occurrenceOrdinal"],
+      "properties": {
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "value": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/bundle/1#/$defs/sha256"
+        },
+        "occurrenceOrdinal": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "causedBy": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "disposition": {
+      "enum": [
+        "active",
+        "baselined",
+        "excepted",
+        "disabled-by-override",
+        "not-enforced"
+      ]
+    },
+    "matchedRecord": {
+      "type": "object",
+      "required": ["kind", "recordId"],
+      "properties": {
+        "kind": {
+          "enum": ["baseline", "exception"]
+        },
+        "recordId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "findingState": {
+      "enum": [
+        "active",
+        "baselined",
+        "excepted",
+        "disabled-by-override",
+        "not-enforced",
+        "proposed",
+        "removed",
+        "unknown",
+        "unimplemented",
+        "skipped",
+        "incomplete",
+        "unlocked",
+        "unsupported",
+        "engine-failure",
+        "integrity-failure",
+        "compatibility-failure"
+      ]
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "total",
+        "failing",
+        "reviewRequired",
+        "info",
+        "warning",
+        "error"
+      ],
+      "properties": {
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failing": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reviewRequired": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "info": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "warning": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "error": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "classification": {
+      "enum": ["pass", "fail", "pass-review-required"]
+    }
+  },
+  "unevaluatedProperties": false
+}

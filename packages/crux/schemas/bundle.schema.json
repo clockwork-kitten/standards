@@ -1,0 +1,404 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/bundle/1",
+  "description": "Offline-readable exact compatibility metadata shipped by one Conform release.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "bundleId",
+    "components",
+    "schemaMajors",
+    "environment",
+    "profiles",
+    "capabilities",
+    "resultMajorSupport"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "bundleId": {
+      "$ref": "#/$defs/bundleId"
+    },
+    "components": {
+      "$ref": "#/$defs/components"
+    },
+    "schemaMajors": {
+      "$ref": "#/$defs/schemaMajors"
+    },
+    "environment": {
+      "$ref": "#/$defs/environmentSupport"
+    },
+    "profiles": {
+      "$ref": "#/$defs/profiles"
+    },
+    "capabilities": {
+      "$ref": "#/$defs/capabilities"
+    },
+    "resultMajorSupport": {
+      "$ref": "#/$defs/resultMajorSupport"
+    },
+    "extensions": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/extensions"
+    }
+  },
+  "$defs": {
+    "bundleId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$",
+      "maxLength": 128
+    },
+    "sha256": {
+      "description": "Lowercase SHA-256 of RFC 8785 canonical JSON bytes for the artifact-specific hash input.",
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "registryUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "integrity": {
+      "type": "string",
+      "pattern": "^sha512-[A-Za-z0-9+/]+={0,2}$"
+    },
+    "packageRecord": {
+      "type": "object",
+      "required": ["name", "version", "registryUrl", "integrity"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^(@[a-z0-9][a-z0-9._-]*/)?[a-z0-9][a-z0-9._-]*$",
+          "maxLength": 214
+        },
+        "version": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+        },
+        "registryUrl": {
+          "$ref": "#/$defs/registryUrl"
+        },
+        "integrity": {
+          "$ref": "#/$defs/integrity"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "componentRecord": {
+      "type": "object",
+      "required": [
+        "componentId",
+        "role",
+        "package",
+        "capabilities",
+        "verdictProducing",
+        "manifestHash"
+      ],
+      "properties": {
+        "componentId": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+        },
+        "role": {
+          "enum": ["policy", "engine", "orchestrator", "tool"]
+        },
+        "package": {
+          "$ref": "#/$defs/packageRecord"
+        },
+        "capabilities": {
+          "$ref": "#/$defs/capabilities"
+        },
+        "verdictProducing": {
+          "type": "boolean"
+        },
+        "manifestHash": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "verdictProducing": {
+                "const": true
+              }
+            },
+            "required": ["verdictProducing"]
+          },
+          "then": {
+            "properties": {
+              "manifestHash": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "components": {
+      "type": "object",
+      "required": ["crux", "canon", "crucible", "conform", "tools"],
+      "properties": {
+        "crux": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/componentRecord"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "componentId": {
+                  "const": "crux"
+                },
+                "role": {
+                  "const": "policy"
+                },
+                "package": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "const": "@clockwork-kitten/crux"
+                    }
+                  }
+                },
+                "verdictProducing": {
+                  "const": false
+                },
+                "manifestHash": {
+                  "type": "null"
+                }
+              }
+            }
+          ]
+        },
+        "canon": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/componentRecord"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "componentId": {
+                  "const": "canon"
+                },
+                "role": {
+                  "const": "engine"
+                },
+                "package": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "const": "@clockwork-kitten/canon"
+                    }
+                  }
+                },
+                "verdictProducing": {
+                  "const": true
+                },
+                "manifestHash": {
+                  "$ref": "#/$defs/sha256"
+                }
+              }
+            }
+          ]
+        },
+        "crucible": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/componentRecord"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "componentId": {
+                  "const": "crucible"
+                },
+                "role": {
+                  "const": "engine"
+                },
+                "package": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "const": "@clockwork-kitten/crucible"
+                    }
+                  }
+                },
+                "verdictProducing": {
+                  "const": true
+                },
+                "manifestHash": {
+                  "$ref": "#/$defs/sha256"
+                }
+              }
+            }
+          ]
+        },
+        "conform": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/componentRecord"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "componentId": {
+                  "const": "conform"
+                },
+                "role": {
+                  "const": "orchestrator"
+                },
+                "package": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "const": "@clockwork-kitten/conform"
+                    }
+                  }
+                },
+                "verdictProducing": {
+                  "const": true
+                },
+                "manifestHash": {
+                  "$ref": "#/$defs/sha256"
+                }
+              }
+            }
+          ]
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/componentRecord"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "role": {
+                    "const": "tool"
+                  }
+                }
+              }
+            ]
+          },
+          "uniqueItems": true
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "schemaMajors": {
+      "type": "object",
+      "required": ["lock", "policy", "result"],
+      "properties": {
+        "lock": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "policy": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "result": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "environmentSupport": {
+      "type": "object",
+      "required": [
+        "nodeMajors",
+        "operatingSystems",
+        "packageManagerLocks",
+        "verdictRuntime"
+      ],
+      "properties": {
+        "nodeMajors": {
+          "type": "array",
+          "items": {
+            "enum": [24, 26]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "operatingSystems": {
+          "type": "array",
+          "items": {
+            "enum": ["linux", "darwin"]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "packageManagerLocks": {
+          "type": "array",
+          "items": {
+            "enum": ["package-lock.json", "bun.lock"]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "verdictRuntime": {
+          "const": "node"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+      },
+      "uniqueItems": true
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "resultMajorSupport": {
+      "description": "Readers support the current result-schema major and, once one exists, the immediately previous major for at least one Conform minor release and 90 days, whichever is longer. The first result-schema release omits previous because no previous published major exists.",
+      "type": "object",
+      "required": ["current"],
+      "properties": {
+        "current": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "previous": {
+          "type": "object",
+          "required": ["major", "minimumConformMinorReleases", "minimumDays"],
+          "properties": {
+            "major": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "minimumConformMinorReleases": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "minimumDays": {
+              "type": "integer",
+              "minimum": 90
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false
+}

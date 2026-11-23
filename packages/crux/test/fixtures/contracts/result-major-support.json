@@ -1,0 +1,22 @@
+{
+  "fixtureRevision": 1,
+  "firstRelease": {
+    "currentResultVersion": "1.0.0",
+    "schemaMajor": 1,
+    "support": {
+      "current": 1
+    }
+  },
+  "futureRelease": {
+    "currentResultVersion": "2.0.0",
+    "schemaMajor": 2,
+    "support": {
+      "current": 2,
+      "previous": {
+        "major": 1,
+        "minimumConformMinorReleases": 1,
+        "minimumDays": 90
+      }
+    }
+  }
+}

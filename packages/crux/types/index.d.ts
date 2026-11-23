@@ -14,3 +14,8 @@ export type { Baseline } from "./generated/baseline.js";
 export type { ExceptionLedger } from "./generated/exception.js";
 export type { RepositoryPolicy } from "./generated/repository-policy.js";
 export type { MigrationDispositionLedger } from "./generated/migration-disposition.js";
+export type { CompatibilityBundle } from "./generated/bundle.js";
+export type { PolicyLock } from "./generated/lock.js";
+export type { EngineResult } from "./generated/engine-result.js";
+export type { ConformResult } from "./generated/conform-result.js";
+export type { DerivedContext } from "./generated/context.js";
