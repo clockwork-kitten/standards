@@ -4,6 +4,19 @@
  */
 
 /**
+ * This interface was referenced by `InventoryReconciliation`'s JSON-Schema
+ * via the `definition` "migrationDecision".
+ */
+export type MigrationDecision = {
+  [k: string]: unknown;
+} & {
+  disposition: "replaced" | "dropped";
+  target: string;
+  replacement?: ReplacementIdentity;
+  intentionalDifference?: string;
+};
+
+/**
  * Exact diagnostic reconciliation of frozen legacy inventory rows to permanent ownership or an explicit clean-break disposition.
  */
 export interface InventoryReconciliation {
@@ -14,18 +27,10 @@ export interface InventoryReconciliation {
    */
   sources: [
     {
-      sourceId: string;
-      repository: string;
-      revision: string;
-      artifact: string;
-      expectedRows: number;
+      [k: string]: unknown;
     },
     ...{
-      sourceId: string;
-      repository: string;
-      revision: string;
-      artifact: string;
-      expectedRows: number;
+      [k: string]: unknown;
     }[],
   ];
   rows: {
@@ -36,4 +41,9 @@ export interface InventoryReconciliation {
 export interface DiagnosticIdentity {
   kind: "command" | "config-key" | "rule" | "suppression";
   id: string;
+}
+export interface ReplacementIdentity {
+  kind: "command" | "config-key" | "rule" | "suppression";
+  id: string;
+  owner: "canon" | "crucible" | "conform";
 }

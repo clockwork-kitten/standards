@@ -85,72 +85,75 @@
     {
       "disposition": "replaced",
       "legacy": { "id": "config.key.code", "kind": "config-key" },
-      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "rationale": "This replacement is diagnostic migration data only and never authorizes config translation or compatibility aliases.",
       "replacement": {
         "id": "repository.code",
         "kind": "config-key",
         "owner": "conform"
-      }
+      },
+      "target": "Conform config schema"
     },
     {
-      "disposition": "replaced",
+      "disposition": "dropped",
+      "intentionalDifference": "Bedrock key is inventoried and must be explicitly dispositioned before reuse.",
       "legacy": { "id": "config.key.code.bedrock", "kind": "config-key" },
-      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
-      "replacement": {
-        "id": "repository.code.bedrock",
-        "kind": "config-key",
-        "owner": "conform"
-      }
+      "rationale": "No implicit compatibility layer is allowed.",
+      "target": "Crucible bedrock migration"
     },
     {
       "disposition": "replaced",
       "legacy": { "id": "config.key.code.eslint", "kind": "config-key" },
-      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "rationale": "This replacement is diagnostic migration data only and never authorizes config translation or compatibility aliases.",
       "replacement": {
         "id": "repository.code.eslint",
         "kind": "config-key",
-        "owner": "conform"
-      }
+        "owner": "crucible"
+      },
+      "target": "Crucible tool toggles"
     },
     {
       "disposition": "replaced",
       "legacy": { "id": "config.key.code.knip", "kind": "config-key" },
-      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "rationale": "This replacement is diagnostic migration data only and never authorizes config translation or compatibility aliases.",
       "replacement": {
         "id": "repository.code.knip",
         "kind": "config-key",
-        "owner": "conform"
-      }
+        "owner": "crucible"
+      },
+      "target": "Crucible tool toggles"
     },
     {
       "disposition": "replaced",
       "legacy": { "id": "config.key.code.prettier", "kind": "config-key" },
-      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "rationale": "This replacement is diagnostic migration data only and never authorizes config translation or compatibility aliases.",
       "replacement": {
         "id": "repository.code.prettier",
         "kind": "config-key",
-        "owner": "conform"
-      }
+        "owner": "crucible"
+      },
+      "target": "Crucible tool toggles"
     },
     {
       "disposition": "replaced",
       "legacy": { "id": "config.key.code.tsconfig", "kind": "config-key" },
-      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "rationale": "This replacement is diagnostic migration data only and never authorizes config translation or compatibility aliases.",
       "replacement": {
         "id": "repository.code.tsconfig",
         "kind": "config-key",
-        "owner": "conform"
-      }
+        "owner": "crucible"
+      },
+      "target": "Crucible typecheck settings"
     },
     {
       "disposition": "replaced",
       "legacy": { "id": "config.key.code.typecheck", "kind": "config-key" },
-      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "rationale": "This replacement is diagnostic migration data only and never authorizes config translation or compatibility aliases.",
       "replacement": {
         "id": "repository.code.typecheck",
         "kind": "config-key",
-        "owner": "conform"
-      }
+        "owner": "crucible"
+      },
+      "target": "Crucible tool toggles"
     },
     {
       "disposition": "dropped",

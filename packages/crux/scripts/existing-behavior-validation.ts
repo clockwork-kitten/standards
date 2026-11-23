@@ -1,3 +1,4 @@
+import { validateConformSourceDeclaration } from "./existing-behavior-provenance.js";
 import {
   type MigrationDispositionEntry,
   validateMigrationDispositions,
@@ -14,12 +15,29 @@ type Policy = {
 type Reconciliation = {
   legacyIdentities: { id: string; kind: LegacyKind }[];
   rows: ReconciliationRow[];
-  sources: { expectedRows: number; sourceId: string }[];
+  sources: {
+    artifact: string;
+    contentSha256?: string;
+    expectedRows: number;
+    repository: string;
+    revision: string;
+    sourceId: string;
+  }[];
 };
 
 type ReconciliationRow = {
   disposition: string;
   inventoryId: string;
+  migration?: {
+    disposition: "dropped" | "replaced";
+    intentionalDifference?: string;
+    replacement?: {
+      id: string;
+      kind: LegacyKind;
+      owner: Engine;
+    };
+    target: string;
+  };
   owner?: Engine;
   ruleId?: string;
   section: string;
@@ -65,6 +83,18 @@ export function validateExistingBehavior(
   const rulesById = new Map(policy.rules.map((rule) => [rule.ruleId, rule]));
   const rowsByKey = new Map<string, number>();
   const sourceCounts = new Map<string, number>();
+
+  errors.push(
+    ...validateConformSourceDeclaration(
+      reconciliation.sources.map((source) => ({
+        artifact: source.artifact,
+        contentSha256: source.contentSha256 ?? "",
+        repository: source.repository,
+        revision: source.revision,
+        sourceId: source.sourceId,
+      })),
+    ),
+  );
 
   for (const row of reconciliation.rows) {
     const key = `${row.sourceId}:${row.section}:${row.inventoryId}`;
@@ -208,6 +238,63 @@ export function validateExistingBehavior(
       migrationEntries,
     ).map((error) => `${error.code}: ${error.identity}`),
   );
+  const migrationByIdentity = new Map(
+    migrationEntries.map((entry) => [
+      `${entry.legacy.kind}:${entry.legacy.id}`,
+      entry,
+    ]),
+  );
+  for (const identity of reconciliation.legacyIdentities) {
+    if (
+      identity.kind !== "config-key" ||
+      !identity.id.startsWith("config.key.")
+    ) {
+      continue;
+    }
+    const key = `${identity.kind}:${identity.id}`;
+    const row = reconciliation.rows.find(
+      (candidate) =>
+        candidate.sourceId === "conform" &&
+        candidate.inventoryId === identity.id,
+    );
+    const entry = migrationByIdentity.get(key);
+    if (entry === undefined || row?.migration === undefined) {
+      errors.push(`missing cross-artifact migration decision: ${key}`);
+      continue;
+    }
+    const expectedDisposition =
+      row.disposition === "intentional-difference" ? "dropped" : "replaced";
+    if (
+      row.migration.disposition !== expectedDisposition ||
+      entry.disposition !== row.migration.disposition
+    ) {
+      errors.push(`migration disposition conflict: ${key}`);
+    }
+    if (entry.target !== row.migration.target) {
+      errors.push(`migration target conflict: ${key}`);
+    }
+    if (entry.intentionalDifference !== row.migration.intentionalDifference) {
+      errors.push(`intentional-difference conflict: ${key}`);
+    }
+    if (
+      JSON.stringify(entry.replacement) !==
+      JSON.stringify(row.migration.replacement)
+    ) {
+      errors.push(`migration replacement conflict: ${key}`);
+    }
+    if (
+      entry.replacement !== undefined &&
+      row.owner !== entry.replacement.owner
+    ) {
+      errors.push(`migration owner conflict: ${key}`);
+    }
+    if (
+      row.migration.replacement !== undefined &&
+      row.owner !== row.migration.replacement.owner
+    ) {
+      errors.push(`migration owner conflict: ${key}`);
+    }
+  }
 
   return errors.toSorted();
 }

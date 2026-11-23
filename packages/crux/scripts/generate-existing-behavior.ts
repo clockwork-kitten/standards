@@ -3,6 +3,12 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { format } from "prettier";
 
+import {
+  CONFORM_INVENTORY_SOURCE,
+  CONFORM_LEGACY_REVISION,
+  fetchPinnedJson,
+} from "./existing-behavior-provenance.js";
+
 const PACKAGE_ROOT = fileURLToPath(new URL("..", import.meta.url));
 const CHECK_FLAG = "--check";
 const SCHEMA_VERSION = "1.0.0";
@@ -10,7 +16,7 @@ const POLICY_VERSION = "0.1.0";
 const INTRODUCED = { date: "2026-11-22", version: POLICY_VERSION };
 const CANON_REVISION = "7717e5baacb514ae6085e4c3bef026a371df7d08";
 const BEDROCK_REVISION = "3f7035d1c9b11cef83e30d450e463ee84106d525";
-const CONFORM_REVISION = "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5";
+const CONFORM_REVISION = CONFORM_INVENTORY_SOURCE.revision;
 
 type BedrockConsumerInventory = {
   results: {
@@ -59,6 +65,7 @@ type ConformInventory = {
 type ConformInventoryItem = {
   id?: string;
   migration: {
+    difference?: string;
     kind: "destination" | "intentional-difference";
     rationale: string;
     target: string;
@@ -99,6 +106,16 @@ type RuleSeed = {
 type SourceRow = {
   disposition: string;
   inventoryId: string;
+  migration?: {
+    disposition: "dropped" | "replaced";
+    intentionalDifference?: string;
+    replacement?: {
+      id: string;
+      kind: LegacyKind;
+      owner: Engine;
+    };
+    target: string;
+  };
   owner?: Engine;
   rationale: string;
   reference?: string;
@@ -431,6 +448,38 @@ function createMigration(
             "The coarse Bedrock reporter identity is retired without an alias.",
         };
       }
+      if (legacy.kind === "config-key" && legacy.id.startsWith("config.key.")) {
+        const row = reconciliation.rows.find(
+          (candidate) =>
+            candidate.sourceId === "conform" &&
+            candidate.inventoryId === legacy.id,
+        );
+        if (row?.migration === undefined) {
+          throw new Error(
+            `Missing reconciled migration decision for ${legacy.id}`,
+          );
+        }
+        if (row.migration.disposition === "dropped") {
+          return {
+            disposition: "dropped",
+            intentionalDifference: row.migration.intentionalDifference,
+            legacy,
+            rationale: row.rationale,
+            target: row.migration.target,
+          };
+        }
+        if (row.migration.replacement === undefined) {
+          throw new Error(`Missing reconciled replacement for ${legacy.id}`);
+        }
+        return {
+          disposition: "replaced",
+          legacy,
+          rationale:
+            "This replacement is diagnostic migration data only and never authorizes config translation or compatibility aliases.",
+          replacement: row.migration.replacement,
+          target: row.migration.target,
+        };
+      }
       const owner: Engine =
         legacy.id.startsWith("canon ") || legacy.id === "canon.config.ts"
           ? "canon"
@@ -465,6 +514,7 @@ function createPolicy(rules: ReturnType<typeof createRule>[]): unknown {
         authority: "clockwork-kitten/studio-board#96",
         bedrockRevision: BEDROCK_REVISION,
         canonRevision: CANON_REVISION,
+        conformLegacyRevision: CONFORM_LEGACY_REVISION,
         conformRevision: CONFORM_REVISION,
       },
     },
@@ -588,6 +638,14 @@ function createReconciliation(
       const target = value.migration.target as string;
       const isDifference = value.migration.kind === "intentional-difference";
       const owner = ownerFromTarget(target);
+      const replacement =
+        section === "configSurfaces" && inventoryId.startsWith("config.key.")
+          ? {
+              id: inventoryId.replace("config.key.", "repository."),
+              kind: "config-key" as const,
+              owner,
+            }
+          : undefined;
       rows.push({
         disposition:
           isDifference && target.includes("Bedrock")
@@ -598,10 +656,23 @@ function createReconciliation(
                 ? "diagnostic-replacement"
                 : "mapped-owner",
         inventoryId,
+        migration:
+          replacement === undefined
+            ? undefined
+            : isDifference
+              ? {
+                  disposition: "dropped",
+                  intentionalDifference: value.migration.difference,
+                  target,
+                }
+              : {
+                  disposition: "replaced",
+                  replacement,
+                  target,
+                },
         owner,
         rationale: value.migration.rationale,
-        reference:
-          "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+        reference: `https://github.com/clockwork-kitten/standards/blob/${CONFORM_REVISION}/packages/conform/inventory/legacy-conform.json`,
         section: kebab(section),
         sourceId: "conform",
       });
@@ -697,11 +768,8 @@ function createReconciliation(
     schemaVersion: SCHEMA_VERSION,
     sources: [
       {
-        artifact: "packages/conform/inventory/legacy-conform.json",
+        ...CONFORM_INVENTORY_SOURCE,
         expectedRows: 108,
-        repository: "clockwork-kitten/standards",
-        revision: CONFORM_REVISION,
-        sourceId: "conform",
       },
       {
         artifact: "test/characterization/canon-v0.1.0/ledger.json",
@@ -895,9 +963,7 @@ function kebab(value: string): string {
 
 async function main(): Promise<void> {
   const [conform, canon, bedrock, bedrockConsumers] = await Promise.all([
-    readJson<ConformInventory>(
-      join(PACKAGE_ROOT, "../conform/inventory/legacy-conform.json"),
-    ),
+    fetchPinnedJson<ConformInventory>(CONFORM_INVENTORY_SOURCE),
     fetchJson<CanonInventory>(
       `https://raw.githubusercontent.com/clockwork-kitten/canon/${CANON_REVISION}/test/characterization/canon-v0.1.0/ledger.json`,
     ),
@@ -967,10 +1033,6 @@ async function readIfExists(path: string): Promise<string> {
     }
     throw error;
   }
-}
-
-async function readJson<T>(path: string): Promise<T> {
-  return JSON.parse(await readFile(path, "utf8")) as T;
 }
 
 function requiredRule(legacyId: string): RuleSeed {

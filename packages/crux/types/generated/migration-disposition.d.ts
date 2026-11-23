@@ -13,11 +13,14 @@ export type DispositionEntry =
       disposition: "replaced";
       replacement: ReplacementIdentity;
       rationale: string;
+      target?: string;
     }
   | {
       legacy: DiagnosticIdentity;
       disposition: "dropped";
       rationale: string;
+      target?: string;
+      intentionalDifference?: string;
     };
 
 /**

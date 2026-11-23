@@ -50,8 +50,29 @@
           "expectedRows": {
             "type": "integer",
             "minimum": 0
+          },
+          "contentSha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
           }
         },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "sourceId": {
+                  "const": "conform"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "contentSha256": true
+              },
+              "required": ["contentSha256"]
+            }
+          }
+        ],
         "unevaluatedProperties": false
       },
       "minItems": 1
@@ -102,6 +123,9 @@
             "type": "string",
             "format": "uri",
             "maxLength": 512
+          },
+          "migration": {
+            "$ref": "#/$defs/migrationDecision"
           }
         },
         "allOf": [
@@ -145,6 +169,59 @@
       "items": {
         "$ref": "https://schemas.clockwork-kitten.dev/crux/migration-disposition/1#/$defs/diagnosticIdentity"
       }
+    }
+  },
+  "$defs": {
+    "migrationDecision": {
+      "type": "object",
+      "required": ["disposition", "target"],
+      "properties": {
+        "disposition": {
+          "enum": ["replaced", "dropped"]
+        },
+        "target": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
+        },
+        "replacement": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/migration-disposition/1#/$defs/replacementIdentity"
+        },
+        "intentionalDifference": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "disposition": {
+                "const": "replaced"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "replacement": true
+            },
+            "required": ["replacement"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "disposition": {
+                "const": "dropped"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intentionalDifference": true
+            },
+            "required": ["intentionalDifference"]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
     }
   },
   "unevaluatedProperties": false

@@ -1877,7 +1877,7 @@
       "inventoryId": "command.check",
       "owner": "conform",
       "rationale": "Check remains an explicit orchestrator command; no alias window is introduced.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "commands",
       "sourceId": "conform"
     },
@@ -1886,7 +1886,7 @@
       "inventoryId": "command.fix",
       "owner": "conform",
       "rationale": "Fix remains an authoring-time command in the future orchestrator.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "commands",
       "sourceId": "conform"
     },
@@ -1895,7 +1895,7 @@
       "inventoryId": "artifact.config.eslint.astro",
       "owner": "crucible",
       "rationale": "Astro lint overlay remains a code-tool config surface.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-artifacts",
       "sourceId": "conform"
     },
@@ -1904,7 +1904,7 @@
       "inventoryId": "artifact.config.eslint.base",
       "owner": "crucible",
       "rationale": "Avoid duplicate authority across Bedrock and ESLint-based enforcement.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-artifacts",
       "sourceId": "conform"
     },
@@ -1913,7 +1913,7 @@
       "inventoryId": "artifact.config.knip.base",
       "owner": "crucible",
       "rationale": "Knip base remains part of code-tool config distribution.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-artifacts",
       "sourceId": "conform"
     },
@@ -1922,7 +1922,7 @@
       "inventoryId": "artifact.config.prettier.astro",
       "owner": "crucible",
       "rationale": "Astro formatting plugin configuration remains a code-tool config surface.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-artifacts",
       "sourceId": "conform"
     },
@@ -1931,7 +1931,7 @@
       "inventoryId": "artifact.config.prettier.base",
       "owner": "crucible",
       "rationale": "Empty base config is still a shipped config contract.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-artifacts",
       "sourceId": "conform"
     },
@@ -1940,7 +1940,7 @@
       "inventoryId": "artifact.config.tsconfig.base",
       "owner": "crucible",
       "rationale": "TypeScript compiler baseline remains code-tool config distribution.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-artifacts",
       "sourceId": "conform"
     },
@@ -1949,7 +1949,7 @@
       "inventoryId": "config.discovery.conform.config.js",
       "owner": "conform",
       "rationale": "Discovery precedence is orchestrator behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
@@ -1958,7 +1958,7 @@
       "inventoryId": "config.discovery.conform.config.json",
       "owner": "conform",
       "rationale": "Discovery precedence is orchestrator behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
@@ -1967,7 +1967,7 @@
       "inventoryId": "config.discovery.conform.config.jsonc",
       "owner": "conform",
       "rationale": "Discovery precedence is orchestrator behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
@@ -1976,7 +1976,7 @@
       "inventoryId": "config.discovery.conform.config.mjs",
       "owner": "conform",
       "rationale": "Discovery precedence is orchestrator behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
@@ -1985,7 +1985,7 @@
       "inventoryId": "config.discovery.conform.config.mts",
       "owner": "conform",
       "rationale": "Discovery precedence is orchestrator behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
@@ -1994,70 +1994,129 @@
       "inventoryId": "config.discovery.conform.config.ts",
       "owner": "conform",
       "rationale": "Discovery precedence is orchestrator behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
     {
       "disposition": "diagnostic-replacement",
       "inventoryId": "config.key.code",
+      "migration": {
+        "disposition": "replaced",
+        "replacement": {
+          "id": "repository.code",
+          "kind": "config-key",
+          "owner": "conform"
+        },
+        "target": "Conform config schema"
+      },
       "owner": "conform",
       "rationale": "Root code block remains config entrypoint for code track.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
     {
       "disposition": "intentional-difference",
       "inventoryId": "config.key.code.bedrock",
+      "migration": {
+        "disposition": "dropped",
+        "intentionalDifference": "Bedrock key is inventoried and must be explicitly dispositioned before reuse.",
+        "target": "Crucible bedrock migration"
+      },
       "owner": "crucible",
       "rationale": "No implicit compatibility layer is allowed.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
     {
       "disposition": "diagnostic-replacement",
       "inventoryId": "config.key.code.eslint",
+      "migration": {
+        "disposition": "replaced",
+        "replacement": {
+          "id": "repository.code.eslint",
+          "kind": "config-key",
+          "owner": "crucible"
+        },
+        "target": "Crucible tool toggles"
+      },
       "owner": "crucible",
       "rationale": "ESLint tool enablement maps to code engine settings.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
     {
       "disposition": "diagnostic-replacement",
       "inventoryId": "config.key.code.knip",
+      "migration": {
+        "disposition": "replaced",
+        "replacement": {
+          "id": "repository.code.knip",
+          "kind": "config-key",
+          "owner": "crucible"
+        },
+        "target": "Crucible tool toggles"
+      },
       "owner": "crucible",
       "rationale": "Knip tool enablement maps to code engine settings.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
     {
       "disposition": "diagnostic-replacement",
       "inventoryId": "config.key.code.prettier",
+      "migration": {
+        "disposition": "replaced",
+        "replacement": {
+          "id": "repository.code.prettier",
+          "kind": "config-key",
+          "owner": "crucible"
+        },
+        "target": "Crucible tool toggles"
+      },
       "owner": "crucible",
       "rationale": "Prettier tool enablement maps to code engine settings.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
     {
       "disposition": "diagnostic-replacement",
       "inventoryId": "config.key.code.tsconfig",
+      "migration": {
+        "disposition": "replaced",
+        "replacement": {
+          "id": "repository.code.tsconfig",
+          "kind": "config-key",
+          "owner": "crucible"
+        },
+        "target": "Crucible typecheck settings"
+      },
       "owner": "crucible",
       "rationale": "TypeScript project path configuration maps to code engine settings.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
     {
       "disposition": "diagnostic-replacement",
       "inventoryId": "config.key.code.typecheck",
+      "migration": {
+        "disposition": "replaced",
+        "replacement": {
+          "id": "repository.code.typecheck",
+          "kind": "config-key",
+          "owner": "crucible"
+        },
+        "target": "Crucible tool toggles"
+      },
       "owner": "crucible",
       "rationale": "Typecheck toggle maps to code engine settings.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
@@ -2066,7 +2125,7 @@
       "inventoryId": "config.loader.jsonc",
       "owner": "conform",
       "rationale": "JSONC and JSON parsing behavior remains config loader behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
@@ -2075,7 +2134,7 @@
       "inventoryId": "config.loader.typescript-default-export",
       "owner": "conform",
       "rationale": "Executable module config loading remains orchestrator implementation behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "config-surfaces",
       "sourceId": "conform"
     },
@@ -2084,7 +2143,7 @@
       "inventoryId": "consumer.incubator",
       "owner": "conform",
       "rationale": "Cross-repo cutover is out of scope for this inventory issue.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "consumers",
       "sourceId": "conform"
     },
@@ -2093,7 +2152,7 @@
       "inventoryId": "consumer.ops",
       "owner": "conform",
       "rationale": "Cross-repo cutover is out of scope for this inventory issue.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "consumers",
       "sourceId": "conform"
     },
@@ -2102,7 +2161,7 @@
       "inventoryId": "consumer.standards",
       "owner": "conform",
       "rationale": "Standards repo remains producer and primary dogfood consumer.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "consumers",
       "sourceId": "conform"
     },
@@ -2111,7 +2170,7 @@
       "inventoryId": "default.cli.check.code",
       "owner": "crucible",
       "rationale": "Code track defaults to enabled when config declares code.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2120,7 +2179,7 @@
       "inventoryId": "default.cli.check.globs",
       "owner": "conform",
       "rationale": "Default markdown glob remains orchestrator-level behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2129,7 +2188,7 @@
       "inventoryId": "default.cli.check.referenceIgnore",
       "owner": "canon",
       "rationale": "Reference ignore list defaults to empty.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2138,7 +2197,7 @@
       "inventoryId": "default.cli.check.references",
       "owner": "canon",
       "rationale": "Reference checks default to enabled unless explicitly disabled.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2147,7 +2206,7 @@
       "inventoryId": "default.cli.fix.code",
       "owner": "crucible",
       "rationale": "Code fixers default to enabled when code track exists.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2156,7 +2215,7 @@
       "inventoryId": "default.cli.fix.globs",
       "owner": "conform",
       "rationale": "Fix default glob remains orchestrator-level behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2165,7 +2224,7 @@
       "inventoryId": "default.cli.fix.llms",
       "owner": "canon",
       "rationale": "llms regeneration defaults to enabled in fix mode.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2174,7 +2233,7 @@
       "inventoryId": "default.config.default.bedrockEmptyArray",
       "owner": "crucible",
       "rationale": "Legacy empty-array normalization must be explicitly dispositioned before migration.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2183,7 +2242,7 @@
       "inventoryId": "default.config.default.bedrockFalse",
       "owner": "crucible",
       "rationale": "Bedrock behavior remains intentionally unresolved until rule-level mapping is complete.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2192,7 +2251,7 @@
       "inventoryId": "default.config.default.bedrockWhenTrue",
       "owner": "crucible",
       "rationale": "Bedrock enablement defaults require explicit migration disposition before reuse.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2201,7 +2260,7 @@
       "inventoryId": "default.config.default.docsOnlyCode",
       "owner": "canon",
       "rationale": "No conform config file resolves to docs-only execution with no code track.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2210,7 +2269,7 @@
       "inventoryId": "default.config.default.docsOnlySource",
       "owner": "canon",
       "rationale": "No conform config file reports the stable docs-only source string.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2219,7 +2278,7 @@
       "inventoryId": "default.config.default.eslint",
       "owner": "crucible",
       "rationale": "ESLint defaults to enabled in resolved code config.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2228,7 +2287,7 @@
       "inventoryId": "default.config.default.knip",
       "owner": "crucible",
       "rationale": "Knip defaults to enabled in resolved code config.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2237,7 +2296,7 @@
       "inventoryId": "default.config.default.noCodeBlock",
       "owner": "canon",
       "rationale": "Config objects without a code block resolve to docs-only execution.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2246,7 +2305,7 @@
       "inventoryId": "default.config.default.prettier",
       "owner": "crucible",
       "rationale": "Prettier defaults to enabled in resolved code config.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2255,7 +2314,7 @@
       "inventoryId": "default.config.default.tsconfig",
       "owner": "crucible",
       "rationale": "Typecheck default path remains in code-track defaults.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2264,7 +2323,7 @@
       "inventoryId": "default.config.default.typecheck",
       "owner": "crucible",
       "rationale": "Typecheck defaults to enabled in resolved code config.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "defaults",
       "sourceId": "conform"
     },
@@ -2273,7 +2332,7 @@
       "inventoryId": "export.internal.CheckArgs",
       "owner": "conform",
       "rationale": "CLI argument typing remains internal unless explicitly re-exported.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2282,7 +2341,7 @@
       "inventoryId": "export.internal.DEFAULT_GLOBS",
       "owner": "conform",
       "rationale": "CLI defaults are implementation details, not package export map entries.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2291,7 +2350,7 @@
       "inventoryId": "export.internal.FixArgs",
       "owner": "conform",
       "rationale": "Fix argument typing is internal unless promoted in exports map.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2300,7 +2359,7 @@
       "inventoryId": "export.internal.main",
       "owner": "conform",
       "rationale": "Entrypoint function remains source-level export only.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2309,7 +2368,7 @@
       "inventoryId": "export.internal.parseCheckArgs",
       "owner": "conform",
       "rationale": "Parser function is test seam/internal API and not in exports map.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2318,7 +2377,7 @@
       "inventoryId": "export.internal.parseFixArgs",
       "owner": "conform",
       "rationale": "Parser function is test seam/internal API and not in exports map.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2327,7 +2386,7 @@
       "inventoryId": "export.internal.runCheck",
       "owner": "conform",
       "rationale": "Runner is internal implementation API not listed in package exports map.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2336,7 +2395,7 @@
       "inventoryId": "export.internal.runFix",
       "owner": "conform",
       "rationale": "Fix runner is implementation detail and not public package API.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2345,7 +2404,7 @@
       "inventoryId": "export.package.config-eslint-astro",
       "owner": "crucible",
       "rationale": "Astro lint config remains code-tool configuration, not Conform logic.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2354,7 +2413,7 @@
       "inventoryId": "export.package.config-eslint-base",
       "owner": "crucible",
       "rationale": "Code tool config ownership maps to Crucible.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2363,7 +2422,7 @@
       "inventoryId": "export.package.config-knip-base",
       "owner": "crucible",
       "rationale": "Static dead-code config ownership is code-engine scope.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2372,7 +2431,7 @@
       "inventoryId": "export.package.config-prettier-astro",
       "owner": "crucible",
       "rationale": "Astro formatting config is code tooling, not Conform orchestration.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2381,7 +2440,7 @@
       "inventoryId": "export.package.config-prettier-base",
       "owner": "crucible",
       "rationale": "Prettier config ownership belongs to the code engine track.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2390,7 +2449,7 @@
       "inventoryId": "export.package.config-tsconfig-base",
       "owner": "crucible",
       "rationale": "TypeScript config defaults are part of the code-tool surface.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2399,7 +2458,7 @@
       "inventoryId": "export.package.root",
       "owner": "conform",
       "rationale": "Root export remains package API authority.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2408,7 +2467,7 @@
       "inventoryId": "export.root.CodeConfig",
       "owner": "conform",
       "rationale": "Authored config shape remains part of the orchestrator contract.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2417,7 +2476,7 @@
       "inventoryId": "export.root.CodeTool",
       "owner": "crucible",
       "rationale": "Code tool typing maps to the code engine.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2426,7 +2485,7 @@
       "inventoryId": "export.root.CodeToolResult",
       "owner": "crucible",
       "rationale": "Tool result typing belongs with code execution.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2435,7 +2494,7 @@
       "inventoryId": "export.root.CONFIG_FILENAMES",
       "owner": "conform",
       "rationale": "Config discovery precedence belongs to orchestrator setup.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2444,7 +2503,7 @@
       "inventoryId": "export.root.ConfigError",
       "owner": "conform",
       "rationale": "Config load failures remain orchestrator concerns.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2453,7 +2512,7 @@
       "inventoryId": "export.root.ConformConfig",
       "owner": "conform",
       "rationale": "The root config type remains a public orchestrator interface.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2462,7 +2521,7 @@
       "inventoryId": "export.root.DEFAULT_BEDROCK_FILES",
       "owner": "crucible",
       "rationale": "Rule-level bedrock disposition is unresolved and must stay explicit.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2471,7 +2530,7 @@
       "inventoryId": "export.root.DEFAULT_TSCONFIG",
       "owner": "crucible",
       "rationale": "Typecheck default path is part of code-track orchestration.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2480,7 +2539,7 @@
       "inventoryId": "export.root.defineConfig",
       "owner": "conform",
       "rationale": "Helper API remains in Conform-facing config authoring.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2489,7 +2548,7 @@
       "inventoryId": "export.root.discoverConfigPath",
       "owner": "conform",
       "rationale": "Config path discovery is orchestrator behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2498,7 +2557,7 @@
       "inventoryId": "export.root.DocsMode",
       "owner": "canon",
       "rationale": "Docs mode typing describes pass-through behavior to Canon.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2507,7 +2566,7 @@
       "inventoryId": "export.root.enabledTools",
       "owner": "crucible",
       "rationale": "Code tool ordering logic belongs to code ownership.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2516,7 +2575,7 @@
       "inventoryId": "export.root.loadConfigFile",
       "owner": "conform",
       "rationale": "Config parsing/import behavior remains orchestrator-owned.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2525,7 +2584,7 @@
       "inventoryId": "export.root.resolveBin",
       "owner": "crucible",
       "rationale": "Tool-bin resolution is a code adapter implementation concern.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2534,7 +2593,7 @@
       "inventoryId": "export.root.resolveCodeConfig",
       "owner": "crucible",
       "rationale": "Code defaults are resolved before delegating execution.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2543,7 +2602,7 @@
       "inventoryId": "export.root.resolveConfig",
       "owner": "conform",
       "rationale": "Top-level config resolution remains orchestrator behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2552,7 +2611,7 @@
       "inventoryId": "export.root.ResolvedCodeConfig",
       "owner": "crucible",
       "rationale": "Resolved code settings define interop between orchestrator and code track.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2561,7 +2620,7 @@
       "inventoryId": "export.root.ResolvedConfig",
       "owner": "conform",
       "rationale": "Resolved config metadata is orchestrator API surface.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2570,7 +2629,7 @@
       "inventoryId": "export.root.RunCodeOptions",
       "owner": "crucible",
       "rationale": "Code runner options are code-engine contract.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2579,7 +2638,7 @@
       "inventoryId": "export.root.runCodeTrack",
       "owner": "crucible",
       "rationale": "Code execution moves under Crucible ownership.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2588,7 +2647,7 @@
       "inventoryId": "export.root.RunDocsOptions",
       "owner": "canon",
       "rationale": "Docs runner options stay in the orchestrator layer.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2597,7 +2656,7 @@
       "inventoryId": "export.root.runDocsTrack",
       "owner": "canon",
       "rationale": "Docs execution remains Canon-owned behavior invoked by Conform.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2606,7 +2665,7 @@
       "inventoryId": "export.root.runProcess",
       "owner": "crucible",
       "rationale": "Default process launcher belongs in code runner implementation.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2615,7 +2674,7 @@
       "inventoryId": "export.root.RunProcess",
       "owner": "crucible",
       "rationale": "Subprocess abstraction is adapter internals for code checks.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2624,7 +2683,7 @@
       "inventoryId": "export.root.toolArgs",
       "owner": "crucible",
       "rationale": "Per-tool argv mapping is code behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "exports",
       "sourceId": "conform"
     },
@@ -2633,7 +2692,7 @@
       "inventoryId": "flag.check.config",
       "owner": "conform",
       "rationale": "Explicit config path selection stays in orchestrator scope.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2642,7 +2701,7 @@
       "inventoryId": "flag.check.config-equals",
       "owner": "conform",
       "rationale": "Inline assignment form is part of the current parser surface.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2651,7 +2710,7 @@
       "inventoryId": "flag.check.help",
       "owner": "conform",
       "rationale": "The split CLI may change help rendering as an intentional UX cleanup.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2660,7 +2719,7 @@
       "inventoryId": "flag.check.no-code",
       "owner": "crucible",
       "rationale": "This is an orchestrator-only switch and remains Conform-owned.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2669,7 +2728,7 @@
       "inventoryId": "flag.check.no-references",
       "owner": "canon",
       "rationale": "This is docs-track delegation behavior and maps to Canon-owned semantics.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2678,7 +2737,7 @@
       "inventoryId": "flag.check.reference-ignore",
       "owner": "canon",
       "rationale": "This is pass-through docs behavior owned by Canon and orchestrated by Conform.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2687,7 +2746,7 @@
       "inventoryId": "flag.check.reference-ignore-equals",
       "owner": "canon",
       "rationale": "Inline assignment form exists in legacy parser behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2696,7 +2755,7 @@
       "inventoryId": "flag.check.short-config",
       "owner": "conform",
       "rationale": "No short-flag alias commitment is made in this diagnostic tranche.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2705,7 +2764,7 @@
       "inventoryId": "flag.check.short-help",
       "owner": "conform",
       "rationale": "This inventory is diagnostic and does not guarantee future aliases.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2714,7 +2773,7 @@
       "inventoryId": "flag.fix.config",
       "owner": "conform",
       "rationale": "Explicit config path selection remains orchestrator behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2723,7 +2782,7 @@
       "inventoryId": "flag.fix.config-equals",
       "owner": "conform",
       "rationale": "Inline assignment form is present in current parser behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2732,7 +2791,7 @@
       "inventoryId": "flag.fix.help",
       "owner": "conform",
       "rationale": "Help output shape may intentionally change without alias windows.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2741,7 +2800,7 @@
       "inventoryId": "flag.fix.no-code",
       "owner": "crucible",
       "rationale": "Code fixer gating remains orchestrator-owned.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2750,7 +2809,7 @@
       "inventoryId": "flag.fix.no-llms",
       "owner": "canon",
       "rationale": "This docs-track toggle is Canon-owned behavior delegated by Conform.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2759,7 +2818,7 @@
       "inventoryId": "flag.fix.short-config",
       "owner": "conform",
       "rationale": "Compatibility aliases are explicitly out of scope.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2768,7 +2827,7 @@
       "inventoryId": "flag.fix.short-help",
       "owner": "conform",
       "rationale": "No compatibility alias promises in this tranche.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "flags",
       "sourceId": "conform"
     },
@@ -2777,7 +2836,7 @@
       "inventoryId": "adapter.code.bedrock",
       "owner": "crucible",
       "rationale": "Do not create compatibility aliases or silent bedrock carryover.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "tool-adapters",
       "sourceId": "conform"
     },
@@ -2786,7 +2845,7 @@
       "inventoryId": "adapter.code.eslint",
       "owner": "crucible",
       "rationale": "ESLint adapter behavior maps directly to code engine ownership.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "tool-adapters",
       "sourceId": "conform"
     },
@@ -2795,7 +2854,7 @@
       "inventoryId": "adapter.code.knip",
       "owner": "crucible",
       "rationale": "Knip gate adapter is part of code engine ownership.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "tool-adapters",
       "sourceId": "conform"
     },
@@ -2804,7 +2863,7 @@
       "inventoryId": "adapter.code.prettier",
       "owner": "crucible",
       "rationale": "Prettier adapter behavior maps to code engine ownership.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "tool-adapters",
       "sourceId": "conform"
     },
@@ -2813,7 +2872,7 @@
       "inventoryId": "adapter.code.typecheck",
       "owner": "crucible",
       "rationale": "TypeScript gate adapter maps to code engine ownership.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "tool-adapters",
       "sourceId": "conform"
     },
@@ -2822,7 +2881,7 @@
       "inventoryId": "adapter.docs.canon",
       "owner": "canon",
       "rationale": "Docs conformance is Canon-owned and invoked by Conform.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "tool-adapters",
       "sourceId": "conform"
     },
@@ -2831,7 +2890,7 @@
       "inventoryId": "workflow.lefthook.base",
       "owner": "conform",
       "rationale": "Hook is a local trigger for Conform and remains orchestrator contract behavior.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "workflows",
       "sourceId": "conform"
     },
@@ -2840,7 +2899,7 @@
       "inventoryId": "workflow.markdown-conformance",
       "owner": "canon",
       "rationale": "Workflow now orchestrates Canon directly; record as legacy Conform-adjacent surface.",
-      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/inventory/legacy-conform.json",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
       "section": "workflows",
       "sourceId": "conform"
     }
@@ -2849,10 +2908,11 @@
   "sources": [
     {
       "artifact": "packages/conform/inventory/legacy-conform.json",
-      "expectedRows": 108,
+      "contentSha256": "3fabef6c3096be1383ac6757ae5721d97ad6fa64d133597268a052aca4ab7288",
       "repository": "clockwork-kitten/standards",
-      "revision": "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5",
-      "sourceId": "conform"
+      "revision": "9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b",
+      "sourceId": "conform",
+      "expectedRows": 108
     },
     {
       "artifact": "test/characterization/canon-v0.1.0/ledger.json",

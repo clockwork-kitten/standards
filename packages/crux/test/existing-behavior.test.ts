@@ -1,10 +1,15 @@
 import addFormats from "ajv-formats";
 import Ajv2020 from "ajv/dist/2020.js";
 import { describe, expect, test } from "bun:test";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  CONFORM_INVENTORY_SOURCE,
+  fetchPinnedJson,
+} from "../scripts/existing-behavior-provenance.js";
 import { validateExistingBehavior } from "../scripts/existing-behavior-validation.js";
 
 const PACKAGE_ROOT = fileURLToPath(new URL("..", import.meta.url));
@@ -35,6 +40,10 @@ async function createValidator(): Promise<Ajv2020> {
     );
   }
   return ajv;
+}
+
+function mutatedFetch(): Promise<Response> {
+  return Promise.resolve(new Response("{}"));
 }
 
 async function readJson<T>(relativePath: string): Promise<T> {
@@ -69,6 +78,10 @@ async function readRecords() {
     policy,
     reconciliation,
   };
+}
+
+function unavailableFetch(): Promise<Response> {
+  return Promise.resolve(new Response("", { status: 404 }));
 }
 
 describe("authoritative existing-behavior records", () => {
@@ -146,6 +159,136 @@ describe("authoritative existing-behavior records", () => {
         records.migration.entries,
       ),
     ).toContain(`vector outcome mismatch: ${vector.vectorId}`);
+  });
+
+  test("fails closed when pinned source content is missing or mutated", async () => {
+    await expect(
+      fetchPinnedJson(CONFORM_INVENTORY_SOURCE, unavailableFetch),
+    ).rejects.toThrow("Pinned source is unavailable");
+
+    await expect(
+      fetchPinnedJson(CONFORM_INVENTORY_SOURCE, mutatedFetch),
+    ).rejects.toThrow("Pinned source digest mismatch");
+
+    const content = "{}";
+    const fixtureSource = {
+      ...CONFORM_INVENTORY_SOURCE,
+      contentSha256: createHash("sha256").update(content).digest("hex"),
+    };
+    const fixtureFetch = () => Promise.resolve(new Response(content));
+    await expect(fetchPinnedJson(fixtureSource, fixtureFetch)).resolves.toEqual(
+      {},
+    );
+  });
+
+  test("rejects stale or incomplete Conform provenance declarations", async () => {
+    const records = await readRecords();
+    for (const field of ["revision", "artifact", "contentSha256"] as const) {
+      const reconciliation = structuredClone(records.reconciliation);
+      const source = reconciliation.sources.find(
+        (candidate) => candidate.sourceId === "conform",
+      );
+      if (source === undefined) throw new Error("Expected Conform source");
+      source[field] = "";
+      expect(
+        validateExistingBehavior(
+          records.policy,
+          records.catalogs,
+          reconciliation,
+          records.migration.entries,
+        ),
+      ).toContainEqual(
+        expect.stringContaining(
+          `source provenance mismatch for conform ${field}`,
+        ),
+      );
+    }
+
+    const missing = structuredClone(records.reconciliation);
+    missing.sources = missing.sources.filter(
+      (source) => source.sourceId !== "conform",
+    );
+    expect(
+      validateExistingBehavior(
+        records.policy,
+        records.catalogs,
+        missing,
+        records.migration.entries,
+      ),
+    ).toContain(
+      "source provenance count mismatch for conform: expected 1, received 0",
+    );
+  });
+
+  test("rejects cross-artifact code-config decision conflicts", async () => {
+    const records = await readRecords();
+    const legacyId = "config.key.code.eslint";
+    const entry = records.migration.entries.find(
+      (candidate) => candidate.legacy.id === legacyId,
+    );
+    if (entry?.replacement === undefined) {
+      throw new Error("Expected code-config replacement");
+    }
+
+    const mutations = [
+      {
+        error: `migration disposition conflict: config-key:${legacyId}`,
+        mutate: (candidate: typeof entry) => {
+          candidate.disposition = "dropped";
+        },
+      },
+      {
+        error: `migration target conflict: config-key:${legacyId}`,
+        mutate: (candidate: typeof entry) => {
+          candidate.target = "Conflicting target";
+        },
+      },
+      {
+        error: `migration owner conflict: config-key:${legacyId}`,
+        mutate: (candidate: typeof entry) => {
+          candidate.replacement!.owner = "conform";
+        },
+      },
+      {
+        error: `migration replacement conflict: config-key:${legacyId}`,
+        mutate: (candidate: typeof entry) => {
+          candidate.replacement!.id = "repository.code.conflict";
+        },
+      },
+    ];
+    for (const mutation of mutations) {
+      const entries = structuredClone(records.migration.entries);
+      const candidate = entries.find(
+        (item) => item.legacy.id === legacyId,
+      ) as typeof entry;
+      mutation.mutate(candidate);
+      expect(
+        validateExistingBehavior(
+          records.policy,
+          records.catalogs,
+          records.reconciliation,
+          entries,
+        ),
+      ).toContain(mutation.error);
+    }
+
+    const differenceId = "config.key.code.bedrock";
+    const differenceEntries = structuredClone(records.migration.entries);
+    const difference = differenceEntries.find(
+      (candidate) => candidate.legacy.id === differenceId,
+    );
+    if (difference === undefined) {
+      throw new Error("Expected Bedrock intentional difference");
+    }
+    difference.intentionalDifference = "Conflicting difference";
+    expect(
+      validateExistingBehavior(
+        records.policy,
+        records.catalogs,
+        records.reconciliation,
+        differenceEntries,
+      ),
+    ).toContain(`intentional-difference conflict: config-key:${differenceId}`);
   });
 
   test("rejects missing, duplicate, unknown, wrong-owner, overlap, and orphan mutations", async () => {

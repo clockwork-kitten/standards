@@ -55,8 +55,10 @@ closed and reviewable without inventing a Conform-owned behavior rule.
 
 Revision 1 reconciles 325 frozen inventory rows exactly once:
 
-- 108 pre-split Conform rows at
-  `50f290ddce8984ace6f9c7a5e161242f9ee4b0e5`;
+- 108 pre-split Conform rows from the immutable P01 inventory artifact at
+  `9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b` (derived from legacy source
+  `50f290ddce8984ace6f9c7a5e161242f9ee4b0e5`, SHA-256
+  `3fabef6c3096be1383ac6757ae5721d97ad6fa64d133597268a052aca4ab7288`);
 - 11 Canon characterization-ledger rows at
   `7717e5baacb514ae6085e4c3bef026a371df7d08`;
 - 181 Bedrock behavior rows and 25 Bedrock consumer-evidence rows at
@@ -64,9 +66,12 @@ Revision 1 reconciles 325 frozen inventory rows exactly once:
 
 The 76-entry migration ledger covers every distinct known legacy command,
 config-key, and rule identity; the frozen inputs declare no suppression
-mechanism. Replacements are diagnostic only. Nothing in the data authorizes
-command execution, rule-ID translation, suppression translation, config
-translation, or a compatibility window. Bedrock behavior not selected as one
+mechanism. Code-config outcomes are generated from the reviewed reconciliation
+decision, and validation compares disposition, owner, target, replacement, and
+intentional-difference metadata across both artifacts. Replacements are
+diagnostic only. Nothing in the data authorizes command execution, rule-ID
+translation, suppression translation, config translation, or a compatibility
+window. Bedrock behavior not selected as one
 of the 12 reviewed concepts is explicitly dropped with rationale; functional
 consumer cutovers remain separately deferred.
 
@@ -154,7 +159,9 @@ bun run --cwd packages/crux test
 `check:generated` regenerates declarations in memory and fails when
 `types/index.d.ts` differs, so schema changes cannot land with stale types.
 `check:existing-behavior` regenerates records from revision-pinned HTTPS source
-artifacts and fails on drift. The committed reconciliation validator also fails
+artifacts and fails on path, revision, or content-digest drift. The committed
+reconciliation validator independently checks the declared Conform provenance
+and also fails
 for missing, duplicate, unknown, wrong-owner, overlapping, or orphaned rows,
 rules, vectors, and dispositions. Its inverted-vector test proves that changing
 an expected result fails validation.
