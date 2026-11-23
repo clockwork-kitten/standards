@@ -1,0 +1,2939 @@
+{
+  "legacyIdentities": [
+    { "id": "canon add-decision", "kind": "command" },
+    { "id": "canon build", "kind": "command" },
+    { "id": "canon check", "kind": "command" },
+    { "id": "canon drain", "kind": "command" },
+    { "id": "canon fix", "kind": "command" },
+    { "id": "canon llms", "kind": "command" },
+    { "id": "command.check", "kind": "command" },
+    { "id": "command.fix", "kind": "command" },
+    { "id": "canon.config.ts", "kind": "config-key" },
+    { "id": "config.key.code", "kind": "config-key" },
+    { "id": "config.key.code.bedrock", "kind": "config-key" },
+    { "id": "config.key.code.eslint", "kind": "config-key" },
+    { "id": "config.key.code.knip", "kind": "config-key" },
+    { "id": "config.key.code.prettier", "kind": "config-key" },
+    { "id": "config.key.code.tsconfig", "kind": "config-key" },
+    { "id": "config.key.code.typecheck", "kind": "config-key" },
+    { "id": "async-await", "kind": "rule" },
+    { "id": "equality", "kind": "rule" },
+    { "id": "immutable-array", "kind": "rule" },
+    { "id": "immutable-object", "kind": "rule" },
+    { "id": "loops", "kind": "rule" },
+    { "id": "no-any", "kind": "rule" },
+    { "id": "no-array-constructor", "kind": "rule" },
+    { "id": "no-array-index-assign", "kind": "rule" },
+    { "id": "no-array-pop", "kind": "rule" },
+    { "id": "no-array-push", "kind": "rule" },
+    { "id": "no-array-shift", "kind": "rule" },
+    { "id": "no-array-splice", "kind": "rule" },
+    { "id": "no-array-unshift", "kind": "rule" },
+    { "id": "no-arrow-functions", "kind": "rule" },
+    { "id": "no-async-without-await", "kind": "rule" },
+    { "id": "no-bare-catch", "kind": "rule" },
+    { "id": "no-break", "kind": "rule" },
+    { "id": "no-classes", "kind": "rule" },
+    { "id": "no-continue", "kind": "rule" },
+    { "id": "no-default-parameters", "kind": "rule" },
+    { "id": "no-delete", "kind": "rule" },
+    { "id": "no-do-while", "kind": "rule" },
+    { "id": "no-enum", "kind": "rule" },
+    { "id": "no-for-each", "kind": "rule" },
+    { "id": "no-for-in", "kind": "rule" },
+    { "id": "no-for-of", "kind": "rule" },
+    { "id": "no-general-destructuring", "kind": "rule" },
+    { "id": "no-has-own-property", "kind": "rule" },
+    { "id": "no-increment", "kind": "rule" },
+    { "id": "no-interface", "kind": "rule" },
+    { "id": "no-labeled-statements", "kind": "rule" },
+    { "id": "no-logical-and-execution", "kind": "rule" },
+    { "id": "no-logical-or-default", "kind": "rule" },
+    { "id": "no-mutating-sort", "kind": "rule" },
+    { "id": "no-namespace", "kind": "rule" },
+    { "id": "no-new-promise", "kind": "rule" },
+    { "id": "no-non-null-assertion", "kind": "rule" },
+    { "id": "no-nullish-coalescing", "kind": "rule" },
+    { "id": "no-optional-chaining", "kind": "rule" },
+    { "id": "no-promise-any", "kind": "rule" },
+    { "id": "no-promise-race", "kind": "rule" },
+    { "id": "no-promise-then", "kind": "rule" },
+    { "id": "no-property-assign", "kind": "rule" },
+    { "id": "no-shortcircuit-control", "kind": "rule" },
+    { "id": "no-shorthand-operators", "kind": "rule" },
+    { "id": "no-sort-without-comparator", "kind": "rule" },
+    { "id": "no-sparse-arrays", "kind": "rule" },
+    { "id": "no-spread-args", "kind": "rule" },
+    { "id": "no-switch", "kind": "rule" },
+    { "id": "no-template-literals", "kind": "rule" },
+    { "id": "no-ternary", "kind": "rule" },
+    { "id": "no-this", "kind": "rule" },
+    { "id": "no-type-assertion", "kind": "rule" },
+    { "id": "no-unhandled-rejection", "kind": "rule" },
+    { "id": "no-var", "kind": "rule" },
+    { "id": "no-while", "kind": "rule" },
+    { "id": "promise-rules", "kind": "rule" },
+    { "id": "require-return-type", "kind": "rule" },
+    { "id": "typescript-strict", "kind": "rule" },
+    { "id": "var-to-const", "kind": "rule" }
+  ],
+  "revision": 1,
+  "rows": [
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "detectAnyType",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/no-explicit-any",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "detectArrayConstructor",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/no-array-constructor",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectAsyncNoAwait",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectBannedPromiseMethods",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectBareAwait",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "detectBareCatch",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/unknown-catch-variable",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectBreak",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectClassDeclaration",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectClassExpression",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectContinue",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectDefaultParams",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectDeleteProp",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectDoWhile",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectEnum",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectForEach",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectIndexedAssign",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectInterface",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectLogicalAndExec",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectLogicalOrDefault",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "detectMissingReturnType",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/explicit-return-type",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "detectNamespace",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/no-typescript-namespace",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectNewPromise",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "detectNonNullAssertion",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/no-non-null-assertion",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectNullishCoalescing",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectOptionalChain",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectPop",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectPromiseChains",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectPropertyAssign",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectShift",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectSortNoComparator",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectSplice",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectSwitch",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectTaggedTemplateLiterals",
+      "rationale": "Dropped-unreachable: exported detector is not wired in reporter pass registration.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectTernary",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectThisExpression",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectTypeAssertion",
+      "rationale": "Diagnostic-only evidence: detector inherits the concept disposition of its legacy rule IDs; output compatibility is not preserved.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "detectUpdateExpressionInExpression",
+      "rationale": "Dropped-unreachable: exported detector is not wired in reporter pass registration.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "detectors",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "arrowToFunctionExpression",
+      "rationale": "Bedrock AST fixer is retired; approved concepts are reimplemented under Crucible ownership (#133), without compatibility aliases.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "compoundAssignToExplicit",
+      "rationale": "Bedrock AST fixer is retired; approved concepts are reimplemented under Crucible ownership (#133), without compatibility aliases.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "equalityToStrict",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/strict-equality",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "forInToIndexed",
+      "rationale": "Bedrock AST fixer is retired; approved concepts are reimplemented under Crucible ownership (#133), without compatibility aliases.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "forOfToIndexed",
+      "rationale": "Bedrock AST fixer is retired; approved concepts are reimplemented under Crucible ownership (#133), without compatibility aliases.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "rewriteTemplateLiterals",
+      "rationale": "Bedrock AST fixer is retired; approved concepts are reimplemented under Crucible ownership (#133), without compatibility aliases.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "transformDefaultParams",
+      "rationale": "Bedrock AST fixer is retired; approved concepts are reimplemented under Crucible ownership (#133), without compatibility aliases.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "transformForEach",
+      "rationale": "Bedrock AST fixer is retired; approved concepts are reimplemented under Crucible ownership (#133), without compatibility aliases.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "transformHasOwnProperty",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/prefer-object-has-own",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "transformPush",
+      "rationale": "Bedrock AST fixer is retired; approved concepts are reimplemented under Crucible ownership (#133), without compatibility aliases.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "transformSort",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/non-mutating-sort",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "transformSparseArrays",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/no-sparse-arrays",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "transformUnshift",
+      "rationale": "Bedrock AST fixer is retired; approved concepts are reimplemented under Crucible ownership (#133), without compatibility aliases.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "updateExpressionToExplicit",
+      "rationale": "Bedrock AST fixer is retired; approved concepts are reimplemented under Crucible ownership (#133), without compatibility aliases.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "varToConst",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/prefer-const",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "whileToFor",
+      "rationale": "Bedrock AST fixer is retired; approved concepts are reimplemented under Crucible ownership (#133), without compatibility aliases.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "fixers",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "async-await",
+      "rationale": "Diagnostic-only evidence: coarse Bedrock reporter ID is retired and is not preserved as an alias in the clean break.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "reporter-ids",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "immutable-array",
+      "rationale": "Diagnostic-only evidence: coarse Bedrock reporter ID is retired and is not preserved as an alias in the clean break.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "reporter-ids",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "immutable-object",
+      "rationale": "Diagnostic-only evidence: coarse Bedrock reporter ID is retired and is not preserved as an alias in the clean break.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "reporter-ids",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "loops",
+      "rationale": "Diagnostic-only evidence: coarse Bedrock reporter ID is retired and is not preserved as an alias in the clean break.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "reporter-ids",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-arrow-functions",
+      "rationale": "Diagnostic-only evidence: coarse Bedrock reporter ID is retired and is not preserved as an alias in the clean break.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "reporter-ids",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-classes",
+      "rationale": "Diagnostic-only evidence: coarse Bedrock reporter ID is retired and is not preserved as an alias in the clean break.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "reporter-ids",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-shortcircuit-control",
+      "rationale": "Diagnostic-only evidence: coarse Bedrock reporter ID is retired and is not preserved as an alias in the clean break.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "reporter-ids",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "promise-rules",
+      "rationale": "Diagnostic-only evidence: coarse Bedrock reporter ID is retired and is not preserved as an alias in the clean break.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "reporter-ids",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "typescript-strict",
+      "rationale": "Diagnostic-only evidence: coarse Bedrock reporter ID is retired and is not preserved as an alias in the clean break.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "reporter-ids",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "equality",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/strict-equality",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "no-any",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/no-explicit-any",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "no-array-constructor",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/no-array-constructor",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-array-index-assign",
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-array-pop",
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-array-push",
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-array-shift",
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-array-splice",
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-array-unshift",
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-arrow-functions",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-async-without-await",
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "no-bare-catch",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/unknown-catch-variable",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-break",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-classes",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-continue",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-default-parameters",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-delete",
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-do-while",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-enum",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-for-each",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-for-in",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-for-of",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-general-destructuring",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "no-has-own-property",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/prefer-object-has-own",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-increment",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-interface",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-labeled-statements",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-logical-and-execution",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-logical-or-default",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "no-mutating-sort",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/non-mutating-sort",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "no-namespace",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/no-typescript-namespace",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-new-promise",
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "no-non-null-assertion",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/no-non-null-assertion",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-nullish-coalescing",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-optional-chaining",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-promise-any",
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-promise-race",
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-promise-then",
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-property-assign",
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-shorthand-operators",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-sort-without-comparator",
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "no-sparse-arrays",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/no-sparse-arrays",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-spread-args",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-switch",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-template-literals",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-ternary",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-this",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-type-assertion",
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-unhandled-rejection",
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "no-var",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/no-var",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "no-while",
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "require-return-type",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/explicit-return-type",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "var-to-const",
+      "owner": "crucible",
+      "rationale": "The reviewed Bedrock concept maps to one permanent Crucible-owned Crux rule; legacy IDs remain diagnostic-only.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "ruleId": "crux/code/prefer-const",
+      "section": "rules",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/args.ts:FIX_FLAG",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/args.ts:parseArgs",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/args.ts:REPORT_FLAG",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/index.ts:main",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:addFileIfNew",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:ALL_TRANSFORM_PASSES",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:detectParser",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:findBaseIndex",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:globToRegex",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:isGlobPattern",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:isSupported",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:resolveDirectPattern",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:resolveGlobPattern",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:resolvePatterns",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:run",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:runFix",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:runReport",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:SUPPORTED_EXTENSIONS",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:walkDir",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:declaration:src/cli/runner.ts:walkEntry",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:module:src/cli/args.ts",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:module:src/cli/index.ts",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:module:src/cli/runner.ts",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "cli:statement:src/cli/index.ts:0",
+      "rationale": "Dropped in the clean break: Bedrock flags, input expansion, parser routing, modes, and exit behavior receive no command or compatibility alias.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "generated-artifact:eslint-config-bedrock.json",
+      "rationale": "Dropped in the clean break: Bedrock package/config identity is retired in favor of Crucible-owned bundles under #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "generated-artifact:packages/eslint-config-bedrock/index.js",
+      "rationale": "Dropped in the clean break: Bedrock package/config identity is retired in favor of Crucible-owned bundles under #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "generated-artifact:RULES.md",
+      "rationale": "Dropped in the clean break: Bedrock package/config identity is retired in favor of Crucible-owned bundles under #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package-bin:bedrock:bedrock",
+      "rationale": "Dropped in the clean break: Bedrock package/config identity is retired in favor of Crucible-owned bundles under #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package-script:bedrock:bedrock",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package-script:bedrock:build",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package-script:bedrock:check",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package-script:bedrock:ci",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package-script:bedrock:generate",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package-script:bedrock:inventory:check",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package-script:bedrock:inventory:generate",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package-script:bedrock:lint",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package-script:bedrock:release",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package-script:bedrock:test",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package-script:bedrock:test:coverage",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package-script:bedrock:typecheck",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package:bedrock",
+      "rationale": "Dropped in the clean break: Bedrock package/config identity is retired in favor of Crucible-owned bundles under #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "package:eslint-config-bedrock",
+      "rationale": "Dropped in the clean break: Bedrock package/config identity is retired in favor of Crucible-owned bundles under #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:declaration:src/reporter/format.ts:CATEGORY_WIDTH",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:declaration:src/reporter/format.ts:countByCategory",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:declaration:src/reporter/format.ts:formatReport",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:declaration:src/reporter/format.ts:formatResultLines",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:declaration:src/reporter/format.ts:formatViolationLine",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:declaration:src/reporter/format.ts:padRight",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:declaration:src/reporter/format.ts:RULE_WIDTH",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:declaration:src/reporter/index.ts:formatReport",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:declaration:src/reporter/index.ts:reportFile",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:declaration:src/reporter/rules.ts:violationPasses",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:declaration:src/reporter/run.ts:createViolationCollector",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:declaration:src/reporter/run.ts:runReport",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:module:src/reporter/format.ts",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:module:src/reporter/index.ts",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:module:src/reporter/rules.ts",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "reporter:module:src/reporter/run.ts",
+      "rationale": "Diagnostic-only evidence: Bedrock rendering, parser selection, grounding, and exit behavior are retired; canonical output contracts are owned by #134.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "script-file:scripts/check-bedrock-inventory.ts",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "script-file:scripts/generate-inventory.ts",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "script-file:scripts/generate.ts",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "workflow-job:.github/workflows/ci.yml:ci",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "workflow-job:.github/workflows/ci.yml:publish-eslint-config",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "workflow-job:.github/workflows/release.yml:release",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "workflow:.github/workflows/ci.yml",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "workflow:.github/workflows/release.yml",
+      "rationale": "Dropped with Bedrock repository retirement under #135; this build/release/development surface is not a public compatibility contract.",
+      "reference": "https://github.com/clockwork-kitten/bedrock/blob/3f7035d1c9b11cef83e30d450e463ee84106d525/docs/bedrock-disposition.json",
+      "section": "surfaces",
+      "sourceId": "bedrock"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock --fix:clockwork-kitten/standards:packages/conform/configs/eslint.base.js",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/configs/eslint.base.js",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock --fix:clockwork-kitten/standards:ROADMAP.md",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/ROADMAP.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock --report:clockwork-kitten/standards:packages/conform/configs/eslint.base.js",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/configs/eslint.base.js",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock --report:clockwork-kitten/standards:ROADMAP.md",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/ROADMAP.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/canon:README.md",
+      "rationale": "reference-only; no cutover issue required",
+      "reference": "https://github.com/clockwork-kitten/canon/blob/7162ec763a9e99fbe4ef047e6ffb7fcfb5a8e18c/README.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/incubator:docs/game-stack-decision.md",
+      "rationale": "reference-only; no cutover issue required",
+      "reference": "https://github.com/clockwork-kitten/incubator/blob/b10e487fc4b8f16e8227f022ab380efd3c6401ed/docs/game-stack-decision.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/ops:docs/DECISIONS.md",
+      "rationale": "reference-only; no cutover issue required",
+      "reference": "https://github.com/clockwork-kitten/ops/blob/7be4f6d33edd65e88d01e60d28c29bb7ee0e7285/docs/DECISIONS.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/ops:docs/identity.md",
+      "rationale": "reference-only; no cutover issue required",
+      "reference": "https://github.com/clockwork-kitten/ops/blob/7be4f6d33edd65e88d01e60d28c29bb7ee0e7285/docs/identity.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/ops:docs/OPS-ROADMAP.md",
+      "rationale": "reference-only; no cutover issue required",
+      "reference": "https://github.com/clockwork-kitten/ops/blob/7be4f6d33edd65e88d01e60d28c29bb7ee0e7285/docs/OPS-ROADMAP.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/ops:docs/oss-policy.md",
+      "rationale": "reference-only; no cutover issue required",
+      "reference": "https://github.com/clockwork-kitten/ops/blob/7be4f6d33edd65e88d01e60d28c29bb7ee0e7285/docs/oss-policy.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/standards:docs/STANDARDS-ARCHITECTURE.md",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/docs/STANDARDS-ARCHITECTURE.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/standards:llms.txt",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/llms.txt",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "non-mvp-deferral",
+      "inventoryId": "bedrock:clockwork-kitten/standards:packages/conform/configs/eslint.base.js",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/configs/eslint.base.js",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/standards:packages/conform/README.md",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/README.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/standards:packages/conform/src/code/run.test.ts",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/src/code/run.test.ts",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "non-mvp-deferral",
+      "inventoryId": "bedrock:clockwork-kitten/standards:packages/conform/src/code/run.ts",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/src/code/run.ts",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/standards:packages/conform/src/config/resolve.test.ts",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/src/config/resolve.test.ts",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "non-mvp-deferral",
+      "inventoryId": "bedrock:clockwork-kitten/standards:packages/conform/src/config/resolve.ts",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/src/config/resolve.ts",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "non-mvp-deferral",
+      "inventoryId": "bedrock:clockwork-kitten/standards:packages/conform/src/config/types.ts",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/src/config/types.ts",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/standards:packages/conform/src/index.ts",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/src/index.ts",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/standards:README.md",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/README.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "bedrock:clockwork-kitten/standards:ROADMAP.md",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/ROADMAP.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "non-mvp-deferral",
+      "inventoryId": "code.bedrock:clockwork-kitten/standards:packages/conform/src/config/resolve.ts",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/packages/conform/src/config/resolve.ts",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "code.bedrock:clockwork-kitten/standards:README.md",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/README.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "dropped",
+      "inventoryId": "code.bedrock:clockwork-kitten/standards:ROADMAP.md",
+      "rationale": "migrate all functional and documentary references via studio-board#131",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/50f290ddce8984ace6f9c7a5e161242f9ee4b0e5/ROADMAP.md",
+      "section": "results",
+      "sourceId": "bedrock-consumers"
+    },
+    {
+      "disposition": "non-mvp-deferral",
+      "inventoryId": "clockwork-kitten/ops",
+      "rationale": "The known consumer requires an explicit repo-local cutover before the legacy line retires.",
+      "reference": "https://github.com/clockwork-kitten/canon/blob/7717e5baacb514ae6085e4c3bef026a371df7d08/test/characterization/canon-v0.1.0/ledger.json",
+      "section": "consumers",
+      "sourceId": "canon"
+    },
+    {
+      "disposition": "non-mvp-deferral",
+      "inventoryId": "clockwork-kitten/standards",
+      "rationale": "The known consumer requires an explicit repo-local cutover before the legacy line retires.",
+      "reference": "https://github.com/clockwork-kitten/canon/blob/7717e5baacb514ae6085e4c3bef026a371df7d08/test/characterization/canon-v0.1.0/ledger.json",
+      "section": "consumers",
+      "sourceId": "canon"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "clockwork-kitten/canon#6",
+      "rationale": "Independent deployment glue does not overlap this characterization corpus, is not a prerequisite, and should remain separately reviewable. Rebase only if main moves before its eventual merge.",
+      "reference": "https://github.com/clockwork-kitten/canon/pull/6",
+      "section": "pull-requests",
+      "sourceId": "canon"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "cli",
+      "owner": "canon",
+      "rationale": "Actual dispatch exposes check, fix, llms, add-decision, drain, and build. Committed process vectors freeze no-command/unknown help, each command's output, and applicable success (0), finding/drift (1), and invocation/config (2) classifications.",
+      "reference": "https://github.com/clockwork-kitten/canon/blob/7717e5baacb514ae6085e4c3bef026a371df7d08/test/characterization/canon-v0.1.0/ledger.json",
+      "section": "surfaces",
+      "sourceId": "canon"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "config",
+      "owner": "canon",
+      "rationale": "TypeScript, JavaScript, JSONC, and JSON names are discovered in precedence order; config deep-merges the baseline unless extends is false.",
+      "reference": "https://github.com/clockwork-kitten/canon/blob/7717e5baacb514ae6085e4c3bef026a371df7d08/test/characterization/canon-v0.1.0/ledger.json",
+      "section": "surfaces",
+      "sourceId": "canon"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "decision.api",
+      "owner": "canon",
+      "rationale": "Fixed intake data drains to content-addressed, monotonic events and projects to deterministic Markdown and graph JSON.",
+      "reference": "https://github.com/clockwork-kitten/canon/blob/7717e5baacb514ae6085e4c3bef026a371df7d08/test/characterization/canon-v0.1.0/ledger.json",
+      "section": "surfaces",
+      "sourceId": "canon"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "distribution",
+      "owner": "canon",
+      "rationale": "The package executes TypeScript under Bun from GitHub Packages and exports only the root source entry.",
+      "reference": "https://github.com/clockwork-kitten/canon/blob/7717e5baacb514ae6085e4c3bef026a371df7d08/test/characterization/canon-v0.1.0/ledger.json",
+      "section": "surfaces",
+      "sourceId": "canon"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "docs.llms",
+      "owner": "canon",
+      "rationale": "llms.txt content is deterministic from title, first prose summary, configured project/summary, and first matching section.",
+      "reference": "https://github.com/clockwork-kitten/canon/blob/7717e5baacb514ae6085e4c3bef026a371df7d08/test/characterization/canon-v0.1.0/ledger.json",
+      "ruleId": "crux/docs/llms-index",
+      "section": "surfaces",
+      "sourceId": "canon"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "docs.markdown",
+      "owner": "canon",
+      "rationale": "Markdown lint and autofix use markdownlint 0.38.0; structural parsing uses the pinned mdast/GFM stack.",
+      "reference": "https://github.com/clockwork-kitten/canon/blob/7717e5baacb514ae6085e4c3bef026a371df7d08/test/characterization/canon-v0.1.0/ledger.json",
+      "ruleId": "crux/docs/markdown-format",
+      "section": "surfaces",
+      "sourceId": "canon"
+    },
+    {
+      "disposition": "mapped-rule",
+      "inventoryId": "docs.references",
+      "owner": "canon",
+      "rationale": "Markdown links and backtick paths are checked on disk; configured ignore substrings bypass cross-repository backtick paths.",
+      "reference": "https://github.com/clockwork-kitten/canon/blob/7717e5baacb514ae6085e4c3bef026a371df7d08/test/characterization/canon-v0.1.0/ledger.json",
+      "ruleId": "crux/docs/reference-integrity",
+      "section": "surfaces",
+      "sourceId": "canon"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "unlocked",
+      "owner": "canon",
+      "rationale": "Canon 0.1.0 has no lock, profile, bundle, canonical-result, or unlocked-status input/output; a no-config local check uses the studio baseline and can pass.",
+      "reference": "https://github.com/clockwork-kitten/canon/blob/7717e5baacb514ae6085e4c3bef026a371df7d08/test/characterization/canon-v0.1.0/ledger.json",
+      "section": "surfaces",
+      "sourceId": "canon"
+    },
+    {
+      "disposition": "diagnostic-replacement",
+      "inventoryId": "command.check",
+      "owner": "conform",
+      "rationale": "Check remains an explicit orchestrator command; no alias window is introduced.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "commands",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "diagnostic-replacement",
+      "inventoryId": "command.fix",
+      "owner": "conform",
+      "rationale": "Fix remains an authoring-time command in the future orchestrator.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "commands",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "artifact.config.eslint.astro",
+      "owner": "crucible",
+      "rationale": "Astro lint overlay remains a code-tool config surface.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-artifacts",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "artifact.config.eslint.base",
+      "owner": "crucible",
+      "rationale": "Avoid duplicate authority across Bedrock and ESLint-based enforcement.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-artifacts",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "artifact.config.knip.base",
+      "owner": "crucible",
+      "rationale": "Knip base remains part of code-tool config distribution.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-artifacts",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "artifact.config.prettier.astro",
+      "owner": "crucible",
+      "rationale": "Astro formatting plugin configuration remains a code-tool config surface.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-artifacts",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "artifact.config.prettier.base",
+      "owner": "crucible",
+      "rationale": "Empty base config is still a shipped config contract.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-artifacts",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "artifact.config.tsconfig.base",
+      "owner": "crucible",
+      "rationale": "TypeScript compiler baseline remains code-tool config distribution.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-artifacts",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "config.discovery.conform.config.js",
+      "owner": "conform",
+      "rationale": "Discovery precedence is orchestrator behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "config.discovery.conform.config.json",
+      "owner": "conform",
+      "rationale": "Discovery precedence is orchestrator behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "config.discovery.conform.config.jsonc",
+      "owner": "conform",
+      "rationale": "Discovery precedence is orchestrator behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "config.discovery.conform.config.mjs",
+      "owner": "conform",
+      "rationale": "Discovery precedence is orchestrator behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "config.discovery.conform.config.mts",
+      "owner": "conform",
+      "rationale": "Discovery precedence is orchestrator behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "config.discovery.conform.config.ts",
+      "owner": "conform",
+      "rationale": "Discovery precedence is orchestrator behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "diagnostic-replacement",
+      "inventoryId": "config.key.code",
+      "migration": {
+        "disposition": "replaced",
+        "replacement": {
+          "id": "repository.code",
+          "kind": "config-key",
+          "owner": "conform"
+        },
+        "target": "Conform config schema"
+      },
+      "owner": "conform",
+      "rationale": "Root code block remains config entrypoint for code track.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "config.key.code.bedrock",
+      "migration": {
+        "disposition": "dropped",
+        "intentionalDifference": "Bedrock key is inventoried and must be explicitly dispositioned before reuse.",
+        "target": "Crucible bedrock migration"
+      },
+      "owner": "crucible",
+      "rationale": "No implicit compatibility layer is allowed.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "diagnostic-replacement",
+      "inventoryId": "config.key.code.eslint",
+      "migration": {
+        "disposition": "replaced",
+        "replacement": {
+          "id": "repository.code.eslint",
+          "kind": "config-key",
+          "owner": "crucible"
+        },
+        "target": "Crucible tool toggles"
+      },
+      "owner": "crucible",
+      "rationale": "ESLint tool enablement maps to code engine settings.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "diagnostic-replacement",
+      "inventoryId": "config.key.code.knip",
+      "migration": {
+        "disposition": "replaced",
+        "replacement": {
+          "id": "repository.code.knip",
+          "kind": "config-key",
+          "owner": "crucible"
+        },
+        "target": "Crucible tool toggles"
+      },
+      "owner": "crucible",
+      "rationale": "Knip tool enablement maps to code engine settings.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "diagnostic-replacement",
+      "inventoryId": "config.key.code.prettier",
+      "migration": {
+        "disposition": "replaced",
+        "replacement": {
+          "id": "repository.code.prettier",
+          "kind": "config-key",
+          "owner": "crucible"
+        },
+        "target": "Crucible tool toggles"
+      },
+      "owner": "crucible",
+      "rationale": "Prettier tool enablement maps to code engine settings.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "diagnostic-replacement",
+      "inventoryId": "config.key.code.tsconfig",
+      "migration": {
+        "disposition": "replaced",
+        "replacement": {
+          "id": "repository.code.tsconfig",
+          "kind": "config-key",
+          "owner": "crucible"
+        },
+        "target": "Crucible typecheck settings"
+      },
+      "owner": "crucible",
+      "rationale": "TypeScript project path configuration maps to code engine settings.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "diagnostic-replacement",
+      "inventoryId": "config.key.code.typecheck",
+      "migration": {
+        "disposition": "replaced",
+        "replacement": {
+          "id": "repository.code.typecheck",
+          "kind": "config-key",
+          "owner": "crucible"
+        },
+        "target": "Crucible tool toggles"
+      },
+      "owner": "crucible",
+      "rationale": "Typecheck toggle maps to code engine settings.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "config.loader.jsonc",
+      "owner": "conform",
+      "rationale": "JSONC and JSON parsing behavior remains config loader behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "config.loader.typescript-default-export",
+      "owner": "conform",
+      "rationale": "Executable module config loading remains orchestrator implementation behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "config-surfaces",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "consumer.incubator",
+      "owner": "conform",
+      "rationale": "Cross-repo cutover is out of scope for this inventory issue.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "consumers",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "consumer.ops",
+      "owner": "conform",
+      "rationale": "Cross-repo cutover is out of scope for this inventory issue.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "consumers",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "consumer.standards",
+      "owner": "conform",
+      "rationale": "Standards repo remains producer and primary dogfood consumer.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "consumers",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.cli.check.code",
+      "owner": "crucible",
+      "rationale": "Code track defaults to enabled when config declares code.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.cli.check.globs",
+      "owner": "conform",
+      "rationale": "Default markdown glob remains orchestrator-level behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.cli.check.referenceIgnore",
+      "owner": "canon",
+      "rationale": "Reference ignore list defaults to empty.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.cli.check.references",
+      "owner": "canon",
+      "rationale": "Reference checks default to enabled unless explicitly disabled.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.cli.fix.code",
+      "owner": "crucible",
+      "rationale": "Code fixers default to enabled when code track exists.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.cli.fix.globs",
+      "owner": "conform",
+      "rationale": "Fix default glob remains orchestrator-level behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.cli.fix.llms",
+      "owner": "canon",
+      "rationale": "llms regeneration defaults to enabled in fix mode.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "default.config.default.bedrockEmptyArray",
+      "owner": "crucible",
+      "rationale": "Legacy empty-array normalization must be explicitly dispositioned before migration.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "default.config.default.bedrockFalse",
+      "owner": "crucible",
+      "rationale": "Bedrock behavior remains intentionally unresolved until rule-level mapping is complete.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "default.config.default.bedrockWhenTrue",
+      "owner": "crucible",
+      "rationale": "Bedrock enablement defaults require explicit migration disposition before reuse.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.config.default.docsOnlyCode",
+      "owner": "canon",
+      "rationale": "No conform config file resolves to docs-only execution with no code track.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.config.default.docsOnlySource",
+      "owner": "canon",
+      "rationale": "No conform config file reports the stable docs-only source string.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.config.default.eslint",
+      "owner": "crucible",
+      "rationale": "ESLint defaults to enabled in resolved code config.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.config.default.knip",
+      "owner": "crucible",
+      "rationale": "Knip defaults to enabled in resolved code config.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.config.default.noCodeBlock",
+      "owner": "canon",
+      "rationale": "Config objects without a code block resolve to docs-only execution.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.config.default.prettier",
+      "owner": "crucible",
+      "rationale": "Prettier defaults to enabled in resolved code config.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.config.default.tsconfig",
+      "owner": "crucible",
+      "rationale": "Typecheck default path remains in code-track defaults.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "default.config.default.typecheck",
+      "owner": "crucible",
+      "rationale": "Typecheck defaults to enabled in resolved code config.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "defaults",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.internal.CheckArgs",
+      "owner": "conform",
+      "rationale": "CLI argument typing remains internal unless explicitly re-exported.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.internal.DEFAULT_GLOBS",
+      "owner": "conform",
+      "rationale": "CLI defaults are implementation details, not package export map entries.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.internal.FixArgs",
+      "owner": "conform",
+      "rationale": "Fix argument typing is internal unless promoted in exports map.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.internal.main",
+      "owner": "conform",
+      "rationale": "Entrypoint function remains source-level export only.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.internal.parseCheckArgs",
+      "owner": "conform",
+      "rationale": "Parser function is test seam/internal API and not in exports map.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.internal.parseFixArgs",
+      "owner": "conform",
+      "rationale": "Parser function is test seam/internal API and not in exports map.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.internal.runCheck",
+      "owner": "conform",
+      "rationale": "Runner is internal implementation API not listed in package exports map.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.internal.runFix",
+      "owner": "conform",
+      "rationale": "Fix runner is implementation detail and not public package API.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.package.config-eslint-astro",
+      "owner": "crucible",
+      "rationale": "Astro lint config remains code-tool configuration, not Conform logic.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.package.config-eslint-base",
+      "owner": "crucible",
+      "rationale": "Code tool config ownership maps to Crucible.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.package.config-knip-base",
+      "owner": "crucible",
+      "rationale": "Static dead-code config ownership is code-engine scope.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.package.config-prettier-astro",
+      "owner": "crucible",
+      "rationale": "Astro formatting config is code tooling, not Conform orchestration.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.package.config-prettier-base",
+      "owner": "crucible",
+      "rationale": "Prettier config ownership belongs to the code engine track.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.package.config-tsconfig-base",
+      "owner": "crucible",
+      "rationale": "TypeScript config defaults are part of the code-tool surface.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.package.root",
+      "owner": "conform",
+      "rationale": "Root export remains package API authority.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.CodeConfig",
+      "owner": "conform",
+      "rationale": "Authored config shape remains part of the orchestrator contract.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.CodeTool",
+      "owner": "crucible",
+      "rationale": "Code tool typing maps to the code engine.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.CodeToolResult",
+      "owner": "crucible",
+      "rationale": "Tool result typing belongs with code execution.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.CONFIG_FILENAMES",
+      "owner": "conform",
+      "rationale": "Config discovery precedence belongs to orchestrator setup.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.ConfigError",
+      "owner": "conform",
+      "rationale": "Config load failures remain orchestrator concerns.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.ConformConfig",
+      "owner": "conform",
+      "rationale": "The root config type remains a public orchestrator interface.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "export.root.DEFAULT_BEDROCK_FILES",
+      "owner": "crucible",
+      "rationale": "Rule-level bedrock disposition is unresolved and must stay explicit.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.DEFAULT_TSCONFIG",
+      "owner": "crucible",
+      "rationale": "Typecheck default path is part of code-track orchestration.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.defineConfig",
+      "owner": "conform",
+      "rationale": "Helper API remains in Conform-facing config authoring.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.discoverConfigPath",
+      "owner": "conform",
+      "rationale": "Config path discovery is orchestrator behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.DocsMode",
+      "owner": "canon",
+      "rationale": "Docs mode typing describes pass-through behavior to Canon.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.enabledTools",
+      "owner": "crucible",
+      "rationale": "Code tool ordering logic belongs to code ownership.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.loadConfigFile",
+      "owner": "conform",
+      "rationale": "Config parsing/import behavior remains orchestrator-owned.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.resolveBin",
+      "owner": "crucible",
+      "rationale": "Tool-bin resolution is a code adapter implementation concern.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.resolveCodeConfig",
+      "owner": "crucible",
+      "rationale": "Code defaults are resolved before delegating execution.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.resolveConfig",
+      "owner": "conform",
+      "rationale": "Top-level config resolution remains orchestrator behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.ResolvedCodeConfig",
+      "owner": "crucible",
+      "rationale": "Resolved code settings define interop between orchestrator and code track.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.ResolvedConfig",
+      "owner": "conform",
+      "rationale": "Resolved config metadata is orchestrator API surface.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.RunCodeOptions",
+      "owner": "crucible",
+      "rationale": "Code runner options are code-engine contract.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.runCodeTrack",
+      "owner": "crucible",
+      "rationale": "Code execution moves under Crucible ownership.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.RunDocsOptions",
+      "owner": "canon",
+      "rationale": "Docs runner options stay in the orchestrator layer.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.runDocsTrack",
+      "owner": "canon",
+      "rationale": "Docs execution remains Canon-owned behavior invoked by Conform.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.runProcess",
+      "owner": "crucible",
+      "rationale": "Default process launcher belongs in code runner implementation.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.RunProcess",
+      "owner": "crucible",
+      "rationale": "Subprocess abstraction is adapter internals for code checks.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "export.root.toolArgs",
+      "owner": "crucible",
+      "rationale": "Per-tool argv mapping is code behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "exports",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "flag.check.config",
+      "owner": "conform",
+      "rationale": "Explicit config path selection stays in orchestrator scope.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "flag.check.config-equals",
+      "owner": "conform",
+      "rationale": "Inline assignment form is part of the current parser surface.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "flag.check.help",
+      "owner": "conform",
+      "rationale": "The split CLI may change help rendering as an intentional UX cleanup.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "flag.check.no-code",
+      "owner": "crucible",
+      "rationale": "This is an orchestrator-only switch and remains Conform-owned.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "flag.check.no-references",
+      "owner": "canon",
+      "rationale": "This is docs-track delegation behavior and maps to Canon-owned semantics.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "flag.check.reference-ignore",
+      "owner": "canon",
+      "rationale": "This is pass-through docs behavior owned by Canon and orchestrated by Conform.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "flag.check.reference-ignore-equals",
+      "owner": "canon",
+      "rationale": "Inline assignment form exists in legacy parser behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "flag.check.short-config",
+      "owner": "conform",
+      "rationale": "No short-flag alias commitment is made in this diagnostic tranche.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "flag.check.short-help",
+      "owner": "conform",
+      "rationale": "This inventory is diagnostic and does not guarantee future aliases.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "flag.fix.config",
+      "owner": "conform",
+      "rationale": "Explicit config path selection remains orchestrator behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "flag.fix.config-equals",
+      "owner": "conform",
+      "rationale": "Inline assignment form is present in current parser behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "flag.fix.help",
+      "owner": "conform",
+      "rationale": "Help output shape may intentionally change without alias windows.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "flag.fix.no-code",
+      "owner": "crucible",
+      "rationale": "Code fixer gating remains orchestrator-owned.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "flag.fix.no-llms",
+      "owner": "canon",
+      "rationale": "This docs-track toggle is Canon-owned behavior delegated by Conform.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "flag.fix.short-config",
+      "owner": "conform",
+      "rationale": "Compatibility aliases are explicitly out of scope.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "flag.fix.short-help",
+      "owner": "conform",
+      "rationale": "No compatibility alias promises in this tranche.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "flags",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "intentional-difference",
+      "inventoryId": "adapter.code.bedrock",
+      "owner": "crucible",
+      "rationale": "Do not create compatibility aliases or silent bedrock carryover.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "tool-adapters",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "adapter.code.eslint",
+      "owner": "crucible",
+      "rationale": "ESLint adapter behavior maps directly to code engine ownership.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "tool-adapters",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "adapter.code.knip",
+      "owner": "crucible",
+      "rationale": "Knip gate adapter is part of code engine ownership.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "tool-adapters",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "adapter.code.prettier",
+      "owner": "crucible",
+      "rationale": "Prettier adapter behavior maps to code engine ownership.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "tool-adapters",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "adapter.code.typecheck",
+      "owner": "crucible",
+      "rationale": "TypeScript gate adapter maps to code engine ownership.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "tool-adapters",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "adapter.docs.canon",
+      "owner": "canon",
+      "rationale": "Docs conformance is Canon-owned and invoked by Conform.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "tool-adapters",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "workflow.lefthook.base",
+      "owner": "conform",
+      "rationale": "Hook is a local trigger for Conform and remains orchestrator contract behavior.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "workflows",
+      "sourceId": "conform"
+    },
+    {
+      "disposition": "mapped-owner",
+      "inventoryId": "workflow.markdown-conformance",
+      "owner": "canon",
+      "rationale": "Workflow now orchestrates Canon directly; record as legacy Conform-adjacent surface.",
+      "reference": "https://github.com/clockwork-kitten/standards/blob/9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b/packages/conform/inventory/legacy-conform.json",
+      "section": "workflows",
+      "sourceId": "conform"
+    }
+  ],
+  "schemaVersion": "1.0.0",
+  "sources": [
+    {
+      "artifact": "packages/conform/inventory/legacy-conform.json",
+      "contentSha256": "3fabef6c3096be1383ac6757ae5721d97ad6fa64d133597268a052aca4ab7288",
+      "repository": "clockwork-kitten/standards",
+      "revision": "9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b",
+      "sourceId": "conform",
+      "expectedRows": 108
+    },
+    {
+      "artifact": "test/characterization/canon-v0.1.0/ledger.json",
+      "expectedRows": 11,
+      "repository": "clockwork-kitten/canon",
+      "revision": "7717e5baacb514ae6085e4c3bef026a371df7d08",
+      "sourceId": "canon"
+    },
+    {
+      "artifact": "docs/bedrock-disposition.json",
+      "expectedRows": 181,
+      "repository": "clockwork-kitten/bedrock",
+      "revision": "3f7035d1c9b11cef83e30d450e463ee84106d525",
+      "sourceId": "bedrock"
+    },
+    {
+      "artifact": "docs/bedrock-consumers.json",
+      "expectedRows": 25,
+      "repository": "clockwork-kitten/bedrock",
+      "revision": "3f7035d1c9b11cef83e30d450e463ee84106d525",
+      "sourceId": "bedrock-consumers"
+    }
+  ]
+}

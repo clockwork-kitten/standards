@@ -14,8 +14,10 @@ JSON and declaration subpaths:
 - `@clockwork-kitten/crux/schemas/profile`
 - `@clockwork-kitten/crux/schemas/suppression`
 - `@clockwork-kitten/crux/schemas/suppression-registry`
+- `@clockwork-kitten/crux/schemas/vector-catalog`
 - `@clockwork-kitten/crux/schemas/engine-manifest`
 - `@clockwork-kitten/crux/schemas/fingerprint`
+- `@clockwork-kitten/crux/schemas/inventory-reconciliation`
 - `@clockwork-kitten/crux/schemas/baseline`
 - `@clockwork-kitten/crux/schemas/exception`
 - `@clockwork-kitten/crux/schemas/repository-policy`
@@ -26,11 +28,52 @@ JSON and declaration subpaths:
 - `@clockwork-kitten/crux/schemas/conform-result`
 - `@clockwork-kitten/crux/schemas/context`
 - `@clockwork-kitten/crux/types`
+- `@clockwork-kitten/crux/policy/existing-behavior`
+- `@clockwork-kitten/crux/vectors/canon`
+- `@clockwork-kitten/crux/vectors/crucible`
+- `@clockwork-kitten/crux/vectors/conform`
+- `@clockwork-kitten/crux/migration/legacy-disposition`
+- `@clockwork-kitten/crux/reconciliation/existing-behavior`
 
 All schemas use JSON Schema 2020-12 and stable major-version `$id` URIs under
 `https://schemas.clockwork-kitten.dev/crux/`. Critical objects are closed.
 Additive product-specific data is accepted only in an explicitly named
 `extensions` map.
+
+## Existing-behavior tranche
+
+The initial policy publishes 15 permanent proposed rule IDs: three Canon-owned
+documentation rules and 12 Crucible-owned source rules. Proposed lifecycle is
+intentional: these records preserve reviewed behavior and ownership without
+claiming that a contract-aware engine manifest has implemented them. Promotion
+requires a published owner manifest and passing owner vectors.
+
+The Canon and Crucible catalogs contain positive and negative vectors for every
+rule plus explicit documentation/source ownership-boundary vectors. The empty
+Conform vector catalog is also published so the three-engine boundary is
+closed and reviewable without inventing a Conform-owned behavior rule.
+
+Revision 1 reconciles 325 frozen inventory rows exactly once:
+
+- 108 pre-split Conform rows from the immutable P01 inventory artifact at
+  `9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b` (derived from legacy source
+  `50f290ddce8984ace6f9c7a5e161242f9ee4b0e5`, SHA-256
+  `3fabef6c3096be1383ac6757ae5721d97ad6fa64d133597268a052aca4ab7288`);
+- 11 Canon characterization-ledger rows at
+  `7717e5baacb514ae6085e4c3bef026a371df7d08`;
+- 181 Bedrock behavior rows and 25 Bedrock consumer-evidence rows at
+  `3f7035d1c9b11cef83e30d450e463ee84106d525`.
+
+The 76-entry migration ledger covers every distinct known legacy command,
+config-key, and rule identity; the frozen inputs declare no suppression
+mechanism. Code-config outcomes are generated from the reviewed reconciliation
+decision, and validation compares disposition, owner, target, replacement, and
+intentional-difference metadata across both artifacts. Replacements are
+diagnostic only. Nothing in the data authorizes command execution, rule-ID
+translation, suppression translation, config translation, or a compatibility
+window. Bedrock behavior not selected as one
+of the 12 reviewed concepts is explicitly dropped with rationale; functional
+consumer cutovers remain separately deferred.
 
 ## Lock, result, and context contracts
 
@@ -108,12 +151,20 @@ From the repository root:
 
 ```sh
 bun run --cwd packages/crux generate:types
+bun run --cwd packages/crux generate:existing-behavior
 bun run --cwd packages/crux typecheck
 bun run --cwd packages/crux test
 ```
 
 `check:generated` regenerates declarations in memory and fails when
 `types/index.d.ts` differs, so schema changes cannot land with stale types.
+`check:existing-behavior` regenerates records from revision-pinned HTTPS source
+artifacts and fails on path, revision, or content-digest drift. The committed
+reconciliation validator independently checks the declared Conform provenance
+and also fails
+for missing, duplicate, unknown, wrong-owner, overlapping, or orphaned rows,
+rules, vectors, and dispositions. Its inverted-vector test proves that changing
+an expected result fails validation.
 Schema validation uses Ajv only as development tooling; the published package
 has no runtime dependencies.
 

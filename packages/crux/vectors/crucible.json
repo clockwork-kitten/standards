@@ -1,0 +1,358 @@
+{
+  "engine": "crucible",
+  "schemaVersion": "1.0.0",
+  "sourceRevision": "3f7035d1c9b11cef83e30d450e463ee84106d525",
+  "vectors": [
+    {
+      "engine": "crucible",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "strict-equality-pass",
+      "fixture": {
+        "content": "a === b;",
+        "description": "positive fixture for Require strict equality.",
+        "fileClass": "source",
+        "path": "src/strict-equality-pass.ts"
+      },
+      "ruleIds": ["crux/code/strict-equality"],
+      "sourceInventoryIds": ["equality"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "strict-equality-fail",
+      "fixture": {
+        "content": "a == b;",
+        "description": "negative fixture for Require strict equality.",
+        "fileClass": "source",
+        "path": "src/strict-equality-fail.ts"
+      },
+      "ruleIds": ["crux/code/strict-equality"],
+      "sourceInventoryIds": ["equality"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "no-explicit-any-pass",
+      "fixture": {
+        "content": "const value: unknown = 1;",
+        "description": "positive fixture for Disallow explicit any.",
+        "fileClass": "source",
+        "path": "src/no-explicit-any-pass.ts"
+      },
+      "ruleIds": ["crux/code/no-explicit-any"],
+      "sourceInventoryIds": ["no-any"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "no-explicit-any-fail",
+      "fixture": {
+        "content": "const value: any = 1;",
+        "description": "negative fixture for Disallow explicit any.",
+        "fileClass": "source",
+        "path": "src/no-explicit-any-fail.ts"
+      },
+      "ruleIds": ["crux/code/no-explicit-any"],
+      "sourceInventoryIds": ["no-any"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "no-array-constructor-pass",
+      "fixture": {
+        "content": "const values = [];",
+        "description": "positive fixture for Disallow Array constructors.",
+        "fileClass": "source",
+        "path": "src/no-array-constructor-pass.ts"
+      },
+      "ruleIds": ["crux/code/no-array-constructor"],
+      "sourceInventoryIds": ["no-array-constructor"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "no-array-constructor-fail",
+      "fixture": {
+        "content": "const values = new Array();",
+        "description": "negative fixture for Disallow Array constructors.",
+        "fileClass": "source",
+        "path": "src/no-array-constructor-fail.ts"
+      },
+      "ruleIds": ["crux/code/no-array-constructor"],
+      "sourceInventoryIds": ["no-array-constructor"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "unknown-catch-variable-pass",
+      "fixture": {
+        "content": "try {} catch (error: unknown) {}",
+        "description": "positive fixture for Use unknown catch variables.",
+        "fileClass": "source",
+        "path": "src/unknown-catch-variable-pass.ts"
+      },
+      "ruleIds": ["crux/code/unknown-catch-variable"],
+      "sourceInventoryIds": ["no-bare-catch"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "unknown-catch-variable-fail",
+      "fixture": {
+        "content": "try {} catch (error: any) {}",
+        "description": "negative fixture for Use unknown catch variables.",
+        "fileClass": "source",
+        "path": "src/unknown-catch-variable-fail.ts"
+      },
+      "ruleIds": ["crux/code/unknown-catch-variable"],
+      "sourceInventoryIds": ["no-bare-catch"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "prefer-object-has-own-pass",
+      "fixture": {
+        "content": "Object.hasOwn(value, key);",
+        "description": "positive fixture for Prefer Object.hasOwn.",
+        "fileClass": "source",
+        "path": "src/prefer-object-has-own-pass.ts"
+      },
+      "ruleIds": ["crux/code/prefer-object-has-own"],
+      "sourceInventoryIds": ["no-has-own-property"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "prefer-object-has-own-fail",
+      "fixture": {
+        "content": "value.hasOwnProperty(key);",
+        "description": "negative fixture for Prefer Object.hasOwn.",
+        "fileClass": "source",
+        "path": "src/prefer-object-has-own-fail.ts"
+      },
+      "ruleIds": ["crux/code/prefer-object-has-own"],
+      "sourceInventoryIds": ["no-has-own-property"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "non-mutating-sort-pass",
+      "fixture": {
+        "content": "values.toSorted();",
+        "description": "positive fixture for Require non-mutating array sorting.",
+        "fileClass": "source",
+        "path": "src/non-mutating-sort-pass.ts"
+      },
+      "ruleIds": ["crux/code/non-mutating-sort"],
+      "sourceInventoryIds": ["no-mutating-sort"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "non-mutating-sort-fail",
+      "fixture": {
+        "content": "values.sort();",
+        "description": "negative fixture for Require non-mutating array sorting.",
+        "fileClass": "source",
+        "path": "src/non-mutating-sort-fail.ts"
+      },
+      "ruleIds": ["crux/code/non-mutating-sort"],
+      "sourceInventoryIds": ["no-mutating-sort"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "no-typescript-namespace-pass",
+      "fixture": {
+        "content": "export const example = {};",
+        "description": "positive fixture for Disallow TypeScript namespaces.",
+        "fileClass": "source",
+        "path": "src/no-typescript-namespace-pass.ts"
+      },
+      "ruleIds": ["crux/code/no-typescript-namespace"],
+      "sourceInventoryIds": ["no-namespace"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "no-typescript-namespace-fail",
+      "fixture": {
+        "content": "namespace Example {}",
+        "description": "negative fixture for Disallow TypeScript namespaces.",
+        "fileClass": "source",
+        "path": "src/no-typescript-namespace-fail.ts"
+      },
+      "ruleIds": ["crux/code/no-typescript-namespace"],
+      "sourceInventoryIds": ["no-namespace"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "no-non-null-assertion-pass",
+      "fixture": {
+        "content": "value?.name;",
+        "description": "positive fixture for Disallow non-null assertions.",
+        "fileClass": "source",
+        "path": "src/no-non-null-assertion-pass.ts"
+      },
+      "ruleIds": ["crux/code/no-non-null-assertion"],
+      "sourceInventoryIds": ["no-non-null-assertion"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "no-non-null-assertion-fail",
+      "fixture": {
+        "content": "value!.name;",
+        "description": "negative fixture for Disallow non-null assertions.",
+        "fileClass": "source",
+        "path": "src/no-non-null-assertion-fail.ts"
+      },
+      "ruleIds": ["crux/code/no-non-null-assertion"],
+      "sourceInventoryIds": ["no-non-null-assertion"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "no-sparse-arrays-pass",
+      "fixture": {
+        "content": "const values = [1, 2, 3];",
+        "description": "positive fixture for Disallow sparse arrays.",
+        "fileClass": "source",
+        "path": "src/no-sparse-arrays-pass.ts"
+      },
+      "ruleIds": ["crux/code/no-sparse-arrays"],
+      "sourceInventoryIds": ["no-sparse-arrays"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "no-sparse-arrays-fail",
+      "fixture": {
+        "content": "const values = [1,,3];",
+        "description": "negative fixture for Disallow sparse arrays.",
+        "fileClass": "source",
+        "path": "src/no-sparse-arrays-fail.ts"
+      },
+      "ruleIds": ["crux/code/no-sparse-arrays"],
+      "sourceInventoryIds": ["no-sparse-arrays"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "no-var-pass",
+      "fixture": {
+        "content": "let value = 1;",
+        "description": "positive fixture for Disallow var declarations.",
+        "fileClass": "source",
+        "path": "src/no-var-pass.ts"
+      },
+      "ruleIds": ["crux/code/no-var"],
+      "sourceInventoryIds": ["no-var"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "no-var-fail",
+      "fixture": {
+        "content": "var value = 1;",
+        "description": "negative fixture for Disallow var declarations.",
+        "fileClass": "source",
+        "path": "src/no-var-fail.ts"
+      },
+      "ruleIds": ["crux/code/no-var"],
+      "sourceInventoryIds": ["no-var"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "explicit-return-type-pass",
+      "fixture": {
+        "content": "export function value(): number { return 1; }",
+        "description": "positive fixture for Require explicit function return types.",
+        "fileClass": "source",
+        "path": "src/explicit-return-type-pass.ts"
+      },
+      "ruleIds": ["crux/code/explicit-return-type"],
+      "sourceInventoryIds": ["require-return-type"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "explicit-return-type-fail",
+      "fixture": {
+        "content": "export function value() { return 1; }",
+        "description": "negative fixture for Require explicit function return types.",
+        "fileClass": "source",
+        "path": "src/explicit-return-type-fail.ts"
+      },
+      "ruleIds": ["crux/code/explicit-return-type"],
+      "sourceInventoryIds": ["require-return-type"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "prefer-const-pass",
+      "fixture": {
+        "content": "const value = 1;",
+        "description": "positive fixture for Prefer const declarations.",
+        "fileClass": "source",
+        "path": "src/prefer-const-pass.ts"
+      },
+      "ruleIds": ["crux/code/prefer-const"],
+      "sourceInventoryIds": ["var-to-const"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "prefer-const-fail",
+      "fixture": {
+        "content": "let value = 1;",
+        "description": "negative fixture for Prefer const declarations.",
+        "fileClass": "source",
+        "path": "src/prefer-const-fail.ts"
+      },
+      "ruleIds": ["crux/code/prefer-const"],
+      "sourceInventoryIds": ["var-to-const"]
+    },
+    {
+      "engine": "crucible",
+      "expectedOutcome": "pass",
+      "expectedOwners": { "crux/code/no-explicit-any": "crucible" },
+      "fixture": {
+        "content": "// [missing](missing.md)\nconst value: unknown = 1;\n",
+        "description": "A source comment containing Markdown-like text remains Crucible-owned because the host file class is source.",
+        "fileClass": "source",
+        "path": "src/example.ts"
+      },
+      "kind": "boundary",
+      "ruleIds": ["crux/code/no-explicit-any"],
+      "sourceInventoryIds": ["no-any"],
+      "vectorId": "source-documentation-boundary"
+    }
+  ]
+}

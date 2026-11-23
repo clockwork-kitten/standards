@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/inventory-reconciliation/1",
+  "description": "Exact diagnostic reconciliation of frozen legacy inventory rows to permanent ownership or an explicit clean-break disposition.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "revision",
+    "sources",
+    "rows",
+    "legacyIdentities"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "sourceId",
+          "repository",
+          "revision",
+          "artifact",
+          "expectedRows"
+        ],
+        "properties": {
+          "sourceId": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+          },
+          "repository": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+/[a-z0-9-]+$"
+          },
+          "revision": {
+            "type": "string",
+            "minLength": 7,
+            "maxLength": 64
+          },
+          "artifact": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "expectedRows": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "contentSha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "sourceId": {
+                  "const": "conform"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "contentSha256": true
+              },
+              "required": ["contentSha256"]
+            }
+          }
+        ],
+        "unevaluatedProperties": false
+      },
+      "minItems": 1
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "sourceId",
+          "section",
+          "inventoryId",
+          "disposition",
+          "rationale"
+        ],
+        "properties": {
+          "sourceId": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+          },
+          "section": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+          },
+          "inventoryId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "disposition": {
+            "enum": [
+              "mapped-rule",
+              "mapped-owner",
+              "diagnostic-replacement",
+              "intentional-difference",
+              "non-mvp-deferral",
+              "dropped"
+            ]
+          },
+          "owner": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/engine"
+          },
+          "ruleId": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/ruleId"
+          },
+          "rationale": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
+          },
+          "reference": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 512
+          },
+          "migration": {
+            "$ref": "#/$defs/migrationDecision"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "disposition": {
+                  "const": "mapped-rule"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "owner": true,
+                "ruleId": true
+              },
+              "required": ["owner", "ruleId"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "disposition": {
+                  "enum": ["mapped-owner", "diagnostic-replacement"]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "owner": true
+              },
+              "required": ["owner"]
+            }
+          }
+        ],
+        "unevaluatedProperties": false
+      }
+    },
+    "legacyIdentities": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.clockwork-kitten.dev/crux/migration-disposition/1#/$defs/diagnosticIdentity"
+      }
+    }
+  },
+  "$defs": {
+    "migrationDecision": {
+      "type": "object",
+      "required": ["disposition", "target"],
+      "properties": {
+        "disposition": {
+          "enum": ["replaced", "dropped"]
+        },
+        "target": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
+        },
+        "replacement": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/migration-disposition/1#/$defs/replacementIdentity"
+        },
+        "intentionalDifference": {
+          "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "disposition": {
+                "const": "replaced"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "replacement": true
+            },
+            "required": ["replacement"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "disposition": {
+                "const": "dropped"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intentionalDifference": true
+            },
+            "required": ["intentionalDifference"]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  },
+  "unevaluatedProperties": false
+}

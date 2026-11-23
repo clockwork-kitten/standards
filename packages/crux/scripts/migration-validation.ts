@@ -4,7 +4,15 @@ export type LegacyIdentity = {
 };
 
 export type MigrationDispositionEntry = {
+  disposition?: "dropped" | "replaced";
+  intentionalDifference?: string;
   legacy: LegacyIdentity;
+  replacement?: {
+    id: string;
+    kind: LegacyIdentity["kind"];
+    owner: "canon" | "conform" | "crucible";
+  };
+  target?: string;
 };
 
 export type MigrationValidationError =

@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.clockwork-kitten.dev/crux/vector-catalog/1",
+  "description": "Inert expected-outcome vectors for one engine's Crux-owned rules and ownership boundaries.",
+  "type": "object",
+  "required": ["schemaVersion", "engine", "sourceRevision", "vectors"],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/semver"
+    },
+    "engine": {
+      "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/engine"
+    },
+    "sourceRevision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "vectors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "vectorId",
+          "kind",
+          "engine",
+          "expectedOutcome",
+          "fixture",
+          "ruleIds"
+        ],
+        "properties": {
+          "vectorId": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/kebabId"
+          },
+          "kind": {
+            "enum": ["positive", "negative", "boundary"]
+          },
+          "engine": {
+            "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/engine"
+          },
+          "expectedOutcome": {
+            "enum": ["pass", "fail"]
+          },
+          "fixture": {
+            "type": "object",
+            "required": ["description", "fileClass", "path", "content"],
+            "properties": {
+              "description": {
+                "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
+              },
+              "fileClass": {
+                "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/fileClass"
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              },
+              "content": {
+                "type": "string",
+                "maxLength": 4096
+              }
+            },
+            "unevaluatedProperties": false
+          },
+          "ruleIds": {
+            "type": "array",
+            "items": {
+              "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/ruleId"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "expectedOwners": {
+            "type": "object",
+            "propertyNames": {
+              "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/ruleId"
+            },
+            "additionalProperties": {
+              "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/engine"
+            }
+          },
+          "sourceInventoryIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "uniqueItems": true
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "kind": {
+                  "const": "boundary"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "expectedOwners": true
+              },
+              "required": ["expectedOwners"]
+            }
+          }
+        ],
+        "unevaluatedProperties": false
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}

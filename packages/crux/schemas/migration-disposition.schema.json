@@ -70,6 +70,9 @@
             },
             "rationale": {
               "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
+            },
+            "target": {
+              "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
             }
           },
           "unevaluatedProperties": false
@@ -85,6 +88,12 @@
               "const": "dropped"
             },
             "rationale": {
+              "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
+            },
+            "target": {
+              "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
+            },
+            "intentionalDifference": {
               "$ref": "https://schemas.clockwork-kitten.dev/crux/rule/1#/$defs/nonEmptyText"
             }
           },

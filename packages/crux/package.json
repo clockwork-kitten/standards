@@ -12,6 +12,7 @@
     "./schemas/engine-result": "./schemas/engine-result.schema.json",
     "./schemas/exception": "./schemas/exception.schema.json",
     "./schemas/fingerprint": "./schemas/fingerprint.schema.json",
+    "./schemas/inventory-reconciliation": "./schemas/inventory-reconciliation.schema.json",
     "./schemas/lock": "./schemas/lock.schema.json",
     "./schemas/migration-disposition": "./schemas/migration-disposition.schema.json",
     "./schemas/policy": "./schemas/policy.schema.json",
@@ -20,18 +21,31 @@
     "./schemas/rule": "./schemas/rule.schema.json",
     "./schemas/suppression-registry": "./schemas/suppression-registry.schema.json",
     "./schemas/suppression": "./schemas/suppression.schema.json",
+    "./schemas/vector-catalog": "./schemas/vector-catalog.schema.json",
+    "./policy/existing-behavior": "./policy/existing-behavior.json",
+    "./vectors/canon": "./vectors/canon.json",
+    "./vectors/conform": "./vectors/conform.json",
+    "./vectors/crucible": "./vectors/crucible.json",
+    "./migration/legacy-disposition": "./migration/legacy-disposition.json",
+    "./reconciliation/existing-behavior": "./reconciliation/existing-behavior.json",
     "./types": "./types/index.d.ts"
   },
   "files": [
     "README.md",
+    "migration",
+    "policy",
+    "reconciliation",
     "schemas",
-    "types"
+    "types",
+    "vectors"
   ],
   "scripts": {
+    "check:existing-behavior": "bun ./scripts/generate-existing-behavior.ts --check",
     "check:generated": "bun ./scripts/generate-types.ts --check",
+    "generate:existing-behavior": "bun ./scripts/generate-existing-behavior.ts",
     "generate:types": "bun ./scripts/generate-types.ts",
     "test:canonical": "node ./scripts/verify-canonical-vectors.mjs",
-    "test": "bun test ./test && bun run check:generated",
+    "test": "bun test ./test && bun run check:generated && bun run check:existing-behavior",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
@@ -39,6 +53,7 @@
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "json-schema-to-typescript": "^15.0.4",
+    "prettier": "^3.9.6",
     "typescript": "^5.7.3"
   }
 }

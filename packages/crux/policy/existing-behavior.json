@@ -1,0 +1,827 @@
+{
+  "controlledTokens": [],
+  "extensions": {
+    "crux.provenance": {
+      "authority": "clockwork-kitten/studio-board#96",
+      "bedrockRevision": "3f7035d1c9b11cef83e30d450e463ee84106d525",
+      "canonRevision": "7717e5baacb514ae6085e4c3bef026a371df7d08",
+      "conformLegacyRevision": "50f290ddce8984ace6f9c7a5e161242f9ee4b0e5",
+      "conformRevision": "9ae50e9c1e9f77c018cb476fb0a7aa5e76071d0b"
+    }
+  },
+  "fileClassRules": [
+    {
+      "exclude": ["**/generated/**", "**/vendor/**"],
+      "fileClass": "documentation",
+      "include": ["**/*.md", "llms.txt"]
+    },
+    {
+      "exclude": ["**/*.test.*", "**/generated/**", "**/vendor/**"],
+      "fileClass": "source",
+      "include": ["src/**/*.{js,jsx,ts,tsx}"]
+    },
+    {
+      "exclude": ["**/generated/**", "**/vendor/**"],
+      "fileClass": "test",
+      "include": ["**/*.test.{js,jsx,ts,tsx}", "test/**"]
+    },
+    {
+      "exclude": ["**/generated/**", "**/vendor/**"],
+      "fileClass": "tool-config",
+      "include": [
+        "*.config.{js,mjs,cjs,ts,mts,cts,json,jsonc}",
+        "tsconfig*.json"
+      ]
+    },
+    {
+      "exclude": ["**/generated/**", "**/vendor/**"],
+      "fileClass": "repository-metadata",
+      "include": [".github/**", ".conform/**", "package.json"]
+    },
+    {
+      "exclude": ["**/vendor/**"],
+      "fileClass": "generated",
+      "include": ["**/generated/**"]
+    },
+    {
+      "exclude": [],
+      "fileClass": "vendored",
+      "include": ["**/vendor/**", "**/node_modules/**"]
+    }
+  ],
+  "policyId": "existing-behavior",
+  "policyVersion": "0.1.0",
+  "profiles": [
+    {
+      "agentOutputLimits": {
+        "neverTruncateIntegrity": true,
+        "neverTruncateProtectedReview": true,
+        "ordinaryFindingCount": 50,
+        "totalBytes": 65536
+      },
+      "allowedCheckKinds": ["static"],
+      "ci": true,
+      "evidenceLimits": { "perFindingBytes": 4096, "totalBytes": 65536 },
+      "fix": { "engineOrder": [], "maxPasses": 0, "writableFileClasses": {} },
+      "profileId": "static",
+      "schemaVersion": "1.0.0"
+    },
+    {
+      "agentOutputLimits": {
+        "neverTruncateIntegrity": true,
+        "neverTruncateProtectedReview": true,
+        "ordinaryFindingCount": 50,
+        "totalBytes": 65536
+      },
+      "allowedCheckKinds": ["static", "executing"],
+      "ci": true,
+      "evidenceLimits": { "perFindingBytes": 4096, "totalBytes": 65536 },
+      "fix": {
+        "engineOrder": ["conform", "canon", "crucible"],
+        "maxPasses": 3,
+        "writableFileClasses": {
+          "canon": ["documentation"],
+          "conform": ["repository-metadata"],
+          "crucible": ["source", "test", "tool-config"]
+        }
+      },
+      "profileId": "full",
+      "schemaVersion": "1.0.0"
+    }
+  ],
+  "rules": [
+    {
+      "aspect": "markdown-format",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["documentation.markdown"],
+      "extensions": { "crux.provenance": { "legacyIds": ["docs.markdown"] } },
+      "fileClass": "documentation",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["markdown-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "canon",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "Documentation follows the canonical Markdown format. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the documentation content to satisfy canonical markdown format.",
+      "ruleId": "crux/docs/markdown-format",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["**/*.md", "llms.txt"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "Documentation follows the canonical Markdown format.",
+      "suppressionFormIds": [],
+      "title": "Canonical Markdown format",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "canon",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "markdown-format-pass"
+        },
+        {
+          "engine": "canon",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "markdown-format-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "reference-integrity",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["documentation.markdown"],
+      "extensions": { "crux.provenance": { "legacyIds": ["docs.references"] } },
+      "fileClass": "documentation",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["markdown-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "canon",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "Documentation references resolve within the declared repository scope. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the documentation content to satisfy documentation reference integrity.",
+      "ruleId": "crux/docs/reference-integrity",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["**/*.md", "llms.txt"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "Documentation references resolve within the declared repository scope.",
+      "suppressionFormIds": [],
+      "title": "Documentation reference integrity",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "canon",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "reference-integrity-pass"
+        },
+        {
+          "engine": "canon",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "reference-integrity-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "llms-index",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["documentation.markdown"],
+      "extensions": { "crux.provenance": { "legacyIds": ["docs.llms"] } },
+      "fileClass": "documentation",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["markdown-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "canon",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "The generated llms.txt index matches canonical documentation. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the documentation content to satisfy canonical llms.txt index.",
+      "ruleId": "crux/docs/llms-index",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["**/*.md", "llms.txt"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "The generated llms.txt index matches canonical documentation.",
+      "suppressionFormIds": [],
+      "title": "Canonical llms.txt index",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "canon",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "llms-index-pass"
+        },
+        {
+          "engine": "canon",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "llms-index-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "strict-equality",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["source.typescript"],
+      "extensions": { "crux.provenance": { "legacyIds": ["equality"] } },
+      "fileClass": "source",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["typescript-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "crucible",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "Source uses strict equality operators. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the source content to satisfy require strict equality.",
+      "ruleId": "crux/code/strict-equality",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["src/**/*.{js,jsx,ts,tsx}"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "Source uses strict equality operators.",
+      "suppressionFormIds": [],
+      "title": "Require strict equality",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "crucible",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "strict-equality-pass"
+        },
+        {
+          "engine": "crucible",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "strict-equality-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "explicit-any",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["source.typescript"],
+      "extensions": { "crux.provenance": { "legacyIds": ["no-any"] } },
+      "fileClass": "source",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["typescript-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "crucible",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "TypeScript source does not use explicit any. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the source content to satisfy disallow explicit any.",
+      "ruleId": "crux/code/no-explicit-any",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["src/**/*.{js,jsx,ts,tsx}"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "TypeScript source does not use explicit any.",
+      "suppressionFormIds": [],
+      "title": "Disallow explicit any",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "crucible",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "no-explicit-any-pass"
+        },
+        {
+          "engine": "crucible",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "no-explicit-any-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "array-construction",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["source.typescript"],
+      "extensions": {
+        "crux.provenance": { "legacyIds": ["no-array-constructor"] }
+      },
+      "fileClass": "source",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["typescript-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "crucible",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "Source uses array literals instead of Array constructors. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the source content to satisfy disallow array constructors.",
+      "ruleId": "crux/code/no-array-constructor",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["src/**/*.{js,jsx,ts,tsx}"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "Source uses array literals instead of Array constructors.",
+      "suppressionFormIds": [],
+      "title": "Disallow Array constructors",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "crucible",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "no-array-constructor-pass"
+        },
+        {
+          "engine": "crucible",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "no-array-constructor-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "catch-variable-type",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["source.typescript"],
+      "extensions": { "crux.provenance": { "legacyIds": ["no-bare-catch"] } },
+      "fileClass": "source",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["typescript-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "crucible",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "Catch variables are treated as unknown. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the source content to satisfy use unknown catch variables.",
+      "ruleId": "crux/code/unknown-catch-variable",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["src/**/*.{js,jsx,ts,tsx}"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "Catch variables are treated as unknown.",
+      "suppressionFormIds": [],
+      "title": "Use unknown catch variables",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "crucible",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "unknown-catch-variable-pass"
+        },
+        {
+          "engine": "crucible",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "unknown-catch-variable-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "object-ownership-check",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["source.typescript"],
+      "extensions": {
+        "crux.provenance": { "legacyIds": ["no-has-own-property"] }
+      },
+      "fileClass": "source",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["typescript-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "crucible",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "Source uses Object.hasOwn for ownership checks. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the source content to satisfy prefer object.hasown.",
+      "ruleId": "crux/code/prefer-object-has-own",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["src/**/*.{js,jsx,ts,tsx}"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "Source uses Object.hasOwn for ownership checks.",
+      "suppressionFormIds": [],
+      "title": "Prefer Object.hasOwn",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "crucible",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "prefer-object-has-own-pass"
+        },
+        {
+          "engine": "crucible",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "prefer-object-has-own-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "array-sort-mutation",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["source.typescript"],
+      "extensions": {
+        "crux.provenance": { "legacyIds": ["no-mutating-sort"] }
+      },
+      "fileClass": "source",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["typescript-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "crucible",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "Source avoids mutating array sort operations. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the source content to satisfy require non-mutating array sorting.",
+      "ruleId": "crux/code/non-mutating-sort",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["src/**/*.{js,jsx,ts,tsx}"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "Source avoids mutating array sort operations.",
+      "suppressionFormIds": [],
+      "title": "Require non-mutating array sorting",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "crucible",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "non-mutating-sort-pass"
+        },
+        {
+          "engine": "crucible",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "non-mutating-sort-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "typescript-namespace",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["source.typescript"],
+      "extensions": { "crux.provenance": { "legacyIds": ["no-namespace"] } },
+      "fileClass": "source",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["typescript-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "crucible",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "TypeScript source does not declare namespaces. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the source content to satisfy disallow typescript namespaces.",
+      "ruleId": "crux/code/no-typescript-namespace",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["src/**/*.{js,jsx,ts,tsx}"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "TypeScript source does not declare namespaces.",
+      "suppressionFormIds": [],
+      "title": "Disallow TypeScript namespaces",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "crucible",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "no-typescript-namespace-pass"
+        },
+        {
+          "engine": "crucible",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "no-typescript-namespace-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "non-null-assertion",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["source.typescript"],
+      "extensions": {
+        "crux.provenance": { "legacyIds": ["no-non-null-assertion"] }
+      },
+      "fileClass": "source",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["typescript-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "crucible",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "TypeScript source does not use non-null assertions. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the source content to satisfy disallow non-null assertions.",
+      "ruleId": "crux/code/no-non-null-assertion",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["src/**/*.{js,jsx,ts,tsx}"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "TypeScript source does not use non-null assertions.",
+      "suppressionFormIds": [],
+      "title": "Disallow non-null assertions",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "crucible",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "no-non-null-assertion-pass"
+        },
+        {
+          "engine": "crucible",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "no-non-null-assertion-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "sparse-array",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["source.typescript"],
+      "extensions": {
+        "crux.provenance": { "legacyIds": ["no-sparse-arrays"] }
+      },
+      "fileClass": "source",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["typescript-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "crucible",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "Source does not create sparse array literals. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the source content to satisfy disallow sparse arrays.",
+      "ruleId": "crux/code/no-sparse-arrays",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["src/**/*.{js,jsx,ts,tsx}"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "Source does not create sparse array literals.",
+      "suppressionFormIds": [],
+      "title": "Disallow sparse arrays",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "crucible",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "no-sparse-arrays-pass"
+        },
+        {
+          "engine": "crucible",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "no-sparse-arrays-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "var-declaration",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["source.typescript"],
+      "extensions": { "crux.provenance": { "legacyIds": ["no-var"] } },
+      "fileClass": "source",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["typescript-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "crucible",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "Source does not declare variables with var. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the source content to satisfy disallow var declarations.",
+      "ruleId": "crux/code/no-var",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["src/**/*.{js,jsx,ts,tsx}"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "Source does not declare variables with var.",
+      "suppressionFormIds": [],
+      "title": "Disallow var declarations",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "crucible",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "no-var-pass"
+        },
+        {
+          "engine": "crucible",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "no-var-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "function-return-type",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["source.typescript"],
+      "extensions": {
+        "crux.provenance": { "legacyIds": ["require-return-type"] }
+      },
+      "fileClass": "source",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["typescript-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "crucible",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "Exported functions declare explicit return types. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the source content to satisfy require explicit function return types.",
+      "ruleId": "crux/code/explicit-return-type",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["src/**/*.{js,jsx,ts,tsx}"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "Exported functions declare explicit return types.",
+      "suppressionFormIds": [],
+      "title": "Require explicit function return types",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "crucible",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "explicit-return-type-pass"
+        },
+        {
+          "engine": "crucible",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "explicit-return-type-fail"
+        }
+      ]
+    },
+    {
+      "aspect": "const-declaration",
+      "checkKind": "static",
+      "defaultSeverity": "info",
+      "domains": ["source.typescript"],
+      "extensions": { "crux.provenance": { "legacyIds": ["var-to-const"] } },
+      "fileClass": "source",
+      "fix": { "kind": "none", "maxPasses": 0, "writableFileClasses": [] },
+      "implementation": {
+        "adapterRequirements": [],
+        "capabilities": ["typescript-analysis"]
+      },
+      "introduced": { "date": "2026-11-22", "version": "0.1.0" },
+      "lifecycle": "proposed",
+      "owner": "crucible",
+      "promotion": {
+        "condition": "Promote only after the published owner manifest declares this rule and every committed vector passes, including an inverted expected-outcome failure.",
+        "falsePositiveCeiling": 0
+      },
+      "rationale": "Variables that are never reassigned use const. This permanent identity preserves the reviewed behavior concept without retaining a legacy runtime alias.",
+      "remediation": "Update the source content to satisfy prefer const declarations.",
+      "ruleId": "crux/code/prefer-const",
+      "schemaVersion": "1.0.0",
+      "selectors": {
+        "exclude": ["**/generated/**", "**/vendor/**"],
+        "include": ["src/**/*.{js,jsx,ts,tsx}"],
+        "repositoryShapes": ["typescript-package"]
+      },
+      "summary": "Variables that are never reassigned use const.",
+      "suppressionFormIds": [],
+      "title": "Prefer const declarations",
+      "topInvariant": false,
+      "vectors": [
+        {
+          "engine": "crucible",
+          "expectedOutcome": "pass",
+          "kind": "positive",
+          "vectorId": "prefer-const-pass"
+        },
+        {
+          "engine": "crucible",
+          "expectedOutcome": "fail",
+          "kind": "negative",
+          "vectorId": "prefer-const-fail"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": "1.0.0",
+  "studioGlossary": [
+    {
+      "definition": "The sole Canon, Crucible, or Conform engine responsible for implementing and reporting a rule.",
+      "term": "engine owner"
+    },
+    {
+      "definition": "A one-way migration message for a known legacy input; it never executes or translates legacy semantics.",
+      "term": "diagnostic replacement"
+    },
+    {
+      "definition": "The file class, aspect, check kind, and domain combination that admits exactly one engine owner.",
+      "term": "ownership tuple"
+    }
+  ],
+  "suppressions": []
+}

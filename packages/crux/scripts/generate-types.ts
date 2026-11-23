@@ -22,6 +22,8 @@ const SCHEMAS = [
   ["exception.schema.json", "ExceptionLedger"],
   ["repository-policy.schema.json", "RepositoryPolicy"],
   ["migration-disposition.schema.json", "MigrationDispositionLedger"],
+  ["inventory-reconciliation.schema.json", "InventoryReconciliation"],
+  ["vector-catalog.schema.json", "VectorCatalog"],
   ["bundle.schema.json", "CompatibilityBundle"],
   ["lock.schema.json", "PolicyLock"],
   ["engine-result.schema.json", "EngineResult"],

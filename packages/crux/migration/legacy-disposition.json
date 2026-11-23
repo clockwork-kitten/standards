@@ -1,0 +1,521 @@
+{
+  "entries": [
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "canon add-decision", "kind": "command" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "replacement": {
+        "id": "canon add-decision",
+        "kind": "command",
+        "owner": "canon"
+      }
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "canon build", "kind": "command" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "replacement": {
+        "id": "canon build",
+        "kind": "command",
+        "owner": "canon"
+      }
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "canon check", "kind": "command" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "replacement": {
+        "id": "canon check",
+        "kind": "command",
+        "owner": "canon"
+      }
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "canon drain", "kind": "command" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "replacement": {
+        "id": "canon drain",
+        "kind": "command",
+        "owner": "canon"
+      }
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "canon fix", "kind": "command" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "replacement": { "id": "canon fix", "kind": "command", "owner": "canon" }
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "canon llms", "kind": "command" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "replacement": { "id": "canon llms", "kind": "command", "owner": "canon" }
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "command.check", "kind": "command" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "replacement": {
+        "id": "command.check",
+        "kind": "command",
+        "owner": "conform"
+      }
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "command.fix", "kind": "command" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "replacement": {
+        "id": "command.fix",
+        "kind": "command",
+        "owner": "conform"
+      }
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "canon.config.ts", "kind": "config-key" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes command execution, config translation, or compatibility aliases.",
+      "replacement": {
+        "id": "canon.config.jsonc",
+        "kind": "config-key",
+        "owner": "canon"
+      }
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "config.key.code", "kind": "config-key" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes config translation or compatibility aliases.",
+      "replacement": {
+        "id": "repository.code",
+        "kind": "config-key",
+        "owner": "conform"
+      },
+      "target": "Conform config schema"
+    },
+    {
+      "disposition": "dropped",
+      "intentionalDifference": "Bedrock key is inventoried and must be explicitly dispositioned before reuse.",
+      "legacy": { "id": "config.key.code.bedrock", "kind": "config-key" },
+      "rationale": "No implicit compatibility layer is allowed.",
+      "target": "Crucible bedrock migration"
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "config.key.code.eslint", "kind": "config-key" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes config translation or compatibility aliases.",
+      "replacement": {
+        "id": "repository.code.eslint",
+        "kind": "config-key",
+        "owner": "crucible"
+      },
+      "target": "Crucible tool toggles"
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "config.key.code.knip", "kind": "config-key" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes config translation or compatibility aliases.",
+      "replacement": {
+        "id": "repository.code.knip",
+        "kind": "config-key",
+        "owner": "crucible"
+      },
+      "target": "Crucible tool toggles"
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "config.key.code.prettier", "kind": "config-key" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes config translation or compatibility aliases.",
+      "replacement": {
+        "id": "repository.code.prettier",
+        "kind": "config-key",
+        "owner": "crucible"
+      },
+      "target": "Crucible tool toggles"
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "config.key.code.tsconfig", "kind": "config-key" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes config translation or compatibility aliases.",
+      "replacement": {
+        "id": "repository.code.tsconfig",
+        "kind": "config-key",
+        "owner": "crucible"
+      },
+      "target": "Crucible typecheck settings"
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "config.key.code.typecheck", "kind": "config-key" },
+      "rationale": "This replacement is diagnostic migration data only and never authorizes config translation or compatibility aliases.",
+      "replacement": {
+        "id": "repository.code.typecheck",
+        "kind": "config-key",
+        "owner": "crucible"
+      },
+      "target": "Crucible tool toggles"
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "async-await", "kind": "rule" },
+      "rationale": "The coarse Bedrock reporter identity is retired without an alias."
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "equality", "kind": "rule" },
+      "rationale": "The permanent Crux identity replaces this legacy Bedrock ID for migration diagnostics only; no alias executes the old semantics.",
+      "replacement": {
+        "id": "crux/code/strict-equality",
+        "kind": "rule",
+        "owner": "crucible"
+      }
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "immutable-array", "kind": "rule" },
+      "rationale": "The coarse Bedrock reporter identity is retired without an alias."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "immutable-object", "kind": "rule" },
+      "rationale": "The coarse Bedrock reporter identity is retired without an alias."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "loops", "kind": "rule" },
+      "rationale": "The coarse Bedrock reporter identity is retired without an alias."
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "no-any", "kind": "rule" },
+      "rationale": "The permanent Crux identity replaces this legacy Bedrock ID for migration diagnostics only; no alias executes the old semantics.",
+      "replacement": {
+        "id": "crux/code/no-explicit-any",
+        "kind": "rule",
+        "owner": "crucible"
+      }
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "no-array-constructor", "kind": "rule" },
+      "rationale": "The permanent Crux identity replaces this legacy Bedrock ID for migration diagnostics only; no alias executes the old semantics.",
+      "replacement": {
+        "id": "crux/code/no-array-constructor",
+        "kind": "rule",
+        "owner": "crucible"
+      }
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-array-index-assign", "kind": "rule" },
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-array-pop", "kind": "rule" },
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-array-push", "kind": "rule" },
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-array-shift", "kind": "rule" },
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-array-splice", "kind": "rule" },
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-array-unshift", "kind": "rule" },
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-arrow-functions", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-async-without-await", "kind": "rule" },
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer."
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "no-bare-catch", "kind": "rule" },
+      "rationale": "The permanent Crux identity replaces this legacy Bedrock ID for migration diagnostics only; no alias executes the old semantics.",
+      "replacement": {
+        "id": "crux/code/unknown-catch-variable",
+        "kind": "rule",
+        "owner": "crucible"
+      }
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-break", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-classes", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-continue", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-default-parameters", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-delete", "kind": "rule" },
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-do-while", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-enum", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-for-each", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-for-in", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-for-of", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-general-destructuring", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "no-has-own-property", "kind": "rule" },
+      "rationale": "The permanent Crux identity replaces this legacy Bedrock ID for migration diagnostics only; no alias executes the old semantics.",
+      "replacement": {
+        "id": "crux/code/prefer-object-has-own",
+        "kind": "rule",
+        "owner": "crucible"
+      }
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-increment", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-interface", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-labeled-statements", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-logical-and-execution", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-logical-or-default", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "no-mutating-sort", "kind": "rule" },
+      "rationale": "The permanent Crux identity replaces this legacy Bedrock ID for migration diagnostics only; no alias executes the old semantics.",
+      "replacement": {
+        "id": "crux/code/non-mutating-sort",
+        "kind": "rule",
+        "owner": "crucible"
+      }
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "no-namespace", "kind": "rule" },
+      "rationale": "The permanent Crux identity replaces this legacy Bedrock ID for migration diagnostics only; no alias executes the old semantics.",
+      "replacement": {
+        "id": "crux/code/no-typescript-namespace",
+        "kind": "rule",
+        "owner": "crucible"
+      }
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-new-promise", "kind": "rule" },
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer."
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "no-non-null-assertion", "kind": "rule" },
+      "rationale": "The permanent Crux identity replaces this legacy Bedrock ID for migration diagnostics only; no alias executes the old semantics.",
+      "replacement": {
+        "id": "crux/code/no-non-null-assertion",
+        "kind": "rule",
+        "owner": "crucible"
+      }
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-nullish-coalescing", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-optional-chaining", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-promise-any", "kind": "rule" },
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-promise-race", "kind": "rule" },
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-promise-then", "kind": "rule" },
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-property-assign", "kind": "rule" },
+      "rationale": "Dropped: mutation rewrite behavior is context-sensitive and can be semantics-changing or unsafe."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-shortcircuit-control", "kind": "rule" },
+      "rationale": "The coarse Bedrock reporter identity is retired without an alias."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-shorthand-operators", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-sort-without-comparator", "kind": "rule" },
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer."
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "no-sparse-arrays", "kind": "rule" },
+      "rationale": "The permanent Crux identity replaces this legacy Bedrock ID for migration diagnostics only; no alias executes the old semantics.",
+      "replacement": {
+        "id": "crux/code/no-sparse-arrays",
+        "kind": "rule",
+        "owner": "crucible"
+      }
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-spread-args", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-switch", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-template-literals", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-ternary", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-this", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-type-assertion", "kind": "rule" },
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-unhandled-rejection", "kind": "rule" },
+      "rationale": "Dropped: policy is overbroad/context-sensitive and not retained in MVP ownership transfer."
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "no-var", "kind": "rule" },
+      "rationale": "The permanent Crux identity replaces this legacy Bedrock ID for migration diagnostics only; no alias executes the old semantics.",
+      "replacement": {
+        "id": "crux/code/no-var",
+        "kind": "rule",
+        "owner": "crucible"
+      }
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "no-while", "kind": "rule" },
+      "rationale": "Dropped: maximalist syntax normalization conflicts with modern JS/TS defaults and current Standards."
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "promise-rules", "kind": "rule" },
+      "rationale": "The coarse Bedrock reporter identity is retired without an alias."
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "require-return-type", "kind": "rule" },
+      "rationale": "The permanent Crux identity replaces this legacy Bedrock ID for migration diagnostics only; no alias executes the old semantics.",
+      "replacement": {
+        "id": "crux/code/explicit-return-type",
+        "kind": "rule",
+        "owner": "crucible"
+      }
+    },
+    {
+      "disposition": "dropped",
+      "legacy": { "id": "typescript-strict", "kind": "rule" },
+      "rationale": "The coarse Bedrock reporter identity is retired without an alias."
+    },
+    {
+      "disposition": "replaced",
+      "legacy": { "id": "var-to-const", "kind": "rule" },
+      "rationale": "The permanent Crux identity replaces this legacy Bedrock ID for migration diagnostics only; no alias executes the old semantics.",
+      "replacement": {
+        "id": "crux/code/prefer-const",
+        "kind": "rule",
+        "owner": "crucible"
+      }
+    }
+  ],
+  "inventoryRevision": 1,
+  "schemaVersion": "1.0.0"
+}

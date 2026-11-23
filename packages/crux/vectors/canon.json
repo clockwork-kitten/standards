@@ -1,0 +1,106 @@
+{
+  "engine": "canon",
+  "schemaVersion": "1.0.0",
+  "sourceRevision": "7717e5baacb514ae6085e4c3bef026a371df7d08",
+  "vectors": [
+    {
+      "engine": "canon",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "markdown-format-pass",
+      "fixture": {
+        "content": "# Heading\n",
+        "description": "positive fixture for Canonical Markdown format.",
+        "fileClass": "documentation",
+        "path": "docs/markdown-format-pass.md"
+      },
+      "ruleIds": ["crux/docs/markdown-format"],
+      "sourceInventoryIds": ["docs.markdown"]
+    },
+    {
+      "engine": "canon",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "markdown-format-fail",
+      "fixture": {
+        "content": "plain text",
+        "description": "negative fixture for Canonical Markdown format.",
+        "fileClass": "documentation",
+        "path": "docs/markdown-format-fail.md"
+      },
+      "ruleIds": ["crux/docs/markdown-format"],
+      "sourceInventoryIds": ["docs.markdown"]
+    },
+    {
+      "engine": "canon",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "reference-integrity-pass",
+      "fixture": {
+        "content": "[readme](README.md)",
+        "description": "positive fixture for Documentation reference integrity.",
+        "fileClass": "documentation",
+        "path": "docs/reference-integrity-pass.md"
+      },
+      "ruleIds": ["crux/docs/reference-integrity"],
+      "sourceInventoryIds": ["docs.references"]
+    },
+    {
+      "engine": "canon",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "reference-integrity-fail",
+      "fixture": {
+        "content": "[missing](missing.md)",
+        "description": "negative fixture for Documentation reference integrity.",
+        "fileClass": "documentation",
+        "path": "docs/reference-integrity-fail.md"
+      },
+      "ruleIds": ["crux/docs/reference-integrity"],
+      "sourceInventoryIds": ["docs.references"]
+    },
+    {
+      "engine": "canon",
+      "expectedOutcome": "pass",
+      "kind": "positive",
+      "vectorId": "llms-index-pass",
+      "fixture": {
+        "content": "# Project\n\nSummary\n",
+        "description": "positive fixture for Canonical llms.txt index.",
+        "fileClass": "documentation",
+        "path": "docs/llms-index-pass.md"
+      },
+      "ruleIds": ["crux/docs/llms-index"],
+      "sourceInventoryIds": ["docs.llms"]
+    },
+    {
+      "engine": "canon",
+      "expectedOutcome": "fail",
+      "kind": "negative",
+      "vectorId": "llms-index-fail",
+      "fixture": {
+        "content": "# stale\n",
+        "description": "negative fixture for Canonical llms.txt index.",
+        "fileClass": "documentation",
+        "path": "docs/llms-index-fail.md"
+      },
+      "ruleIds": ["crux/docs/llms-index"],
+      "sourceInventoryIds": ["docs.llms"]
+    },
+    {
+      "engine": "canon",
+      "expectedOutcome": "pass",
+      "expectedOwners": { "crux/docs/markdown-format": "canon" },
+      "fixture": {
+        "content": "# Example\n\n```ts\nconst value: any = 1;\n```\n",
+        "description": "A Markdown file containing a TypeScript fence remains Canon-owned because embedded content follows the host file class.",
+        "fileClass": "documentation",
+        "path": "docs/example.md"
+      },
+      "kind": "boundary",
+      "ruleIds": ["crux/docs/markdown-format"],
+      "sourceInventoryIds": ["docs.markdown"],
+      "vectorId": "documentation-source-boundary"
+    }
+  ]
+}
