@@ -44,7 +44,7 @@ export default {
       entry: [
         "test/distribution/imports.mjs",
         "test/distribution/types.ts",
-        "test/distribution/verify-published-package.test.mjs",
+        "test/distribution/verify-published-package.node.mjs",
       ],
       // The publication verifier owns an isolated npm lock under
       // `test/distribution/verifier`; it is not a dependency of inert Crux.

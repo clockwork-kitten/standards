@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test ../verify-published-package.test.mjs"
+    "test": "node --test ../verify-published-package.node.mjs"
   },
   "dependencies": {
     "@sigstore/bundle": "5.0.1",
