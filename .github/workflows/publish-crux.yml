@@ -125,6 +125,9 @@ jobs:
         run: npm version "$VERSION" --no-git-tag-version
       - name: Reverify versioned packed distribution
         run: node packages/crux/test/distribution/verify-package.mjs
+      - name: Install provenance verifier
+        working-directory: packages/crux/test/distribution/verifier
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Publish public package with OIDC provenance
         working-directory: packages/crux
         run: npx --yes npm@12.2.3 publish --access public --provenance --tag next
@@ -168,6 +171,9 @@ jobs:
         run: npm version "$VERSION" --no-git-tag-version
       - name: Reverify versioned packed distribution
         run: node packages/crux/test/distribution/verify-package.mjs
+      - name: Install provenance verifier
+        working-directory: packages/crux/test/distribution/verifier
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Bootstrap public package with short-lived token and provenance
         working-directory: packages/crux
         env:

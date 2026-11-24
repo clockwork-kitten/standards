@@ -1,0 +1,8 @@
+{
+  "name": "crux-distribution-verifier",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "sigstore": "5.0.1"
+  }
+}

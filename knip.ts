@@ -42,6 +42,9 @@ export default {
       // The Node-only distribution harness copies these consumer fixtures into
       // a temporary project, so their relationship is intentionally dynamic.
       entry: ["test/distribution/imports.mjs", "test/distribution/types.ts"],
+      // The publication verifier owns an isolated npm lock under
+      // `test/distribution/verifier`; it is not a dependency of inert Crux.
+      ignoreDependencies: ["sigstore"],
     },
   },
 } satisfies KnipConfig;

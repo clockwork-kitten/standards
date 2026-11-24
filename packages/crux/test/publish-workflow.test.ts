@@ -39,9 +39,26 @@ describe("Crux publication workflow", () => {
     expect(
       workflow.match(/verify-published-package\.mjs "\$VERSION"/g),
     ).toHaveLength(2);
+    expect(
+      workflow.match(/npm ci --ignore-scripts --no-audit --no-fund/g),
+    ).toHaveLength(2);
+    expect(verifier).toContain('const { verify } = require("sigstore")');
+    expect(verifier).toContain("await verify(provenance.bundle");
+    expect(verifier).toContain("certificateIdentityURI");
+    expect(verifier).toContain("certificateIssuer");
+    expect(verifier).toContain('"1.3.6.1.4.1.57264.1.23": "crux-npm"');
+    expect(verifier).toContain(
+      "repo:clockwork-kitten/standards:environment:crux-npm",
+    );
+    expect(verifier).toContain("ctLogThreshold: 1");
+    expect(verifier).toContain("tlogThreshold: 1");
+    expect(verifier).toContain(
+      "published tarball does not match dist.integrity",
+    );
     expect(verifier).toContain("dist.attestations.provenance.predicateType");
     expect(verifier).toContain("https://slsa.dev/provenance/v1");
     expect(verifier).toContain("verificationMaterial?.tlogEntries");
+    expect(verifier).toContain("https://in-toto.io/Statement/v1");
     expect(verifier).toContain(
       "npm provenance subject does not match the published tarball",
     );

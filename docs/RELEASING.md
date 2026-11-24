@@ -62,14 +62,16 @@ job.
 ### GitHub release protections
 
 The live repository settings are part of the release boundary, not assumptions made by the
-workflow file. As verified through the GitHub REST API on 2026-11-23:
+workflow file. As verified through the GitHub REST API on 2026-11-24:
 
 - `main` requires pull requests, conversation resolution, linear history, administrator
   enforcement, and strict passing checks named `conform`, `hygiene / required-files`, and
   `reusable-markdown / markdownlint`; force pushes and deletion are disabled.
-- `crux-npm` requires reviewer `josephcarey`, deliberately permits that reviewer to approve their
-  own deployment, and limits deployments to protected branches. It therefore admits only
-  protected `main` for this workflow.
+- `crux-npm` requires reviewer `josephcarey`, permits that reviewer to approve their own
+  deployment, disables administrator bypass, and limits deployments to protected branches. It
+  therefore requires explicit reviewer approval and admits only protected `main` for this
+  workflow. The environment API reported `can_admins_bypass: false` with these rules at
+  `2026-11-24T04:13:24Z`.
 
 Inspect the current settings rather than relying on this dated snapshot:
 
@@ -87,17 +89,22 @@ gate.
 npm requires the package to exist before its trusted publisher can be configured. The only token
 path is therefore a one-time bootstrap, never a fallback for trusted publication:
 
-1. Create a granular npm token with write access limited to the `clockwork-kitten` scope and the
-   shortest practical expiry. Add it temporarily as `NPM_BOOTSTRAP_TOKEN` in the protected
-   `crux-npm` environment (or as a repository Actions secret if environment-secret administration
-   is unavailable). Do not put the value in an issue, pull request, workflow input, log, or chat.
-2. From **Actions → publish-crux → Run workflow**, select `main`, enter the first 0.x prerelease,
+1. Create a granular npm token with read/write package permission limited to the
+   `clockwork-kitten` scope and the shortest practical expiry. Check npm's **Bypass two-factor
+   authentication** setting; npm leaves it disabled by default, but non-interactive package
+   publication requires this token to bypass the publishing 2FA challenge. This bypass applies
+   only to the disposable bootstrap token, not to the account or permanent OIDC path.
+2. Add the token temporarily as `NPM_BOOTSTRAP_TOKEN` in the protected `crux-npm` environment (or
+   as a repository Actions secret if environment-secret administration is unavailable). Do not
+   put the value in an issue, pull request, workflow input, log, or chat.
+3. From **Actions → publish-crux → Run workflow**, select `main`, enter the first 0.x prerelease,
    and enable **bootstrap**. Approve the `crux-npm` deployment.
-3. The bootstrap job rechecks that the package itself returns npm `404` after approval. It refuses
+4. The bootstrap job rechecks that the package itself returns npm `404` after approval. It refuses
    to run after any version exists, publishes with `--provenance` and `next`, then fails unless the
-   exact registry version, tarball integrity, npm attestation URL, signed SLSA provenance subject,
-   and transparency-log entry all verify.
-4. Immediately revoke the granular token in npm and delete `NPM_BOOTSTRAP_TOKEN` from GitHub.
+   exact registry version and tarball integrity match and Sigstore cryptographically verifies the
+   signed SLSA subject, certificate transparency, Rekor inclusion, protected workflow identity,
+   protected `main` ref, GitHub-hosted runner, and `crux-npm` deployment environment.
+5. Immediately revoke the granular token in npm and delete `NPM_BOOTSTRAP_TOKEN` from GitHub.
    Confirm the secret is gone before configuring or testing the permanent path.
 
 The regular `publish` job never reads this secret. There is no token fallback once the package
@@ -134,8 +141,11 @@ GitHub OIDC identity directly; no registry credential is present.
 3. Approve the `crux-npm` environment deployment.
 4. Confirm the workflow summary records the exact registry metadata URL and fields
    (`version`, `dist.tarball`, `dist.integrity`, `dist.attestations.url`, and
-   `dist.attestations.provenance.predicateType`) plus the fetched Sigstore/SLSA attestation
-   evidence. A zero exit from `npm publish` alone is not success.
+   `dist.attestations.provenance.predicateType`) plus the cryptographically verified
+   Sigstore/SLSA identity and attestation evidence. Verification requires certificate and Rekor
+   transparency inclusion plus the exact protected workflow, repository, ref, GitHub-hosted
+   runner, trigger, and `crux-npm` environment identity. A zero exit from `npm publish` alone is
+   not success.
 5. Verify the package page at
    `https://www.npmjs.com/package/@clockwork-kitten/crux/v/<version>` and its provenance badge.
    Keep the workflow run URL and the exact 45-file
