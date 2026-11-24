@@ -51,3 +51,111 @@ jobs:
 
 Upgrade across lines (`@v0.1` → `@v0.2`) deliberately, since a new minor may be breaking during
 `0.x`.
+
+## Publish a Crux prerelease
+
+Crux has an independent package workflow at `.github/workflows/publish-crux.yml`. Changes under
+`packages/crux/` run its exact tarball and Node.js 24/26 consumer matrix. Publication itself is a
+manual `workflow_dispatch` from `main`; pull requests and ordinary pushes cannot enter the publish
+job.
+
+### GitHub release protections
+
+The live repository settings are part of the release boundary, not assumptions made by the
+workflow file. As verified through the GitHub REST API on 2026-11-24:
+
+- `main` requires pull requests, conversation resolution, linear history, administrator
+  enforcement, and strict passing checks named `conform`, `hygiene / required-files`, and
+  `reusable-markdown / markdownlint`; force pushes and deletion are disabled.
+- `crux-npm` requires reviewer `josephcarey`, permits that reviewer to approve their own
+  deployment, disables administrator bypass, and limits deployments to protected branches. It
+  therefore requires explicit reviewer approval and admits only protected `main` for this
+  workflow. The environment API reported `can_admins_bypass: false` with these rules at
+  `2026-11-24T04:13:24Z`.
+
+Inspect the current settings rather than relying on this dated snapshot:
+
+```sh
+gh api repos/clockwork-kitten/standards/branches/main/protection
+gh api repos/clockwork-kitten/standards/environments/crux-npm
+```
+
+The environment name is also part of the npm trusted-publisher identity and must match on both
+sides. Branch protection is the source-review gate; environment approval is the separate release
+gate.
+
+### One-time first-package bootstrap
+
+npm requires the package to exist before its trusted publisher can be configured. The only token
+path is therefore a one-time bootstrap, never a fallback for trusted publication:
+
+1. Create a granular npm token with read/write package permission limited to the
+   `clockwork-kitten` scope and the shortest practical expiry. Check npm's **Bypass two-factor
+   authentication** setting; npm leaves it disabled by default, but non-interactive package
+   publication requires this token to bypass the publishing 2FA challenge. This bypass applies
+   only to the disposable bootstrap token, not to the account or permanent OIDC path.
+2. Add the token temporarily as `NPM_BOOTSTRAP_TOKEN` in the protected `crux-npm` environment (or
+   as a repository Actions secret if environment-secret administration is unavailable). Do not
+   put the value in an issue, pull request, workflow input, log, or chat.
+3. From **Actions → publish-crux → Run workflow**, select `main`, enter the first 0.x prerelease,
+   and enable **bootstrap**. Approve the `crux-npm` deployment.
+4. The bootstrap job rechecks that the package itself returns npm `404` after approval. It refuses
+   to run after any version exists, publishes with `--provenance` and `next`, then fails unless the
+   exact registry version and tarball integrity match and Sigstore cryptographically verifies the
+   signed SLSA subject, certificate transparency, Rekor inclusion, protected workflow identity,
+   protected `main` ref, GitHub-hosted runner, and `crux-npm` deployment environment.
+5. Immediately revoke the granular token in npm and delete `NPM_BOOTSTRAP_TOKEN` from GitHub.
+   Confirm the secret is gone before configuring or testing the permanent path.
+
+The regular `publish` job never reads this secret. There is no token fallback once the package
+exists.
+
+### Configure permanent trusted publishing
+
+After the bootstrap package is public, an npm organization owner or package maintainer must open
+its **Settings → Trusted Publisher** page, choose **GitHub Actions**, and enter:
+
+- **Organization or user:** `clockwork-kitten`
+- **Repository:** `standards`
+- **Workflow filename:** `publish-crux.yml`
+- **Environment name:** `crux-npm`
+- **Allowed actions:** **Allow npm publish**
+
+Leave dist-tag management disabled; this workflow supplies `next` as part of `npm publish` and
+does not perform a separate dist-tag operation. The equivalent npm CLI configuration must include
+`--allow-publish`.
+
+Where npm marks a new trusted-publisher configuration as pending validation, complete the first
+OIDC publication within two days or recreate the expired configuration. Then set
+**Settings → Publishing access** to **Require two-factor authentication and disallow tokens**.
+
+The permanent job grants only `contents: read` and `id-token: write`. npm exchanges the short-lived
+GitHub OIDC identity directly; no registry credential is present.
+
+### Release procedure
+
+1. Confirm both `distribution / node-24` and `distribution / node-26` pass on protected `main`.
+2. Go to **Actions → publish-crux → Run workflow**, select `main`, leave **bootstrap** disabled,
+   and enter a new prerelease. Stable versions and versions without a prerelease suffix are
+   rejected.
+3. Approve the `crux-npm` environment deployment.
+4. Confirm the workflow summary records the exact registry metadata URL and fields
+   (`version`, `dist.tarball`, `dist.integrity`, `dist.attestations.url`, and
+   `dist.attestations.provenance.predicateType`) plus the cryptographically verified
+   Sigstore/SLSA identity and attestation evidence. Verification requires certificate and Rekor
+   transparency inclusion plus the exact protected workflow, repository, ref, GitHub-hosted
+   runner, trigger, and `crux-npm` environment identity. A zero exit from `npm publish` alone is
+   not success.
+5. Verify the package page at
+   `https://www.npmjs.com/package/@clockwork-kitten/crux/v/<version>` and its provenance badge.
+   Keep the workflow run URL and the exact 45-file
+   `packages/crux/test/distribution/tarball-files.json` manifest as release evidence.
+
+npm versions are immutable: retry a failed publication with the same version only when npm still
+returns `404`; after a successful publish, increment the prerelease version. Releases use only the
+`next` dist-tag during 0.x prerelease development and never overwrite a published version.
+
+Keep `clockwork-kitten/studio-board#97` open when this repository setup merges. Close it only after
+the bootstrap evidence, token revocation and secret deletion, trusted-publisher configuration, and
+a subsequent tokenless OIDC release have all been recorded, including the npm URL, public tarball,
+and fetched attestation evidence.

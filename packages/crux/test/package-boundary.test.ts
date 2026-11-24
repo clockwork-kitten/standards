@@ -4,8 +4,19 @@ import { fileURLToPath } from "node:url";
 
 type PackageManifest = {
   dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
   exports: Record<string, string>;
-  scripts: Record<string, string>;
+  publishConfig: {
+    access: string;
+    provenance: boolean;
+    tag: string;
+  };
+  repository: {
+    directory: string;
+    type: string;
+    url: string;
+  };
+  scripts?: Record<string, string>;
 };
 
 type PackResult = {
@@ -18,26 +29,24 @@ const PACKAGE_ROOT = fileURLToPath(new URL("..", import.meta.url));
 const PACKAGE_PATH = fileURLToPath(new URL("../package.json", import.meta.url));
 
 describe("inert package boundary", () => {
-  test("has no root export, runtime dependency, or lifecycle script", async () => {
+  test("has no root export, dependency, or package script", async () => {
     const packageManifest = JSON.parse(
       await readFile(PACKAGE_PATH, "utf8"),
     ) as PackageManifest;
-    const lifecycleScripts = [
-      "install",
-      "postinstall",
-      "postpack",
-      "preinstall",
-      "prepare",
-      "prepack",
-    ];
-
     expect(packageManifest.exports["."]).toBeUndefined();
     expect(packageManifest.dependencies).toBeUndefined();
-    expect(
-      lifecycleScripts.filter((script) =>
-        Object.hasOwn(packageManifest.scripts, script),
-      ),
-    ).toEqual([]);
+    expect(packageManifest.devDependencies).toBeUndefined();
+    expect(packageManifest.scripts).toBeUndefined();
+    expect(packageManifest.publishConfig).toEqual({
+      access: "public",
+      provenance: true,
+      tag: "next",
+    });
+    expect(packageManifest.repository).toEqual({
+      directory: "packages/crux",
+      type: "git",
+      url: "git+https://github.com/clockwork-kitten/standards.git",
+    });
     expect(Object.values(packageManifest.exports)).toEqual(
       expect.arrayContaining([
         "./schemas/baseline.schema.json",

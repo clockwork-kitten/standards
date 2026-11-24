@@ -38,5 +38,22 @@ export default {
       // flat configs and comes transitively — we never import it directly.
       ignoreDependencies: ["prettier-plugin-astro"],
     },
+    "packages/crux": {
+      // The Node-only distribution harness copies these consumer fixtures into
+      // a temporary project, so their relationship is intentionally dynamic.
+      entry: [
+        "test/distribution/imports.mjs",
+        "test/distribution/types.ts",
+        "test/distribution/verify-published-package.node.mjs",
+      ],
+      // The publication verifier owns an isolated npm lock under
+      // `test/distribution/verifier`; it is not a dependency of inert Crux.
+      ignoreDependencies: [
+        "@sigstore/bundle",
+        "@sigstore/protobuf-specs",
+        "@sigstore/tuf",
+        "@sigstore/verify",
+      ],
+    },
   },
 } satisfies KnipConfig;

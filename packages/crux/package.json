@@ -2,7 +2,18 @@
   "name": "@clockwork-kitten/crux",
   "version": "0.0.0",
   "description": "Inert policy schemas and generated TypeScript declarations for the Clockwork Kitten toolchain.",
+  "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clockwork-kitten/standards.git",
+    "directory": "packages/crux"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "tag": "next"
+  },
   "exports": {
     "./schemas/baseline": "./schemas/baseline.schema.json",
     "./schemas/bundle": "./schemas/bundle.schema.json",
@@ -38,22 +49,5 @@
     "schemas",
     "types",
     "vectors"
-  ],
-  "scripts": {
-    "check:existing-behavior": "bun ./scripts/generate-existing-behavior.ts --check",
-    "check:generated": "bun ./scripts/generate-types.ts --check",
-    "generate:existing-behavior": "bun ./scripts/generate-existing-behavior.ts",
-    "generate:types": "bun ./scripts/generate-types.ts",
-    "test:canonical": "node ./scripts/verify-canonical-vectors.mjs",
-    "test": "bun test ./test && bun run check:generated && bun run check:existing-behavior",
-    "typecheck": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "@types/bun": "^1.3.3",
-    "ajv": "^8.20.0",
-    "ajv-formats": "^3.0.1",
-    "json-schema-to-typescript": "^15.0.4",
-    "prettier": "^3.9.6",
-    "typescript": "^5.7.3"
-  }
+  ]
 }

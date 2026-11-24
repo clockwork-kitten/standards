@@ -150,10 +150,11 @@ rule, or suppression aliases and never establish a compatibility window.
 From the repository root:
 
 ```sh
-bun run --cwd packages/crux generate:types
-bun run --cwd packages/crux generate:existing-behavior
-bun run --cwd packages/crux typecheck
-bun run --cwd packages/crux test
+bun run crux:generate:types
+bun run crux:generate:existing-behavior
+bun run crux:typecheck
+bun run crux:test
+node packages/crux/test/distribution/verify-package.mjs
 ```
 
 `check:generated` regenerates declarations in memory and fails when
@@ -176,6 +177,40 @@ and supported environment selection. Result reconciliation derives counts and
 classification, checks finding dispositions and references, requires relevant
 base metadata, validates stable ordering, and proves aggregate results preserve
 validated engine partials.
+
+## Distribution
+
+Crux publishes public 0.x prereleases to npm under the `next` dist-tag. The
+package metadata points to this temporary source location at
+`clockwork-kitten/standards/packages/crux`; the repository URL changes in a
+later patch when the repository is renamed, without changing package identity.
+
+The packed artifact is data-only. It has no root export, runtime or development
+dependencies, package scripts, executable JavaScript, or development files.
+Its exact file manifest is committed at
+`test/distribution/tarball-files.json`. The distribution test creates the
+tarball with `npm pack`, installs that tarball with npm, imports every JSON
+subpath under Node, rejects a root import, and resolves every public type with
+TypeScript. GitHub Actions runs that test on Node.js 24 and 26 without Bun.
+The same matrix cryptographically verifies a bounded public npm Sigstore v0.3
+fixture offline, including its Fulcio certificate, certificate transparency,
+Rekor inclusion, GitHub Actions identity claims, and SLSA subject. Fixture
+source URLs, capture time, and SHA-256 digests are recorded in
+`test/fixtures/published-provenance/provenance.json`.
+
+Publication is deliberate and can only run through
+`.github/workflows/publish-crux.yml` on `main`. The workflow accepts an
+unpublished 0.x prerelease version, rejects a version already present in npm,
+reruns the packed-artifact checks, and publishes with public access and npm
+OIDC provenance. Published versions are immutable. The moving `next` dist-tag
+may advance to a newer prerelease; the workflow never publishes `latest`.
+Pull-request and ordinary push runs execute distribution tests only and cannot
+reach the protected publication job.
+
+Repository administrators must configure the npm trusted publisher and the
+protected `crux-npm` GitHub environment before the first release. The exact
+account-side procedure and release evidence are documented in
+[`docs/RELEASING.md`](../../docs/RELEASING.md#publish-a-crux-prerelease).
 
 ## Support boundary
 

@@ -1,0 +1,14 @@
+{
+  "name": "crux-distribution-verifier",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test ../verify-published-package.node.mjs"
+  },
+  "dependencies": {
+    "@sigstore/bundle": "5.0.1",
+    "@sigstore/protobuf-specs": "0.5.2",
+    "@sigstore/tuf": "5.0.1",
+    "@sigstore/verify": "4.1.3"
+  }
+}
