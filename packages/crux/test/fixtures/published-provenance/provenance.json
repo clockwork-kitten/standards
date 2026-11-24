@@ -1,0 +1,15 @@
+{
+  "capturedAt": "2026-11-24T04:49:00Z",
+  "package": "vite@8.3.8",
+  "sources": {
+    "attestation": "https://registry.npmjs.org/-/npm/v1/attestations/vite@8.3.8",
+    "metadata": "https://registry.npmjs.org/vite/8.3.8",
+    "trustedRoot": "https://tuf-repo-cdn.sigstore.dev"
+  },
+  "sha256": {
+    "attestation": "5693c88ac2970d4862bbe82a94bd0ae79f4afdd85ac8647aaa5da9eec05f8f4e",
+    "metadata": "e45c8cdb038158e402b45739d43858ee8176fbbf11f6fb81cc85ec4890557b5c",
+    "trustedRoot": "98636891e1c38753e86993a27de9b3439789f20c3945dc11af169abe185b2ae5"
+  },
+  "selection": "Public npm provenance emitted as a Sigstore v0.3 DSSE bundle by GitHub Actions with repository, workflow, ref, event, GitHub-hosted runner, OIDC subject, and deployment-environment certificate claims."
+}

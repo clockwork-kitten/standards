@@ -41,16 +41,17 @@ describe("Crux publication workflow", () => {
     ).toHaveLength(2);
     expect(
       workflow.match(/npm ci --ignore-scripts --no-audit --no-fund/g),
-    ).toHaveLength(2);
-    expect(verifier).toContain('const { verify } = require("sigstore")');
-    expect(verifier).toContain("await verify(provenance.bundle");
-    expect(verifier).toContain("certificateIdentityURI");
-    expect(verifier).toContain("certificateIssuer");
+    ).toHaveLength(3);
+    expect(workflow).toContain("Verify captured npm provenance");
+    expect(verifier).toContain("new Verifier(");
+    expect(verifier).toContain("bundleFromJSON(provenance.bundle)");
+    expect(verifier).toContain("subjectAlternativeName");
+    expect(verifier).toContain("extensions: { issuer:");
     expect(verifier).toContain('"1.3.6.1.4.1.57264.1.23": "crux-npm"');
     expect(verifier).toContain(
       "repo:clockwork-kitten/standards:environment:crux-npm",
     );
-    expect(verifier).toContain("ctLogThreshold: 1");
+    expect(verifier).toContain("ctlogThreshold: 1");
     expect(verifier).toContain("tlogThreshold: 1");
     expect(verifier).toContain(
       "published tarball does not match dist.integrity",

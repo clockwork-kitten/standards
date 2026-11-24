@@ -46,6 +46,12 @@ jobs:
           registry-url: https://registry.npmjs.org
       - name: Verify packed distribution
         run: node packages/crux/test/distribution/verify-package.mjs
+      - name: Install provenance verifier
+        working-directory: packages/crux/test/distribution/verifier
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Verify captured npm provenance
+        working-directory: packages/crux/test/distribution/verifier
+        run: npm test
 
   release-check:
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'

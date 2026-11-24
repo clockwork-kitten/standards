@@ -1,0 +1,14 @@
+{
+  "name": "vite",
+  "version": "8.3.8",
+  "dist": {
+    "tarball": "https://registry.npmjs.org/vite/-/vite-8.3.8.tgz",
+    "integrity": "sha512-LzOn3h9rG/0vhLdXrV4yJ4QFA9eEoqCl+Yx+kGJd7aB9w6nfNgVHKSYwLPZUHrz4ZGa+t+kXjV9itvcHDLQouA==",
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/vite@8.3.8",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    }
+  }
+}

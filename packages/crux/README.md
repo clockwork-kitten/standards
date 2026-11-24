@@ -192,6 +192,11 @@ Its exact file manifest is committed at
 tarball with `npm pack`, installs that tarball with npm, imports every JSON
 subpath under Node, rejects a root import, and resolves every public type with
 TypeScript. GitHub Actions runs that test on Node.js 24 and 26 without Bun.
+The same matrix cryptographically verifies a bounded public npm Sigstore v0.3
+fixture offline, including its Fulcio certificate, certificate transparency,
+Rekor inclusion, GitHub Actions identity claims, and SLSA subject. Fixture
+source URLs, capture time, and SHA-256 digests are recorded in
+`test/fixtures/published-provenance/provenance.json`.
 
 Publication is deliberate and can only run through
 `.github/workflows/publish-crux.yml` on `main`. The workflow accepts an
